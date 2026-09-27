@@ -2196,4 +2196,327 @@ function renderRecharge(){
   `;
 
   }
-  
+function approveRecharge(id){
+
+  const list = requests();
+
+  const request =
+    list.find(
+      r => r.id === id
+    );
+
+  if(!request) return;
+
+  if(request.status !== "PENDING"){
+
+    toast(
+      "This request has already been processed."
+    );
+
+    return;
+
+  }
+
+  const userList = users();
+
+  const user =
+    userList.find(
+      u => u.mobile === request.mobile
+    );
+
+  if(!user){
+
+    toast(
+      "User account not found."
+    );
+
+    return;
+
+  }
+
+  user.balance =
+    Number(user.balance) +
+    Number(request.coins);
+
+  user.activity =
+    user.activity || [];
+
+  user.activity.unshift({
+
+    text:
+      `Admin approved ${Number(request.coins).toLocaleString()} virtual coins — Request ${request.id}`,
+
+    time:
+      new Date().toLocaleString()
+
+  });
+
+  request.status = "APPROVED";
+
+  request.approvedAt =
+    new Date().toLocaleString();
+
+  saveUsers(userList);
+
+  saveRequests(list);
+
+  renderAdmin();
+
+  toast(
+    "Recharge approved. Virtual coins added."
+  );
+
+}
+
+
+function rejectRecharge(id){
+
+  const list = requests();
+
+  const request =
+    list.find(
+      r => r.id === id
+    );
+
+  if(!request) return;
+
+  if(request.status !== "PENDING"){
+
+    toast(
+      "This request has already been processed."
+    );
+
+    return;
+
+  }
+
+  request.status = "REJECTED";
+
+  request.rejectedAt =
+    new Date().toLocaleString();
+
+  const userList = users();
+
+  const user =
+    userList.find(
+      u => u.mobile === request.mobile
+    );
+
+  if(user){
+
+    user.activity =
+      user.activity || [];
+
+    user.activity.unshift({
+
+      text:
+        `Recharge request ${request.id} was rejected by admin`,
+
+      time:
+        new Date().toLocaleString()
+
+    });
+
+    saveUsers(userList);
+
+  }
+
+  saveRequests(list);
+
+  renderAdmin();
+
+  toast(
+    "Recharge request rejected."
+  );
+
+}
+
+
+function adminLogout(){
+
+  document
+    .getElementById("adminPage")
+    .classList.add("hidden");
+
+  document
+    .getElementById("adminLoginPage")
+    .classList.add("hidden");
+
+  document
+    .getElementById("authPage")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("adminUsername")
+    .value = "";
+
+  document
+    .getElementById("adminPassword")
+    .value = "";
+
+}
+
+
+function back(){
+
+  document
+    .getElementById("adminLoginPage")
+    .classList.add("hidden");
+
+  document
+    .getElementById("adminPage")
+    .classList.add("hidden");
+
+  document
+    .getElementById("userPage")
+    .classList.add("hidden");
+
+  document
+    .getElementById("authPage")
+    .classList.remove("hidden");
+
+  showLogin();
+
+}
+
+
+const winners = [
+
+  {
+    name:
+      "ALI NOVA MEMBER",
+
+    prize:
+      "15,000 Demo Points"
+  },
+
+  {
+    name:
+      "NOVA MEMBER",
+
+    prize:
+      "8,000 Demo Points"
+  },
+
+  {
+    name:
+      "ALINOVA USER",
+
+    prize:
+      "4,000 Demo Points"
+  },
+
+  {
+    name:
+      "VIP DEMO MEMBER",
+
+    prize:
+      "2,000 Demo Points"
+  }
+
+];
+
+
+let winnerIndex = 0;
+
+
+function rotateWinner(){
+
+  const name =
+    document.getElementById(
+      "winnerName"
+    );
+
+  const prize =
+    document.getElementById(
+      "winnerPrize"
+    );
+
+  if(!name || !prize) return;
+
+  winnerIndex =
+    (winnerIndex + 1) %
+    winners.length;
+
+  name.style.opacity = "0";
+
+  prize.style.opacity = "0";
+
+  setTimeout(()=>{
+
+    name.innerText =
+      winners[winnerIndex].name;
+
+    prize.innerText =
+      winners[winnerIndex].prize;
+
+    name.style.opacity = "1";
+
+    prize.style.opacity = "1";
+
+  },300);
+
+}
+
+
+setInterval(
+  rotateWinner,
+  3000
+);
+
+
+window.addEventListener(
+  "load",
+  () => {
+
+    const mobile =
+      localStorage.getItem(
+        SESSION
+      );
+
+    if(!mobile) return;
+
+    const user =
+      users().find(
+        u => u.mobile === mobile
+      );
+
+    if(
+      user &&
+      user.active
+    ){
+
+      openWebsite();
+
+    }else{
+
+      localStorage.removeItem(
+        SESSION
+      );
+
+    }
+
+  }
+);
+
+
+/*
+  ADMIN LOGIN
+
+  Username:
+  Alig0014
+
+  Password:
+  alig0014
+
+  IMPORTANT:
+  This is only a client-side demo.
+  Do not use this method for real financial
+  accounts or real-money authentication.
+*/
+
+
+</script>
+
+</body>
+</html>  
