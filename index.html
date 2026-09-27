@@ -2253,6 +2253,556 @@ footer{
         </b>
 
       </div>
+      /* ==========================================
+   ALINOVA TRADING — PART 5/5
+   FINAL EVENTS + PAGE INITIALIZATION
+========================================== */
+
+
+/* ---------- SAFE CLICK HELPER ---------- */
+
+function bindClick(id, handler) {
+
+  const el =
+    document.getElementById(id);
+
+  if (el) {
+    el.addEventListener("click", handler);
+  }
+}
+
+
+/* ---------- AUTH BUTTONS ---------- */
+
+bindClick(
+  "registerBtn",
+  registerUser
+);
+
+bindClick(
+  "loginBtn",
+  loginUser
+);
+
+bindClick(
+  "adminBtn",
+  showAdminLogin
+);
+
+
+/* ---------- ADMIN LOGIN ---------- */
+
+bindClick(
+  "adminLoginBtn",
+  adminLogin
+);
+
+bindClick(
+  "adminBackBtn",
+  backToAuth
+);
+
+
+/* ---------- USER BUTTONS ---------- */
+
+bindClick(
+  "dailyRewardBtn",
+  claimDailyReward
+);
+
+bindClick(
+  "rechargeBtn",
+  submitRecharge
+);
+
+bindClick(
+  "calculateBtn",
+  calculateCoins
+);
+
+bindClick(
+  "referralBtn",
+  shareReferral
+);
+
+bindClick(
+  "spinButton",
+  spinLuckyDraw
+);
+
+bindClick(
+  "logoutBtn",
+  logoutUser
+);
+
+
+/* ---------- ADMIN BUTTONS ---------- */
+
+bindClick(
+  "adminLogoutBtn",
+  adminLogout
+);
+
+bindClick(
+  "adminRefreshBtn",
+  refreshAdmin
+);
+
+bindClick(
+  "adminNoticeBtn",
+  showAdminNotice
+);
+
+
+/* ---------- SEARCH ---------- */
+
+const adminSearch =
+  document.getElementById(
+    "adminUserSearch"
+  );
+
+if (adminSearch) {
+
+  adminSearch.addEventListener(
+    "input",
+    searchAdminUsers
+  );
+
+}
+
+
+/* ---------- CALCULATOR LIVE UPDATE ---------- */
+
+const calcInput =
+  document.getElementById(
+    "calcCoins"
+  );
+
+if (calcInput) {
+
+  calcInput.addEventListener(
+    "input",
+    calculateCoins
+  );
+
+}
+
+
+/* ---------- MODAL CLOSE ---------- */
+
+const modal =
+  document.getElementById(
+    "mainModal"
+  );
+
+if (modal) {
+
+  modal.addEventListener(
+    "click",
+    function(e) {
+
+      if (e.target === modal) {
+        closeModal();
+      }
+
+    }
+  );
+
+}
+
+
+/* ---------- ENTER KEY LOGIN ---------- */
+
+const loginPhone =
+  document.getElementById(
+    "loginPhone"
+  );
+
+if (loginPhone) {
+
+  loginPhone.addEventListener(
+    "keydown",
+    function(e) {
+
+      if (e.key === "Enter") {
+        loginUser();
+      }
+
+    }
+  );
+
+}
+
+
+const regPhone =
+  document.getElementById(
+    "regPhone"
+  );
+
+if (regPhone) {
+
+  regPhone.addEventListener(
+    "keydown",
+    function(e) {
+
+      if (e.key === "Enter") {
+        registerUser();
+      }
+
+    }
+  );
+
+}
+
+
+const adminPassword =
+  document.getElementById(
+    "adminPassword"
+  );
+
+if (adminPassword) {
+
+  adminPassword.addEventListener(
+    "keydown",
+    function(e) {
+
+      if (e.key === "Enter") {
+        adminLogin();
+      }
+
+    }
+  );
+
+}
+
+
+/* ---------- MOBILE NUMBER FORMAT ---------- */
+
+function formatPakistaniNumber(input) {
+
+  if (!input) return;
+
+  input.addEventListener(
+    "input",
+    function() {
+
+      this.value =
+        this.value
+          .replace(/\D/g, "")
+          .slice(0, 11);
+
+    }
+  );
+
+}
+
+
+formatPakistaniNumber(
+  document.getElementById("loginPhone")
+);
+
+formatPakistaniNumber(
+  document.getElementById("regPhone")
+);
+
+
+/* ---------- RECHARGE INPUT ---------- */
+
+const rechargeCoins =
+  document.getElementById(
+    "rechargeCoins"
+  );
+
+if (rechargeCoins) {
+
+  rechargeCoins.addEventListener(
+    "input",
+    function() {
+
+      let value =
+        Number(this.value || 0);
+
+      if (value < 0) {
+        this.value = 0;
+      }
+
+      const preview =
+        document.getElementById(
+          "rechargePreview"
+        );
+
+      if (preview) {
+
+        preview.textContent =
+          "Estimated demo value: Rs. " +
+          (
+            value * RATE
+          ).toLocaleString("en-PK", {
+            maximumFractionDigits: 2
+          });
+
+      }
+
+    }
+  );
+
+}
+
+
+/* ---------- AUTH PAGE ACCESS HELP ---------- */
+
+const accessHelp =
+  document.getElementById(
+    "accessHelpBtn"
+  );
+
+if (accessHelp) {
+
+  accessHelp.addEventListener(
+    "click",
+    requestAccessHelp
+  );
+
+}
+
+
+/* ---------- ADMIN PANEL NAVIGATION ---------- */
+
+function showAdminSection(section) {
+
+  const sections = [
+    "adminRequestsSection",
+    "adminUsersSection",
+    "adminAccessSection"
+  ];
+
+  sections.forEach(id => {
+
+    const el =
+      document.getElementById(id);
+
+    if (el) {
+      el.style.display = "none";
+    }
+
+  });
+
+
+  const selected =
+    document.getElementById(
+      section
+    );
+
+  if (selected) {
+    selected.style.display = "block";
+  }
+
+}
+
+
+/* ---------- USER SECTION NAVIGATION ---------- */
+
+function scrollToSection(id) {
+
+  const target =
+    document.getElementById(id);
+
+  if (!target) return;
+
+  target.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+
+}
+
+
+/* ---------- COPY MOBILE ---------- */
+
+function copyUserPhone() {
+
+  const user =
+    currentUser();
+
+  if (!user) return;
+
+
+  if (
+    navigator.clipboard &&
+    navigator.clipboard.writeText
+  ) {
+
+    navigator.clipboard.writeText(
+      user.phone
+    );
+
+    toast(
+      "Mobile number copied.",
+      "success"
+    );
+
+  }
+
+}
+
+
+/* ---------- RESET DEMO DATA ---------- */
+
+function resetDemoData() {
+
+  if (
+    localStorage.getItem(
+      ADMIN_SESSION
+    ) !== "true"
+  ) {
+
+    toast(
+      "Admin login required.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const confirmation =
+    prompt(
+      "Type RESET to clear all ALINOVA demo data:"
+    );
+
+
+  if (confirmation !== "RESET") {
+
+    toast(
+      "Reset cancelled.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  localStorage.removeItem(USERS);
+  localStorage.removeItem(RECHARGE);
+  localStorage.removeItem(ACCESS);
+  localStorage.removeItem(SESSION);
+
+
+  toast(
+    "All demo data has been reset.",
+    "success"
+  );
+
+
+  setTimeout(() => {
+
+    renderAdminPanel();
+
+  }, 500);
+
+}
+
+
+/* ---------- INITIAL PAGE STATE ---------- */
+
+function initializeApp() {
+
+  const userSession =
+    localStorage.getItem(
+      SESSION
+    );
+
+  const adminSession =
+    localStorage.getItem(
+      ADMIN_SESSION
+    );
+
+
+  /* Admin session has priority */
+
+  if (adminSession === "true") {
+
+    if (
+      typeof openAdminPanel ===
+      "function"
+    ) {
+
+      openAdminPanel();
+
+    }
+
+    return;
+  }
+
+
+  /* Existing user session */
+
+  if (userSession) {
+
+    const user =
+      currentUser();
+
+    if (
+      user &&
+      user.active !== false
+    ) {
+
+      openWebsite();
+
+      return;
+
+    }
+
+    localStorage.removeItem(
+      SESSION
+    );
+
+  }
+
+
+  /* Default login screen */
+
+  hideAllPages();
+
+  const auth =
+    document.getElementById(
+      "authPage"
+    );
+
+  if (auth) {
+    auth.style.display = "flex";
+  }
+
+}
+
+
+/* ---------- DEFAULT CALCULATOR ---------- */
+
+calculateCoins();
+
+
+/* ---------- START APPLICATION ---------- */
+
+if (
+  document.readyState ===
+  "loading"
+) {
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    initializeApp
+  );
+
+} else {
+
+  initializeApp();
+
+}
+
+</script>
+
+</body>
+      </html>
 
 
       <div class="admin-card">
