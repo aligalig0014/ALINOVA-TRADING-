@@ -3144,5 +3144,1090 @@ function toast(message, type = "info") {
       box.style.opacity = "0";
     }, 3500);
 }
+/* ---------- OPEN ADMIN PANEL ---------- */
+
+function openAdminPanel() {
+
+  if (localStorage.getItem(ADMIN_SESSION) !== "true") {
+    showAdminLogin();
+    return;
+  }
+
+  hideAllPages();
+
+  const panel =
+    document.getElementById("adminPanel");
+
+  if (panel) {
+    panel.style.display = "block";
+  }
+
+  renderAdminPanel();
+}
+
+
+/* ---------- ADMIN LOGOUT ---------- */
+
+function adminLogout() {
+
+  localStorage.removeItem(ADMIN_SESSION);
+
+  hideAllPages();
+
+  const page =
+    document.getElementById("adminLoginPage");
+
+  if (page) {
+    page.style.display = "flex";
+  }
+
+  const username =
+    document.getElementById("adminUsername");
+
+  const password =
+    document.getElementById("adminPassword");
+
+  if (username) username.value = "";
+  if (password) password.value = "";
+
+  toast("Admin logged out.", "success");
+}
+
+
+/* ---------- ADMIN STATS ---------- */
+
+function renderAdminStats() {
+
+  const users = getUsers();
+  const requests = getRequests();
+  const access = getAccessRequests();
+
+  const pending =
+    requests.filter(r => r.status === "PENDING").length;
+
+  const approved =
+    requests.filter(r => r.status === "APPROVED").length;
+
+  const rejected =
+    requests.filter(r => r.status === "REJECTED").length;
+
+  const pendingAccess =
+    access.filter(r => r.status === "PENDING").length;
+
+
+  const elements = {
+
+    adminUsersCount: users.length,
+
+    adminPendingCount: pending,
+
+    adminApprovedCount: approved,
+
+    adminRejectedCount: rejected,
+
+    adminAccessCount: pendingAccess
+  };
+
+
+  Object.keys(elements).forEach(id => {
+
+    const el =
+      document.getElementById(id);
+
+    if (el) {
+      el.textContent = elements[id];
+    }
+
+  });
+}
+
+
+/* ---------- ADMIN PANEL ---------- */
+
+function renderAdminPanel() {
+
+  if (localStorage.getItem(ADMIN_SESSION) !== "true") {
+    showAdminLogin();
+    return;
+  }
+
+  renderAdminStats();
+
+  renderAdminRequests();
+
+  renderAdminUsers();
+
+  renderAdminAccessRequests();
+}
+
+
+/* ---------- RECHARGE REQUESTS ---------- */
+
+function renderAdminRequests() {
+
+  const box =
+    document.getElementById("adminRequests");
+
+  if (!box) return;
+
+  const requests =
+    getRequests();
+
+  if (!requests.length) {
+
+    box.innerHTML = `
+      <div class="empty-state">
+        No recharge requests found.
+      </div>
+    `;
+
+    return;
+  }
+
+
+  box.innerHTML = requests.map(req => {
+
+    let statusClass =
+      "status-pending";
+
+    if (req.status === "APPROVED") {
+      statusClass = "status-approved";
+    }
+
+    if (req.status === "REJECTED") {
+      statusClass = "status-rejected";
+    }
+
+
+    return `
+      <div class="admin-request-card">
+
+        <div class="request-top">
+
+          <div>
+            <strong>${esc(req.id)}</strong>
+
+            <span class="${statusClass}">
+              ${esc(req.status)}
+            </span>
+          </div>
+
+          <small>
+            ${esc(req.createdAt)}
+          </small>
+
+        </div>
+
+
+        <div class="request-grid">
+
+          <div>
+            <label>Mobile</label>
+            <strong>${esc(req.phone)}</strong>
+          </div>
+
+          <div>
+            <label>Virtual Coins</label>
+            <strong>
+              ${Number(req.coins).toLocaleString()}
+            </strong>
+          </div>
+
+          <div>
+            <label>Demo Value</label>
+            <strong>
+              Rs. ${Number(req.estimatedValue).toLocaleString("en-PK")}
+            </strong>
+          </div>
+
+          <div>
+            <label>Reference</label>
+            <strong>
+              ${esc(req.reference)}
+            </strong>
+          </div>
+
+        </div>
+
+
+        ${
+          req.status === "PENDING"
+          ? `
+            <div class="admin-actions">
+
+              <button
+                class="btn-primary"
+                onclick="approveRecharge('${esc(req.id)}')">
+                ✓ APPROVE
+              </button>
+
+              <button
+                class="btn-danger"
+                onclick="rejectRecharge('${esc(req.id)}')">
+                ✕ REJECT
+              </button>
+
+            </div>
+          `
+          : `
+            <div class="request-final">
+              Request ${esc(req.status.toLowerCase())}.
+            </div>
+          `
+        }
+
+      </div>
+    `;
+
+  }).join("");
+}
+
+
+/* ---------- APPROVE RECHARGE ---------- */
+
+function approveRecharge(requestId) {
+
+  if (localStorage.getItem(ADMIN_SESSION) !== "true") {
+    toast("Admin login required.", "error");
+    return;
+  }
+
+
+  const requests =
+    getRequests();
+
+  const request =
+    requests.find(r => r.id === requestId);
+
+  if (!request) {
+    toast("Request not found.", "error");
+    return;
+  }
+
+  if (request.status !== "PENDING") {
+    toast("This request is already processed.", "error");
+    return;
+  }
+
+
+  const users =
+    getUsers();
+
+  const user =
+    users.find(u => u.phone === request.phone);
+
+  if (!user) {
+
+    request.status = "REJECTED";
+
+    request.adminNote =
+      "User account not found.";
+
+    request.processedAt =
+      nowText();
+
+    saveRequests(requests);
+
+    toast(
+      "User account not found. Request rejected.",
+      "error"
+    );
+
+    renderAdminPanel();
+
+    return;
+  }
+
+
+  if (user.active === false) {
+
+    toast(
+      "This user's account is disabled.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const coins =
+    Number(request.coins) || 0;
+
+
+  user.balance =
+    Number(user.balance || 0) + coins;
+
+
+  user.activity =
+    user.activity || [];
+
+
+  user.activity.unshift({
+
+    id: uid("ACT"),
+
+    text:
+      "Admin approved recharge: +" +
+      coins.toLocaleString() +
+      " virtual ALI Coins",
+
+    time:
+      nowText()
+
+  });
+
+
+  request.status =
+    "APPROVED";
+
+  request.processedAt =
+    nowText();
+
+  request.adminNote =
+    "Virtual/demo coins credited by admin.";
+
+
+  saveUsers(users);
+
+  saveRequests(requests);
+
+
+  toast(
+    "Request approved. Virtual coins credited.",
+    "success"
+  );
+
+
+  renderAdminPanel();
+}
+
+
+/* ---------- REJECT RECHARGE ---------- */
+
+function rejectRecharge(requestId) {
+
+  if (localStorage.getItem(ADMIN_SESSION) !== "true") {
+    toast("Admin login required.", "error");
+    return;
+  }
+
+
+  const requests =
+    getRequests();
+
+  const request =
+    requests.find(r => r.id === requestId);
+
+
+  if (!request) {
+    toast("Request not found.", "error");
+    return;
+  }
+
+
+  if (request.status !== "PENDING") {
+    toast("This request is already processed.", "error");
+    return;
+  }
+
+
+  request.status =
+    "REJECTED";
+
+  request.processedAt =
+    nowText();
+
+  request.adminNote =
+    "Request rejected by admin.";
+
+
+  saveRequests(requests);
+
+
+  const user =
+    getUsers().find(
+      u => u.phone === request.phone
+    );
+
+
+  if (user) {
+
+    user.activity =
+      user.activity || [];
+
+    user.activity.unshift({
+
+      id: uid("ACT"),
+
+      text:
+        "Recharge request rejected: " +
+        Number(request.coins).toLocaleString() +
+        " virtual coins",
+
+      time:
+        nowText()
+
+    });
+
+    saveCurrentUser(user);
+  }
+
+
+  toast(
+    "Recharge request rejected.",
+    "success"
+  );
+
+
+  renderAdminPanel();
+}
+
+
+/* ---------- USERS TABLE ---------- */
+
+function renderAdminUsers(searchTerm = "") {
+
+  const box =
+    document.getElementById("adminUsers");
+
+  if (!box) return;
+
+
+  let users =
+    getUsers();
+
+
+  searchTerm =
+    String(searchTerm || "")
+      .trim()
+      .toLowerCase();
+
+
+  if (searchTerm) {
+
+    users =
+      users.filter(user =>
+        user.phone
+          .toLowerCase()
+          .includes(searchTerm)
+      );
+
+  }
+
+
+  if (!users.length) {
+
+    box.innerHTML = `
+      <div class="empty-state">
+        No users found.
+      </div>
+    `;
+
+    return;
+  }
+
+
+  box.innerHTML = users.map(user => {
+
+    const status =
+      user.active === false
+        ? "DISABLED"
+        : "ACTIVE";
+
+
+    return `
+      <div class="admin-user-card">
+
+        <div class="user-card-head">
+
+          <div>
+            <strong>
+              ${esc(user.phone)}
+            </strong>
+
+            <span class="${
+              user.active === false
+                ? "status-rejected"
+                : "status-approved"
+            }">
+              ${status}
+            </span>
+          </div>
+
+          <strong>
+            ${Number(user.balance || 0).toLocaleString()}
+            <small> COINS</small>
+          </strong>
+
+        </div>
+
+
+        <div class="user-info">
+
+          <span>
+            Registered:
+            ${esc(user.registeredAt || "-")}
+          </span>
+
+          <span>
+            Referral Points:
+            ${Number(user.referralPoints || 0).toLocaleString()}
+          </span>
+
+        </div>
+
+
+        <div class="admin-actions">
+
+          <button
+            class="btn-primary"
+            onclick="adjustUserCoins('${esc(user.phone)}', 'add')">
+            + COINS
+          </button>
+
+          <button
+            class="btn-warning"
+            onclick="adjustUserCoins('${esc(user.phone)}', 'remove')">
+            − COINS
+          </button>
+
+          <button
+            class="btn-secondary"
+            onclick="toggleUserAccount('${esc(user.phone)}')">
+
+            ${
+              user.active === false
+                ? "ENABLE"
+                : "DISABLE"
+            }
+
+          </button>
+
+          <button
+            class="btn-secondary"
+            onclick="viewUserActivity('${esc(user.phone)}')">
+            ACTIVITY
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+  }).join("");
+}
+
+
+/* ---------- SEARCH USERS ---------- */
+
+function searchAdminUsers() {
+
+  const input =
+    document.getElementById("adminUserSearch");
+
+  const value =
+    input ? input.value : "";
+
+  renderAdminUsers(value);
+}
+
+
+/* ---------- ADJUST VIRTUAL COINS ---------- */
+
+function adjustUserCoins(phone, mode) {
+
+  if (localStorage.getItem(ADMIN_SESSION) !== "true") {
+    toast("Admin login required.", "error");
+    return;
+  }
+
+
+  const amountText =
+    prompt(
+      mode === "add"
+        ? "Enter virtual coins to ADD:"
+        : "Enter virtual coins to REMOVE:"
+    );
+
+
+  if (amountText === null) return;
+
+
+  const amount =
+    Number(amountText);
+
+
+  if (
+    !Number.isFinite(amount) ||
+    amount <= 0
+  ) {
+
+    toast(
+      "Enter a valid positive number.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const users =
+    getUsers();
+
+  const user =
+    users.find(u => u.phone === phone);
+
+
+  if (!user) {
+
+    toast(
+      "User not found.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if (mode === "add") {
+
+    user.balance =
+      Number(user.balance || 0) + amount;
+
+    user.activity =
+      user.activity || [];
+
+    user.activity.unshift({
+
+      id: uid("ACT"),
+
+      text:
+        "Admin added " +
+        amount.toLocaleString() +
+        " virtual ALI Coins",
+
+      time:
+        nowText()
+
+    });
+
+  } else {
+
+    user.balance =
+      Math.max(
+        0,
+        Number(user.balance || 0) - amount
+      );
+
+    user.activity =
+      user.activity || [];
+
+    user.activity.unshift({
+
+      id: uid("ACT"),
+
+      text:
+        "Admin removed " +
+        amount.toLocaleString() +
+        " virtual ALI Coins",
+
+      time:
+        nowText()
+
+    });
+
+  }
+
+
+  saveUsers(users);
+
+
+  toast(
+    "Virtual coin balance updated.",
+    "success"
+  );
+
+
+  renderAdminPanel();
+}
+
+
+/* ---------- ENABLE / DISABLE ACCOUNT ---------- */
+
+function toggleUserAccount(phone) {
+
+  if (localStorage.getItem(ADMIN_SESSION) !== "true") {
+    toast("Admin login required.", "error");
+    return;
+  }
+
+
+  const users =
+    getUsers();
+
+  const user =
+    users.find(u => u.phone === phone);
+
+
+  if (!user) {
+    toast("User not found.", "error");
+    return;
+  }
+
+
+  user.active =
+    user.active === false;
+
+
+  user.activity =
+    user.activity || [];
+
+
+  user.activity.unshift({
+
+    id: uid("ACT"),
+
+    text:
+      "Account status changed to " +
+      (user.active ? "ACTIVE" : "DISABLED"),
+
+    time:
+      nowText()
+
+  });
+
+
+  saveUsers(users);
+
+
+  toast(
+    user.active
+      ? "Account enabled."
+      : "Account disabled.",
+    "success"
+  );
+
+
+  renderAdminPanel();
+}
+
+
+/* ---------- USER ACTIVITY ---------- */
+
+function viewUserActivity(phone) {
+
+  const user =
+    getUsers().find(
+      u => u.phone === phone
+    );
+
+
+  if (!user) {
+
+    toast(
+      "User not found.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const activity =
+    user.activity || [];
+
+
+  let html = "";
+
+
+  if (!activity.length) {
+
+    html =
+      `<p>No activity recorded.</p>`;
+
+  } else {
+
+    html = activity
+      .slice(0, 30)
+      .map(item => `
+        <div class="modal-activity">
+
+          <strong>
+            ${esc(item.text)}
+          </strong>
+
+          <small>
+            ${esc(item.time)}
+          </small>
+
+        </div>
+      `)
+      .join("");
+
+  }
+
+
+  openModal(
+    "USER ACTIVITY — " + phone,
+    html
+  );
+}
+
+
+/* ---------- ACCESS REQUESTS ---------- */
+
+function renderAdminAccessRequests() {
+
+  const box =
+    document.getElementById("adminAccessRequests");
+
+  if (!box) return;
+
+
+  const requests =
+    getAccessRequests();
+
+
+  if (!requests.length) {
+
+    box.innerHTML = `
+      <div class="empty-state">
+        No access requests.
+      </div>
+    `;
+
+    return;
+  }
+
+
+  box.innerHTML =
+    requests.map(req => `
+
+      <div class="admin-request-card">
+
+        <div class="request-top">
+
+          <div>
+            <strong>
+              ${esc(req.id)}
+            </strong>
+
+            <span class="${
+              req.status === "PENDING"
+                ? "status-pending"
+                : req.status === "APPROVED"
+                  ? "status-approved"
+                  : "status-rejected"
+            }">
+              ${esc(req.status)}
+            </span>
+          </div>
+
+          <small>
+            ${esc(req.createdAt)}
+          </small>
+
+        </div>
+
+
+        <div class="request-grid">
+
+          <div>
+            <label>Mobile</label>
+
+            <strong>
+              ${esc(req.phone)}
+            </strong>
+          </div>
+
+          <div>
+            <label>Request ID</label>
+
+            <strong>
+              ${esc(req.id)}
+            </strong>
+          </div>
+
+        </div>
+
+
+        ${
+          req.status === "PENDING"
+          ? `
+            <div class="admin-actions">
+
+              <button
+                class="btn-primary"
+                onclick="approveAccess('${esc(req.id)}')">
+                ✓ APPROVE
+              </button>
+
+              <button
+                class="btn-danger"
+                onclick="rejectAccess('${esc(req.id)}')">
+                ✕ REJECT
+              </button>
+
+            </div>
+          `
+          : ""
+        }
+
+      </div>
+
+    `).join("");
+}
+
+
+/* ---------- APPROVE ACCESS ---------- */
+
+function approveAccess(id) {
+
+  const requests =
+    getAccessRequests();
+
+  const request =
+    requests.find(r => r.id === id);
+
+
+  if (!request) {
+
+    toast(
+      "Access request not found.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  request.status =
+    "APPROVED";
+
+  request.processedAt =
+    nowText();
+
+  request.adminNote =
+    "Support access request approved.";
+
+
+  saveAccessRequests(requests);
+
+
+  toast(
+    "Access request approved.",
+    "success"
+  );
+
+
+  renderAdminPanel();
+}
+
+
+/* ---------- REJECT ACCESS ---------- */
+
+function rejectAccess(id) {
+
+  const requests =
+    getAccessRequests();
+
+  const request =
+    requests.find(r => r.id === id);
+
+
+  if (!request) {
+
+    toast(
+      "Access request not found.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  request.status =
+    "REJECTED";
+
+  request.processedAt =
+    nowText();
+
+  request.adminNote =
+    "Support access request rejected.";
+
+
+  saveAccessRequests(requests);
+
+
+  toast(
+    "Access request rejected.",
+    "success"
+  );
+
+
+  renderAdminPanel();
+}
+
+
+/* ---------- ADMIN REFRESH ---------- */
+
+function refreshAdmin() {
+
+  if (
+    localStorage.getItem(ADMIN_SESSION)
+    !== "true"
+  ) {
+
+    showAdminLogin();
+
+    return;
+  }
+
+
+  renderAdminPanel();
+
+  toast(
+    "Admin data refreshed.",
+    "success"
+  );
+}
+
+
+/* ---------- ADMIN DEMO NOTICE ---------- */
+
+function showAdminNotice() {
+
+  openModal(
+    "ADMIN SYSTEM NOTICE",
+    `
+      <div class="notice-box">
+
+        <h3>ALINOVA TRADING</h3>
+
+        <p>
+          This admin panel is a browser-based
+          virtual/demo management system.
+        </p>
+
+        <p>
+          User data and demo coin balances are
+          stored locally in this browser.
+        </p>
+
+        <p>
+          For a real multi-user platform,
+          a secure backend/database and
+          server-side authentication are required.
+        </p>
+
+        <strong>
+          No real-money balance or cash
+          withdrawal is handled by this demo.
+        </strong>
+
+      </div>
+    `
+  );
+}
 
       
