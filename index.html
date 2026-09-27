@@ -1,343 +1,684 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ALINOVA TRADING</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-body{background:radial-gradient(circle at top,#182653,#070a16 50%,#020308);color:#fff;min-height:100vh}
-.hidden{display:none!important}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+font-family:Arial,sans-serif;color:#fff;min-height:100vh;
+background:radial-gradient(circle at 15% 10%,#15335b,transparent 35%),
+radial-gradient(circle at 85% 85%,#351442,transparent 35%),#050814
+}
 button,input{font:inherit}
-.auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-.box{width:100%;max-width:430px;background:#0d1328;border:1px solid #00d9ff;border-radius:27px;padding:28px 23px;box-shadow:0 0 40px #00cfff22}
-.logo{text-align:center;font-size:34px;font-weight:900;letter-spacing:2px}
-.logo span,.navlogo span{color:#00eaff}
-.tag{text-align:center;color:#8e9ab8;font-size:11px;margin:8px 0 24px}
-.tabs{display:flex;gap:8px;margin-bottom:20px}
-.tab{flex:1;border:0;border-radius:11px;padding:12px;background:#141b35;color:#8995b4;font-weight:bold;cursor:pointer}
-.tab.active{background:linear-gradient(135deg,#00c9e8,#635bff);color:#fff}
-label{display:block;color:#aeb9d2;font-size:12px;margin-bottom:7px}
-input{width:100%;padding:14px;border-radius:11px;border:1px solid #2a3555;background:#080d1d;color:#fff;outline:none;margin-bottom:13px}
-input:focus{border-color:#00eaff}
-.btn{width:100%;border:0;border-radius:11px;padding:14px;background:linear-gradient(135deg,#00c9e8,#655bff);color:#fff;font-weight:bold;cursor:pointer}
-.btn:hover{filter:brightness(1.1)}
-.note{text-align:center;color:#687492;font-size:10px;line-height:1.5;margin-top:13px}.dashboard{max-width:1150px;margin:auto;padding:15px}
-.nav{display:flex;align-items:center;gap:14px;margin-bottom:20px}
-.navlogo{font-size:25px;font-weight:900;margin-right:auto}
-.navuser{font-size:12px;color:#9aa6c1}
-.logout,.adminbtn{background:#11182e;color:#fff;border:1px solid #303957;border-radius:9px;padding:9px 12px;cursor:pointer}
-.adminbtn{border-color:#00d9ff;color:#00eaff}
-
-.hero{padding:24px;border-radius:23px;margin-bottom:17px;background:linear-gradient(135deg,#00d9ff12,#745cff18);border:1px solid #00d9ff55}
-.hero h1{font-size:26px;margin-bottom:7px}.hero p{font-size:13px;color:#9ca8c5}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:17px}
-.card,.panel{background:#0c1225;border:1px solid #293453;border-radius:19px;box-shadow:0 12px 30px #0005}
-.card{padding:18px;min-height:130px}.title{font-size:10px;color:#8490ad;text-transform:uppercase;letter-spacing:1px}
-.big{font-size:24px;font-weight:900;margin-top:12px}.coin{color:#00eaff}.sub{font-size:10px;color:#687593;margin-top:6px}
-.sections{display:grid;grid-template-columns:1.2fr .8fr;gap:17px}
-.panel{padding:19px}.panel h2{font-size:17px;margin-bottom:15px}
-.market{display:flex;justify-content:space-between;background:#11182e;border:1px solid #283354;border-radius:13px;padding:13px;margin-bottom:9px}
-.marketname{font-weight:bold;font-size:13px}.code{font-size:10px;color:#71809e;margin-top:3px}.price{text-align:right;font-weight:bold}.up{color:#50ff9d;font-size:10px;margin-top:4px}
-.calc{background:#10172d;border:1px solid #2b385c;border-radius:14px;padding:14px;margin-bottom:14px}
-.result{background:#080e1f;border:1px solid #00d9ff44;border-radius:11px;padding:13px;text-align:center;font-size:11px}
-.result b{font-size:23px;color:#00eaff}
-.whatsapp{background:linear-gradient(135deg,#17b968,#087d43)}
-.pending{margin-top:9px;padding:10px;border-radius:9px;background:#151d36;color:#9aa7c4;font-size:11px}
-.activity{padding:11px 0;border-bottom:1px solid #202a45;font-size:12px}.activity span{color:#687594;font-size:10px}
-.winner{margin-top:17px;padding:19px;text-align:center;border-radius:20px;background:#0d142b;border:1px solid #725cff66}
-.winner h2{font-size:18px}.winner small{color:#75819d;font-size:9px}.winnerbox{margin-top:14px}.winnername{font-size:21px;font-weight:900;color:#00eaff}.winnerprize{font-size:11px;color:#8995b2;margin-top:5px}
-.refbox{margin-top:17px;padding:17px;border-radius:17px;background:#0d1429;border:1px solid #293454}.refbox p{font-size:11px;color:#929eba;line-height:1.5;margin:7px 0 12px}
-.footer{text-align:center;color:#596680;font-size:10px;line-height:1.6;padding:24px}
-.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,100px);background:#111a32;border:1px solid #00dfff;color:#fff;border-radius:11px;padding:12px 17px;font-size:12px;transition:.3s;z-index:100}.toast.show{transform:translate(-50%,0)}
-
-.adminwrap{max-width:1100px;margin:auto;padding:18px}
-.adminhead{display:flex;align-items:center;gap:12px;margin-bottom:18px}.adminhead h1{margin-right:auto;font-size:25px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:17px}
-.req{background:#0d1429;border:1px solid #293554;border-radius:16px;padding:16px;margin-bottom:11px}
-.reqtop{display:flex;justify-content:space-between;gap:10px;margin-bottom:10px}
-.reqtitle{font-weight:bold;color:#00eaff}.status{font-size:10px;padding:5px 8px;border-radius:7px;background:#332b08;color:#ffd75c}
-.req p{font-size:11px;color:#929eba;margin:5px 0}.req strong{color:#fff}
-.actions{display:flex;gap:8px;margin-top:12px}.approve,.reject{border:0;border-radius:9px;padding:9px 13px;color:#fff;cursor:pointer;font-weight:bold}.approve{background:#119b61}.reject{background:#a62c42}
-.empty{text-align:center;color:#687593;padding:25px;font-size:12px}
-
-@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.sections{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}
-@media(max-width:500px){.dashboard,.adminwrap{padding:11px}.nav{flex-wrap:wrap}.navlogo{width:100%;margin:0}.grid{gap:9px}.card{padding:14px}.big{font-size:20px}.stats{grid-template-columns:1fr}.actions{flex-direction:column}}
+button{cursor:pointer}
+.container{width:min(1150px,94%);margin:auto}
+.glass{
+background:rgba(10,17,36,.82);border:1px solid #203657;
+border-radius:22px;box-shadow:0 0 35px #00cfff12;
+backdrop-filter:blur(14px)
+}
+header{padding:17px 0;border-bottom:1px solid #19304c;
+position:sticky;top:0;z-index:20;background:#050814dd;backdrop-filter:blur(15px)}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.logo{
+font-size:23px;font-weight:900;
+background:linear-gradient(90deg,#00eaff,#9d65ff,#ff4fd8);
+-webkit-background-clip:text;color:transparent
+}
+.btn{
+border:0;border-radius:12px;padding:12px 16px;color:#fff;font-weight:800;
+background:linear-gradient(135deg,#00d9ff,#7058ff)
+}
+.btn.dark{background:#151e35}
+.btn.green{background:linear-gradient(135deg,#00c98b,#008cff)}
+.btn.red{background:linear-gradient(135deg,#ff477e,#d71c52)}
+.btn.small{padding:8px 11px;font-size:12px}
+.input{
+width:100%;padding:14px;margin:8px 0 13px;border-radius:12px;
+border:1px solid #293956;background:#070d1d;color:#fff;outline:none
+}
+.input:focus{border-color:#00dfff}
+main{padding:30px 0 60px}
+.hidden{display:none!important}
+.auth{max-width:480px;margin:55px auto;padding:30px}
+.auth h1{text-align:center;font-size:36px}
+.center{text-align:center}
+.muted{color:#91a0bb}
+.gradient{
+background:linear-gradient(90deg,#00eaff,#9b67ff,#ff4fd8);
+-webkit-background-clip:text;color:transparent
+}
+.tabs{display:flex;gap:8px;margin:25px 0}
+.tabs button{flex:1}
+.note{
+margin-top:10px;padding:12px;border-radius:12px;background:#080f21;
+color:#8998b3;font-size:12px;line-height:1.5
+}
+.grid{display:grid;grid-template-columns:1.4fr .8fr;gap:20px}
+.card{padding:22px}
+.balance{font-size:43px;font-weight:900;margin:8px 0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.stat{padding:15px;border-radius:15px;background:#080f20;border:1px solid #1c2d49}
+.stat b{display:block;font-size:18px;margin-top:5px}
+.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:18px}
+.market{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.market div{
+padding:18px;border-radius:16px;background:#0a1225;border:1px solid #263956
+}
+.up{color:#45e9aa}.down{color:#ff6a8d}
+.section{margin-top:20px}
+.winner{
+overflow:hidden;white-space:nowrap;padding:15px;border-radius:14px;
+background:#080f20;border:1px solid #243755
+}
+.winner span{display:inline-block;animation:move 7s linear infinite}
+@keyframes move{from{transform:translateX(100%)}to{transform:translateX(-120%)}}
+.activity{max-height:250px;overflow:auto}
+.activity div{padding:11px;border-bottom:1px solid #1a2943;font-size:13px}
+.admin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+.admin-stat{padding:18px;border-radius:16px;background:#080f20;border:1px solid #243654}
+.admin-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:850px}
+th,td{padding:11px;border-bottom:1px solid #1b2943;text-align:left;font-size:13px}
+th{color:#7ee7ff;background:#0a1225}
+.status{padding:5px 9px;border-radius:20px;font-size:11px;font-weight:bold}
+.pending{background:#4c3a0a;color:#ffd667}
+.approved,.active{background:#073e31;color:#55efbd}
+.rejected,.disabled{background:#481021;color:#ff7191}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}
+.tools .input{max-width:320px;margin:0}
+.modal{
+position:fixed;inset:0;background:#000b;display:flex;align-items:center;
+justify-content:center;padding:20px;z-index:50
+}
+.modal-box{width:min(500px,100%);padding:25px}
+.toast{
+position:fixed;right:18px;bottom:18px;background:#101a31;
+border:1px solid #2b4668;padding:13px 17px;border-radius:13px;z-index:100
+}
+footer{text-align:center;color:#667590;padding:25px;font-size:12px}
+@media(max-width:850px){
+.grid{grid-template-columns:1fr}.admin-grid{grid-template-columns:1fr}
+.market{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:550px){
+.auth{margin:25px auto;padding:22px}
+.stats{grid-template-columns:1fr}
+.actions{grid-template-columns:1fr}
+.market{grid-template-columns:1fr 1fr}
+}
 </style>
+</head>
 
-</head><body><!-- LOGIN --><section id="auth" class="auth">
-<div class="box">
-<div class="logo">ALI<span>NOVA</span></div>
-<div class="tag">TRADING • VIRTUAL DIGITAL PLATFORM</div><div class="tabs">
-<button id="ltab" class="tab active" onclick="loginTab()">LOGIN</button>
-<button id="rtab" class="tab" onclick="registerTab()">REGISTER</button>
-</div><div id="loginform">
+<body>
+
+<header>
+<div class="container nav">
+<div class="logo">✦ ALINOVA TRADING</div>
+<div>
+<span id="navUser" class="muted"></span>
+<button class="btn small dark" onclick="showAdminLogin()">ADMIN</button>
+</div>
+</div>
+</header>
+
+<main>
+<div class="container">
+
+<!-- AUTH -->
+<section id="auth" class="glass auth">
+<h1 class="gradient">ALINOVA</h1>
+<p class="center muted">Virtual Trading Experience</p>
+
+<div class="tabs">
+<button id="loginBtn" class="btn" onclick="showLogin()">LOGIN</button>
+<button id="regBtn" class="btn dark" onclick="showRegister()">REGISTER</button>
+</div>
+
+<div id="loginBox">
+<label>Registered Mobile Number</label>
+<input id="loginPhone" class="input" placeholder="03XXXXXXXXX" maxlength="11">
+<button class="btn" style="width:100%" onclick="login()">LOGIN & OPEN WEBSITE</button>
+
+<button class="btn dark" style="width:100%;margin-top:10px"
+onclick="forgotAccess()">FORGOT ACCESS / HELP</button>
+
+<div class="note">
+No password required. Enter the same registered mobile number to access your account.
+</div>
+</div>
+
+<div id="registerBox" class="hidden">
 <label>Mobile Number</label>
-<input id="lnumber" type="tel" maxlength="11" placeholder="03XXXXXXXXX">
-<button class="btn" onclick="userLogin()">LOGIN TO ALINOVA</button>
-</div><div id="registerform" class="hidden">
-<label>Mobile Number</label>
-<input id="rnumber" type="tel" maxlength="11" placeholder="03XXXXXXXXX">
-<button class="btn" onclick="userRegister()">CREATE ACCOUNT</button>
-</div><div class="note">New demo account receives 500 virtual ALI Coins.</div>
+<input id="regPhone" class="input" placeholder="03XXXXXXXXX" maxlength="11">
+
+<button class="btn" style="width:100%" onclick="register()">
+REGISTER & OPEN WEBSITE
+</button>
+
+<div class="note">
+New account receives <b>500 virtual ALI Coins</b>.<br>
+These coins are virtual/demo only and have no cash value.
 </div>
-</section><!-- USER DASHBOARD --><section id="userPage" class="dashboard hidden"><div class="nav">
-<div class="navlogo">ALI<span>NOVA</span></div>
-<div class="navuser">Account: <b id="userNo"></b></div>
-<button class="adminbtn" onclick="openAdminLogin()">ADMIN</button>
-<button class="logout" onclick="logout()">Logout</button>
-</div><div class="hero">
-<h1>Welcome to ALINOVA TRADING</h1>
-<p>Professional virtual trading dashboard and digital coin experience.</p>
-</div><div class="grid">
-<div class="card"><div class="title">Available Coins</div><div class="big coin" id="coins">500</div><div class="sub">Virtual ALI Coins</div></div>
-<div class="card"><div class="title">Daily Reward</div><div class="big">+20</div><div class="sub">Every 24 hours</div></div>
-<div class="card"><div class="title">Account</div><div class="big">ACTIVE</div><div class="sub">Demo account</div></div>
-<div class="card"><div class="title">Referral Points</div><div class="big" id="refs">0</div><div class="sub">Virtual points</div></div>
-</div><div class="sections"><div class="panel">
-<h2>📊 Market Overview</h2><div class="market"><div><div class="marketname">ALI NOVA</div><div class="code">ALI</div></div><div class="price">1.00<div class="up">+2.45%</div></div></div>
-<div class="market"><div><div class="marketname">NOVA X</div><div class="code">NVX</div></div><div class="price">2.40<div class="up">+4.18%</div></div></div>
-<div class="market"><div><div class="marketname">APEX</div><div class="code">APX</div></div><div class="price">4.75<div class="up">+1.92%</div></div></div>
-<div class="market"><div><div class="marketname">ORBIT</div><div class="code">ORB</div></div><div class="price">7.20<div class="up">+3.61%</div></div></div>
-</div><div class="panel">
-<h2>🧮 Coin Calculator</h2><div class="calc">
-<label>Virtual Coins</label>
-<input id="calc" type="number" placeholder="5000" oninput="calculate()">
-<div class="result">Estimated Demo Value<br><b id="calcResult">Rs. 0</b></div>
-<div class="note">5,000 virtual coins = Rs. 6,500</div>
-</div><button class="btn" onclick="daily()">🎁 CLAIM 20 VIRTUAL COINS</button>
-
-<div style="margin-top:14px">
-<label>Recharge Coin Quantity</label>
-<input id="rq" type="number" placeholder="Enter quantity"><label>Receipt / Reference</label>
-<input id="receipt" type="text" placeholder="Reference details">
-
-<button class="btn whatsapp" onclick="recharge()">📲 SEND RECHARGE REQUEST</button>
-
-<div id="pending" class="pending hidden"></div>
 </div>
-</div></div><div class="winner">
-<h2>🏆 Virtual Lucky Draw</h2>
-<small>DEMO / PROMOTIONAL DISPLAY — NOT A CASH PRIZE SYSTEM</small>
-<div class="winnerbox">
-<div><div class="winnername" id="wn">ALI NOVA MEMBER</div><div class="winnerprize" id="wp">Virtual Reward: 15,000 Demo Points</div></div>
+</section>
+
+<!-- USER -->
+<section id="userPage" class="hidden">
+
+<div class="grid">
+<div class="glass card">
+<div class="muted">WELCOME</div>
+<h2>ALI NOVA MEMBER</h2>
+
+<div class="muted" style="margin-top:20px">Virtual ALI Coins</div>
+<div id="balance" class="balance">0</div>
+
+<div class="stats">
+<div class="stat">
+<span class="muted">Estimated Demo Value</span>
+<b id="demoValue">Rs. 0</b>
 </div>
-</div><div class="refbox">
-<h2 style="font-size:16px">👥 Referral Program</h2>
-<p>Invite members and receive virtual referral points. No cash commission or guaranteed monetary reward is provided.</p>
-<button class="btn" onclick="share()">SHARE REFERRAL</button>
-</div><div class="panel" style="margin-top:17px">
-<h2>📝 Recent Activity</h2>
-<div id="activity"></div>
-</div><div class="footer">© 2026 ALINOVA TRADING<br>Virtual/Demo Platform — displayed coins and rewards have no cash value.</div>
-</section><!-- ADMIN LOGIN --><section id="adminLogin" class="auth hidden">
-<div class="box">
-<div class="logo">ALI<span>NOVA</span></div>
-<div class="tag">ADMIN CONTROL PANEL</div><label>Admin Username</label>
-<input id="adminUser" type="text" placeholder="Username">
-
-<label>Admin Password</label>
-<input id="adminPass" type="password" placeholder="Password">
-
-<button class="btn" onclick="adminLogin()">ADMIN LOGIN</button>
-
-<div class="note">Demo credentials: admin / 123456</div>
-<br>
-<button class="logout" onclick="backUser()">Back</button>
+<div class="stat">
+<span class="muted">Daily Reward</span>
+<b>+20</b>
 </div>
-</section><!-- ADMIN PANEL --><section id="adminPage" class="adminwrap hidden"><div class="adminhead">
-<h1>🛡️ ALINOVA ADMIN</h1>
-<button class="logout" onclick="backUser()">User Dashboard</button>
-<button class="logout" onclick="adminLogout()">Logout</button>
-</div><div class="stats">
-<div class="card"><div class="title">Pending Requests</div><div class="big" id="pendingCount">0</div></div>
-<div class="card"><div class="title">Approved</div><div class="big" id="approvedCount">0</div></div>
-<div class="card"><div class="title">Rejected</div><div class="big" id="rejectedCount">0</div></div>
-</div><div class="panel">
-<h2>📥 Recharge Requests</h2>
-<div id="requests"></div>
-</div><div class="footer">Admin controls are for this local demo only.</div>
-</section><div id="toast" class="toast"></div><script>
+<div class="stat">
+<span class="muted">Account</span>
+<b class="up">ACTIVE</b>
+</div>
+</div>
+
+<div class="actions">
+<button class="btn green" onclick="dailyReward()">🎁 DAILY REWARD</button>
+<button class="btn" onclick="recharge()">💳 RECHARGE REQUEST</button>
+</div>
+</div>
+
+<div class="glass card">
+<h3>Coin Calculator</h3>
+<p class="muted" style="margin-top:8px">
+5,000 virtual coins = Rs. 6,500 estimated demo value
+</p>
+<input id="calc" class="input" type="number" placeholder="Virtual coins">
+<button class="btn" style="width:100%" onclick="calculate()">CALCULATE</button>
+<h2 id="calcResult" style="margin-top:18px">Rs. 0</h2>
+<div class="note">Demo calculation only. No real cash balance.</div>
+</div>
+</div>
+
+<div class="glass card section">
+<h3>Market Overview</h3>
+<div class="market" style="margin-top:15px">
+<div><b>ALI</b><br><span class="up">▲ +4.82%</span></div>
+<div><b>NVX</b><br><span class="up">▲ +2.41%</span></div>
+<div><b>APX</b><br><span class="down">▼ -1.18%</span></div>
+<div><b>ORB</b><br><span class="up">▲ +3.07%</span></div>
+</div>
+</div>
+
+<div class="glass card section">
+<h3>Virtual Lucky Draw</h3>
+<div class="note">DEMO / PROMOTIONAL DISPLAY — NOT A CASH PRIZE SYSTEM</div>
+<div class="winner" style="margin-top:12px">
+<span id="winner">ALI NOVA MEMBER — 15,000 Demo Points</span>
+</div>
+</div>
+
+<div class="glass card section">
+<h3>Referral</h3>
+<p class="muted" style="margin-top:8px">Share the ALINOVA virtual demo platform.</p>
+<button class="btn" style="margin-top:12px" onclick="shareReferral()">📤 SHARE</button>
+</div>
+
+<div class="glass card section">
+<div style="display:flex;justify-content:space-between;gap:10px">
+<h3>Recent Activity</h3>
+<button class="btn small dark" onclick="logout()">LOGOUT</button>
+</div>
+<div id="activity" class="activity" style="margin-top:12px"></div>
+</div>
+
+</section>
+
+<!-- ADMIN LOGIN -->
+<section id="adminLogin" class="glass auth hidden">
+<h1 class="gradient">ADMIN</h1>
+<p class="center muted">ALINOVA Management</p>
+
+<input id="adminName" class="input" placeholder="Admin Username">
+<input id="adminPassword" class="input" type="password" placeholder="Admin Password">
+
+<button class="btn" style="width:100%" onclick="adminLogin()">ADMIN LOGIN</button>
+<button class="btn dark" style="width:100%;margin-top:10px" onclick="back()">BACK</button>
+</section>
+
+<!-- ADMIN PANEL -->
+<section id="adminPage" class="hidden">
+
+<div class="admin-top">
+<div>
+<h1 class="gradient">ADMIN PANEL</h1>
+<p class="muted">ALINOVA virtual/demo management</p>
+</div>
+<button class="btn dark" onclick="adminLogout()">LOGOUT</button>
+</div>
+
+<div class="admin-grid" style="margin-top:20px">
+<div class="admin-stat">
+<div class="muted">Pending Recharge</div>
+<h2 id="pending">0</h2>
+</div>
+<div class="admin-stat">
+<div class="muted">Access Requests</div>
+<h2 id="accessPending">0</h2>
+</div>
+<div class="admin-stat">
+<div class="muted">Users</div>
+<h2 id="totalUsers">0</h2>
+</div>
+</div>
+
+<!-- ACCESS REQUESTS -->
+<div class="glass card section">
+<h2>🔐 Forgot Access Requests</h2>
+<div class="table-wrap" style="margin-top:15px">
+<table>
+<thead>
+<tr>
+<th>Request ID</th>
+<th>Mobile</th>
+<th>Time</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody id="accessTable"></tbody>
+</table>
+</div>
+</div>
+
+<!-- USERS -->
+<div class="glass card section">
+<h2>👥 User Management</h2>
+
+<div class="tools" style="margin-top:15px">
+<input id="searchUser" class="input" placeholder="Search mobile..." oninput="renderUsers()">
+<button class="btn dark" onclick="renderAdmin()">REFRESH</button>
+</div>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Mobile</th>
+<th>Coins</th>
+<th>Status</th>
+<th>Registered</th>
+<th>Manage</th>
+</tr>
+</thead>
+<tbody id="usersTable"></tbody>
+</table>
+</div>
+</div>
+
+<!-- RECHARGE -->
+<div class="glass card section">
+<h2>💳 Recharge Requests</h2>
+<div class="table-wrap" style="margin-top:15px">
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Mobile</th>
+<th>Coins</th>
+<th>Demo Value</th>
+<th>Reference</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody id="rechargeTable"></tbody>
+</table>
+</div>
+</div>
+
+</section>
+
+</div>
+</main>
+
+<footer>
+ALINOVA TRADING © 2026 — Virtual/Demo Platform
+</footer>
+
+<!-- USER MANAGEMENT MODAL -->
+<div id="userModal" class="modal hidden">
+<div class="glass modal-box">
+<h2 class="gradient">Manage User</h2>
+<p id="selectedUser" class="muted" style="margin:10px 0"></p>
+
+<input id="coinAdjust" class="input" type="number"
+placeholder="Example: 500 or -200">
+
+<button class="btn green" style="width:100%" onclick="adjustCoins()">
+ADD / REMOVE VIRTUAL COINS
+</button>
+
+<button id="toggleBtn" class="btn dark"
+style="width:100%;margin-top:10px" onclick="toggleAccount()">
+DISABLE ACCOUNT
+</button>
+
+<button class="btn red" style="width:100%;margin-top:10px"
+onclick="closeModal()">CLOSE</button>
+
+<div class="note">
+Admin changes are virtual/demo changes only.
+</div>
+</div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script>
 const USERS="ALINOVA_USERS";
-const REQUESTS="ALINOVA_REQUESTS";
+const RECHARGE="ALINOVA_RECHARGE";
+const ACCESS="ALINOVA_ACCESS";
 const SESSION="ALINOVA_SESSION";
-const RATE=1.3;
+const RATE=1.30;
 
-let users=JSON.parse(localStorage.getItem(USERS)||"{}");
-let requests=JSON.parse(localStorage.getItem(REQUESTS)||"[]");
+let selectedUser=null;
 
-function save(){
-localStorage.setItem(USERS,JSON.stringify(users));
-localStorage.setItem(REQUESTS,JSON.stringify(requests));
+function users(){
+return JSON.parse(localStorage.getItem(USERS)||"{}");
 }
-
-function toast(x){
+function saveUsers(x){
+localStorage.setItem(USERS,JSON.stringify(x));
+}
+function requests(){
+return JSON.parse(localStorage.getItem(RECHARGE)||"[]");
+}
+function saveRequests(x){
+localStorage.setItem(RECHARGE,JSON.stringify(x));
+}
+function accessRequests(){
+return JSON.parse(localStorage.getItem(ACCESS)||"[]");
+}
+function saveAccess(x){
+localStorage.setItem(ACCESS,JSON.stringify(x));
+}
+function valid(n){
+return /^03\d{9}$/.test(n);
+}
+function toast(m){
 let t=document.getElementById("toast");
-t.textContent=x;t.classList.add("show");
-setTimeout(()=>t.classList.remove("show"),2300);
+t.textContent=m;
+t.classList.remove("hidden");
+setTimeout(()=>t.classList.add("hidden"),2800);
+}
+function esc(x){
+return String(x??"").replace(/&/g,"&amp;")
+.replace(/</g,"&lt;").replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;");
 }
 
-function valid(n){return /^03\d{9}$/.test(n)}
-
-function loginTab(){
-document.getElementById("loginform").classList.remove("hidden");
-document.getElementById("registerform").classList.add("hidden");
-document.getElementById("ltab").classList.add("active");
-document.getElementById("rtab").classList.remove("active");
+function showLogin(){
+document.getElementById("loginBox").classList.remove("hidden");
+document.getElementById("registerBox").classList.add("hidden");
+}
+function showRegister(){
+document.getElementById("loginBox").classList.add("hidden");
+document.getElementById("registerBox").classList.remove("hidden");
 }
 
-function registerTab(){
-document.getElementById("registerform").classList.remove("hidden");
-document.getElementById("loginform").classList.add("hidden");
-document.getElementById("rtab").classList.add("active");
-document.getElementById("ltab").classList.remove("active");
+/* REGISTER */
+function register(){
+let phone=document.getElementById("regPhone").value.trim();
+
+if(!valid(phone)){
+toast("Valid 11-digit Pakistani number enter karein.");
+return;
 }
 
-function userRegister(){
-let n=document.getElementById("rnumber").value.replace(/\D/g,"");
+let u=users();
 
-if(!valid(n)){toast("Enter valid Pakistani mobile number.");return}
-if(users[n]){toast("Number already registered.");return}
+if(u[phone]){
+toast("This number is already registered. Login karein.");
+return;
+}
 
-users[n]={
-number:n,
+u[phone]={
+phone:phone,
 coins:500,
-ref:0,
-lastClaim:0,
-pending:false,
+disabled:false,
+registered:new Date().toLocaleString(),
+lastDaily:0,
 activity:[
-{text:"Account created",time:Date.now()},
-{text:"Welcome bonus +500 virtual coins",time:Date.now()}
+{
+time:new Date().toLocaleString(),
+text:"Account registered — +500 virtual ALI Coins"
+}
 ]
 };
 
-save();
-localStorage.setItem(SESSION,n);
+saveUsers(u);
+localStorage.setItem(SESSION,phone);
+
 toast("Registration successful!");
-setTimeout(openUser,400);
+openWebsite();
 }
 
-function userLogin(){
-let n=document.getElementById("lnumber").value.replace(/\D/g,"");
+/* LOGIN */
+function login(){
+let phone=document.getElementById("loginPhone").value.trim();
+let u=users();
 
-if(!valid(n)){toast("Enter valid Pakistani mobile number.");return}
-if(!users[n]){toast("Number not registered.");return}
-
-localStorage.setItem(SESSION,n);
-openUser();
+if(!valid(phone)){
+toast("Valid registered number enter karein.");
+return;
 }
 
-function openUser(){
-let n=localStorage.getItem(SESSION);
-if(!n||!users[n])return;
+if(!u[phone]){
+toast("Number registered nahi hai. Pehle Register karein.");
+return;
+}
 
+if(u[phone].disabled){
+toast("Account admin ne disabled kiya hua hai.");
+return;
+}
+
+localStorage.setItem(SESSION,phone);
+toast("Login successful!");
+openWebsite();
+}
+
+function openWebsite(){
 document.getElementById("auth").classList.add("hidden");
 document.getElementById("adminLogin").classList.add("hidden");
 document.getElementById("adminPage").classList.add("hidden");
 document.getElementById("userPage").classList.remove("hidden");
-updateUser();
+updateDashboard();
 }
 
-function updateUser(){
-let n=localStorage.getItem(SESSION),u=users[n];
-if(!u)return;
+function updateDashboard(){
+let phone=localStorage.getItem(SESSION);
+let u=users();
 
-document.getElementById("userNo").textContent=n;
-document.getElementById("coins").textContent=Number(u.coins).toLocaleString();
-document.getElementById("refs").textContent=Number(u.ref||0).toLocaleString();
+if(!phone||!u[phone])return;
 
-let p=document.getElementById("pending");
+document.getElementById("navUser").textContent=u[phone].phone;
+document.getElementById("balance").textContent=
+Number(u[phone].coins).toLocaleString();
 
-if(u.pending){
-p.classList.remove("hidden");
-p.textContent="⏳ Recharge request is pending admin verification.";
-}else{
-p.classList.add("hidden");
-}
+document.getElementById("demoValue").textContent=
+"Rs. "+(u[phone].coins*RATE).toLocaleString(undefined,{
+maximumFractionDigits:2
+});
 
 renderActivity();
 }
 
-function daily(){
-let n=localStorage.getItem(SESSION),u=users[n];
-let now=Date.now();
+function dailyReward(){
+let phone=localStorage.getItem(SESSION);
+let u=users();
 
-if(u.lastClaim&&now-u.lastClaim<86400000){
-let h=Math.ceil((86400000-(now-u.lastClaim))/3600000);
-toast("Try again in about "+h+" hour(s).");
+if(!u[phone])return;
+
+let now=Date.now();
+let last=Number(u[phone].lastDaily||0);
+
+if(now-last<86400000){
+let h=Math.ceil((86400000-(now-last))/3600000);
+toast("Daily reward already claimed. About "+h+" hours remaining.");
 return;
 }
 
-u.coins+=20;
-u.lastClaim=now;
-u.activity.unshift({text:"Daily reward +20 virtual coins",time:now});
-save();updateUser();
-toast("+20 virtual coins added!");
+u[phone].coins+=20;
+u[phone].lastDaily=now;
+
+u[phone].activity.unshift({
+time:new Date().toLocaleString(),
+text:"+20 virtual coins — Daily Reward"
+});
+
+saveUsers(u);
+updateDashboard();
+toast("+20 virtual coins added.");
 }
 
 function calculate(){
-let c=Number(document.getElementById("calc").value)||0;
+let c=Number(document.getElementById("calc").value||0);
+
+if(c<0){
+toast("Invalid amount.");
+return;
+}
+
 document.getElementById("calcResult").textContent=
 "Rs. "+(c*RATE).toLocaleString(undefined,{maximumFractionDigits:2});
 }
 
+/* RECHARGE */
 function recharge(){
-let n=localStorage.getItem(SESSION),u=users[n];
-let c=Number(document.getElementById("rq").value);
-let r=document.getElementById("receipt").value.trim();
+let amount=prompt("Virtual coins quantity enter karein:");
+if(amount===null)return;
 
-if(!c||c<1){toast("Enter coin quantity.");return}
+let coins=Math.floor(Number(amount));
 
-let req={
-id:Date.now(),
-number:n,
-coins:c,
-estimated:c*RATE,
-receipt:r||"Not provided",
-status:"pending",
-time:Date.now()
-};
-
-requests.unshift(req);
-u.pending=true;
-u.activity.unshift({text:"Recharge request submitted: "+c+" virtual coins",time:Date.now()});
-save();
-updateUser();
-
-let msg=
-"ALINOVA TRADING RECHARGE REQUEST\n\n"+
-"Mobile: "+n+"\n"+
-"Virtual Coins: "+c+"\n"+
-"Demo Estimated Value: Rs. "+(c*RATE).toLocaleString()+"\n"+
-"Receipt Reference: "+(r||"Not provided")+"\n\n"+
-"STATUS: PENDING ADMIN VERIFICATION";
-
-window.open("https://wa.me/923220751486?text="+encodeURIComponent(msg),"_blank");
-
-document.getElementById("rq").value="";
-document.getElementById("receipt").value="";
-toast("Request sent to WhatsApp.");
+if(!Number.isFinite(coins)||coins<=0){
+toast("Valid amount enter karein.");
+return;
 }
 
+let reference=prompt("Optional receipt/reference:");
+
+let phone=localStorage.getItem(SESSION);
+let list=requests();
+
+let id="ALN-"+Date.now().toString().slice(-8);
+
+list.unshift({
+id:id,
+phone:phone,
+coins:coins,
+value:coins*RATE,
+reference:reference||"Not provided",
+status:"PENDING",
+time:new Date().toLocaleString()
+});
+
+saveRequests(list);
+
+let message=
+"ALINOVA TRADING VIRTUAL RECHARGE REQUEST\n\n"+
+"Mobile: "+phone+"\n"+
+"Virtual Coins: "+coins+"\n"+
+"Estimated Demo Value: Rs. "+(coins*RATE)+"\n"+
+"Reference: "+(reference||"Not provided")+"\n"+
+"Request ID: "+id+"\n"+
+"Status: PENDING ADMIN VERIFICATION";
+
+window.open(
+"https://wa.me/923220751486?text="+encodeURIComponent(message),
+"_blank"
+);
+
+toast("Request submitted for admin verification.");
+}
+
+/* FORGOT ACCESS */
+function forgotAccess(){
+let phone=prompt("Apna registered mobile number enter karein:");
+
+if(phone===null)return;
+
+phone=phone.trim();
+
+if(!valid(phone)){
+toast("Valid Pakistani mobile number enter karein.");
+return;
+}
+
+let u=users();
+
+if(!u[phone]){
+toast("Is number ka account nahi mila.");
+return;
+}
+
+let list=accessRequests();
+
+let existing=list.find(x=>x.phone===phone&&x.status==="PENDING");
+
+if(existing){
+toast("Access request already pending hai.");
+return;
+}
+
+let id="ACC-"+Date.now().toString().slice(-8);
+
+list.unshift({
+id:id,
+phone:phone,
+time:new Date().toLocaleString(),
+status:"PENDING"
+});
+
+saveAccess(list);
+
+toast("Access request admin ko bhej di gayi.");
+}
+
+/* ACTIVITY */
 function renderActivity(){
-let n=localStorage.getItem(SESSION),u=users[n];
-document.getElementById("activity").innerHTML=u.activity.slice(0,7).map(a=>
-`<div class="activity">${esc(a.text)}<br><span>${new Date(a.time).toLocaleString()}</span></div>`
+let phone=localStorage.getItem(SESSION);
+let u=users();
+let box=document.getElementById("activity");
+
+if(!u[phone])return;
+
+let a=u[phone].activity||[];
+
+box.innerHTML=a.slice(0,20).map(x=>
+"<div><b>"+esc(x.text)+"</b><br>"+
+"<span class='muted'>"+esc(x.time)+"</span></div>"
 ).join("");
 }
 
-function esc(s){
-return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-}
-
-function share(){
-let n=localStorage.getItem(SESSION);
-let text="Join ALINOVA TRADING virtual demo platform. Referral: "+n;
+async function shareReferral(){
+let text="Join ALINOVA TRADING — Virtual/Demo Trading Experience.";
 
 if(navigator.share){
-navigator.share({title:"ALINOVA TRADING",text:text});
+try{await navigator.share({title:"ALINOVA TRADING",text:text})}catch(e){}
 }else{
-navigator.clipboard.writeText(text);
-toast("Referral copied.");
+navigator.clipboard?.writeText(text);
+toast("Referral text copied.");
 }
 }
 
@@ -345,153 +686,93 @@ function logout(){
 localStorage.removeItem(SESSION);
 document.getElementById("userPage").classList.add("hidden");
 document.getElementById("auth").classList.remove("hidden");
-loginTab();
+document.getElementById("navUser").textContent="";
+showLogin();
 }
 
-function openAdminLogin(){
+/* ADMIN */
+function showAdminLogin(){
+document.getElementById("auth").classList.add("hidden");
 document.getElementById("userPage").classList.add("hidden");
+document.getElementById("adminPage").classList.add("hidden");
 document.getElementById("adminLogin").classList.remove("hidden");
 }
 
 function adminLogin(){
-let u=document.getElementById("adminUser").value;
-let p=document.getElementById("adminPass").value;
+let name=document.getElementById("adminName").value;
+let pass=document.getElementById("adminPassword").value;
 
-if(u==="admin"&&p==="123456"){
+if(name==="Alig0014"&&pass==="alig0014"){
 document.getElementById("adminLogin").classList.add("hidden");
 document.getElementById("adminPage").classList.remove("hidden");
 renderAdmin();
+toast("Admin login successful.");
 }else{
-toast("Invalid admin login.");
+toast("Wrong admin username or password.");
 }
 }
 
 function renderAdmin(){
+let r=requests();
+let a=accessRequests();
+let u=users();
 
-let pending=requests.filter(x=>x.status==="pending").length;
-let approved=requests.filter(x=>x.status==="approved").length;
-let rejected=requests.filter(x=>x.status==="rejected").length;
+document.getElementById("pending").textContent=
+r.filter(x=>x.status==="PENDING").length;
 
-document.getElementById("pendingCount").textContent=pending;
-document.getElementById("approvedCount").textContent=approved;
-document.getElementById("rejectedCount").textContent=rejected;
+document.getElementById("accessPending").textContent=
+a.filter(x=>x.status==="PENDING").length;
 
-let box=document.getElementById("requests");
+document.getElementById("totalUsers").textContent=
+Object.keys(u).length;
 
-if(!requests.length){
-box.innerHTML="<div class='empty'>No recharge requests yet.</div>";
+renderAccess();
+renderUsers();
+renderRecharge();
+}
+
+/* ACCESS ADMIN */
+function renderAccess(){
+let list=accessRequests();
+let box=document.getElementById("accessTable");
+
+if(!list.length){
+box.innerHTML='<tr><td colspan="5" class="muted">No access requests.</td></tr>';
 return;
 }
 
-box.innerHTML=requests.map(r=>`
-<div class="req">
-<div class="reqtop">
-<div class="reqtitle">Recharge #${r.id}</div>
-<div class="status">${r.status.toUpperCase()}</div>
-</div>
+box.innerHTML=list.map(x=>{
+let action=x.status==="PENDING"
+?`<button class="btn small green" onclick="approveAccess('${x.id}')">APPROVE</button>
+<button class="btn small red" onclick="rejectAccess('${x.id}')">REJECT</button>`
+:"<span class='muted'>Completed</span>";
 
-<p>Mobile: <strong>${esc(r.number)}</strong></p>
-<p>Requested Virtual Coins: <strong>${Number(r.coins).toLocaleString()}</strong></p>
-<p>Demo Estimated Value: <strong>Rs. ${Number(r.estimated).toLocaleString()}</strong></p>
-<p>Receipt Reference: <strong>${esc(r.receipt)}</strong></p>
-<p>Time: ${new Date(r.time).toLocaleString()}</p>
+let cls=x.status==="PENDING"?"pending":
+x.status==="APPROVED"?"approved":"rejected";
 
-${r.status==="pending"?`
-<div class="actions">
-<button class="approve" onclick="approve(${r.id})">✓ APPROVE</button>
-<button class="reject" onclick="rejectReq(${r.id})">✕ REJECT</button>
-</div>`:""}
-
-</div>
-`).join("");
+return `<tr>
+<td>${esc(x.id)}</td>
+<td>${esc(x.phone)}</td>
+<td>${esc(x.time)}</td>
+<td><span class="status ${cls}">${esc(x.status)}</span></td>
+<td>${action}</td>
+</tr>`;
+}).join("");
 }
 
-function approve(id){
+function approveAccess(id){
+let list=accessRequests();
+let x=list.find(a=>a.id===id);
 
-let r=requests.find(x=>x.id===id);
-if(!r||r.status!=="pending")return;
+if(!x||x.status!=="PENDING")return;
 
-if(users[r.number]){
-users[r.number].coins+=Number(r.coins);
-users[r.number].pending=false;
-
-users[r.number].activity.unshift({
-text:"Recharge approved: +"+Number(r.coins).toLocaleString()+" virtual coins",
-time:Date.now()
-});
-}
-
-r.status="approved";
-r.approvedAt=Date.now();
-
-save();
+x.status="APPROVED";
+saveAccess(list);
 renderAdmin();
-toast("Request approved. Virtual coins added.");
+
+toast("Access request approved.");
 }
 
-function rejectReq(id){
-
-let r=requests.find(x=>x.id===id);
-if(!r||r.status!=="pending")return;
-
-r.status="rejected";
-
-if(users[r.number]){
-users[r.number].pending=false;
-
-users[r.number].activity.unshift({
-text:"Recharge request rejected",
-time:Date.now()
-});
-}
-
-save();
-renderAdmin();
-toast("Request rejected.");
-}
-
-function adminLogout(){
-document.getElementById("adminPage").classList.add("hidden");
-document.getElementById("adminLogin").classList.remove("hidden");
-document.getElementById("adminPass").value="";
-}
-
-function backUser(){
-document.getElementById("adminLogin").classList.add("hidden");
-document.getElementById("adminPage").classList.add("hidden");
-
-if(localStorage.getItem(SESSION)){
-document.getElementById("userPage").classList.remove("hidden");
-updateUser();
-}else{
-document.getElementById("auth").classList.remove("hidden");
-}
-}
-
-const winners=[
-["ALI NOVA MEMBER","15,000 Demo Points"],
-["NOVA MEMBER","8,000 Demo Points"],
-["ALINOVA USER","4,000 Demo Points"],
-["VIP DEMO MEMBER","2,000 Demo Points"]
-];
-
-let wi=0;
-
-setInterval(()=>{
-let w=winners[wi];
-let n=document.getElementById("wn");
-let p=document.getElementById("wp");
-
-if(n&&p){
-n.textContent=w[0];
-p.textContent="Virtual Reward: "+w[1];
-}
-wi=(wi+1)%winners.length;
-},3000);
-
-window.addEventListener("load",()=>{
-let n=localStorage.getItem(SESSION);
-
-if(n&&users[n])openUser();
-else loginTab();
-}
+function rejectAccess(id){
+let list=accessRequests();
+let x=list.find(a
