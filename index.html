@@ -1535,3 +1535,785 @@ Member: <strong id="userMobile"></strong>
 </div>
 
 </div>
+  function showAdminLogin(){
+
+document
+.getElementById("authPage")
+.classList.add("hidden");
+
+document
+.getElementById("userPage")
+.classList.add("hidden");
+
+document
+.getElementById("adminPage")
+.classList.add("hidden");
+
+document
+.getElementById("adminLoginPage")
+.classList.remove("hidden");
+
+}
+
+
+function adminLogin(){
+
+const username=
+document
+.getElementById("adminUsername")
+.value
+.trim();
+
+const password=
+document
+.getElementById("adminPassword")
+.value;
+
+if(
+username!==ADMIN_USERNAME ||
+password!==ADMIN_PASSWORD
+){
+
+toast("Invalid admin login.");
+
+return;
+
+}
+
+document
+.getElementById("adminLoginPage")
+.classList.add("hidden");
+
+document
+.getElementById("adminPage")
+.classList.remove("hidden");
+
+renderAdmin();
+
+}
+
+
+function renderAdmin(){
+
+renderAccess();
+renderUsers();
+renderRecharge();
+
+const list=requests();
+
+document
+.getElementById("pendingCount")
+.innerText=
+list.filter(
+r=>r.status==="PENDING"
+).length;
+
+document
+.getElementById("approvedCount")
+.innerText=
+list.filter(
+r=>r.status==="APPROVED"
+).length;
+
+document
+.getElementById("rejectedCount")
+.innerText=
+list.filter(
+r=>r.status==="REJECTED"
+).length;
+
+}
+
+
+function renderAccess(){
+
+const box=
+document.getElementById(
+"accessRequests"
+);
+
+const list=accessRequests();
+
+if(!list.length){
+
+box.innerHTML=
+'<p class="small">No access requests.</p>';
+
+return;
+
+}
+
+box.innerHTML=
+list.map(r=>`
+
+<div class="card"
+style="margin:10px 0;background:#080e20">
+
+<strong>${esc(r.id)}</strong>
+
+<p class="small">
+Mobile: ${esc(r.mobile)}
+</p>
+
+<p class="small">
+Time: ${esc(r.time)}
+</p>
+
+<p>
+Status:
+<span class="${
+r.status==="APPROVED"
+?"success":
+r.status==="REJECTED"
+?"danger":
+"warning"
+}">
+${esc(r.status)}
+</span>
+</p>
+
+${
+r.status==="PENDING"
+?`
+
+<button
+class="btn"
+onclick="approveAccess('${r.id}')"
+>
+APPROVE
+</button>
+
+<button
+class="btn red"
+onclick="rejectAccess('${r.id}')"
+>
+REJECT
+</button>
+
+`
+:""
+}
+
+</div>
+
+`).join("");
+
+}
+
+
+function approveAccess(id){
+
+const list=accessRequests();
+
+const r=
+list.find(
+x=>x.id===id
+);
+
+if(!r)return;
+
+r.status="APPROVED";
+
+saveAccess(list);
+
+renderAdmin();
+
+toast("Access request approved.");
+
+}
+
+
+function rejectAccess(id){
+
+const list=accessRequests();
+
+const r=
+list.find(
+x=>x.id===id
+);
+
+if(!r)return;
+
+r.status="REJECTED";
+
+saveAccess(list);
+
+renderAdmin();
+
+toast("Access request rejected.");
+
+}
+
+
+function renderUsers(){
+
+const box=
+document.getElementById(
+"usersTable"
+);
+
+const search=
+(
+document.getElementById(
+"userSearch"
+).value||""
+).trim();
+
+let list=users();
+
+if(search){
+
+list=
+list.filter(
+u=>u.mobile.includes(search)
+);
+
+}
+
+if(!list.length){
+
+box.innerHTML=
+'<p class="small">No users found.</p>';
+
+return;
+
+}
+
+box.innerHTML=`
+
+<div style="overflow-x:auto">
+
+<table style="
+width:100%;
+min-width:700px;
+border-collapse:collapse;
+">
+
+<tr style="
+background:#111a32;
+">
+
+<th style="padding:12px">Mobile</th>
+<th style="padding:12px">Coins</th>
+<th style="padding:12px">Status</th>
+<th style="padding:12px">Registered</th>
+<th style="padding:12px">Action</th>
+
+</tr>
+
+${list.map(u=>`
+
+<tr>
+
+<td style="padding:12px">
+${esc(u.mobile)}
+</td>
+
+<td style="padding:12px">
+${Number(u.balance).toLocaleString()}
+</td>
+
+<td style="padding:12px">
+<span class="${
+u.active
+?"success"
+:"danger"
+}">
+${u.active?"ACTIVE":"DISABLED"}
+</span>
+</td>
+
+<td style="padding:12px">
+${esc(u.registeredAt)}
+</td>
+
+<td style="padding:12px">
+
+<button
+class="btn"
+onclick="manageUser('${u.mobile}')"
+>
+MANAGE
+</button>
+
+</td>
+
+</tr>
+
+`).join("")}
+
+</table>
+
+</div>
+
+`;
+
+}
+
+
+function manageUser(mobile){
+
+selectedUser=mobile;
+
+const user=
+users().find(
+u=>u.mobile===mobile
+);
+
+if(!user)return;
+
+document
+.getElementById("modalMobile")
+.innerText=
+"Mobile: "+user.mobile;
+
+document
+.getElementById("toggleAccountBtn")
+.innerText=
+user.active
+?"DISABLE ACCOUNT"
+:"ENABLE ACCOUNT";
+
+document
+.getElementById("userModal")
+.classList.remove("hidden");
+
+}
+
+
+function closeModal(){
+
+selectedUser=null;
+
+document
+.getElementById("userModal")
+.classList.add("hidden");
+
+document
+.getElementById("coinAdjustment")
+.value="";
+
+}
+
+
+function adjustCoins(){
+
+if(!selectedUser)return;
+
+const amount=
+Number(
+document.getElementById(
+"coinAdjustment"
+).value
+);
+
+if(!amount){
+
+toast("Enter a coin amount.");
+
+return;
+
+}
+
+const list=users();
+
+const user=
+list.find(
+u=>u.mobile===selectedUser
+);
+
+if(!user)return;
+
+user.balance=
+Math.max(
+0,
+Number(user.balance)+amount
+);
+
+user.activity=
+user.activity||[];
+
+user.activity.unshift({
+
+text:
+`Admin ${
+amount>0?"added ":"removed "
+}${Math.abs(amount).toLocaleString()}
+virtual coins`,
+
+time:
+new Date().toLocaleString()
+
+});
+
+saveUsers(list);
+
+closeModal();
+
+renderAdmin();
+
+toast("Virtual coin balance updated.");
+
+}
+
+
+function toggleAccount(){
+
+if(!selectedUser)return;
+
+const list=users();
+
+const user=
+list.find(
+u=>u.mobile===selectedUser
+);
+
+if(!user)return;
+
+user.active=!user.active;
+
+saveUsers(list);
+
+closeModal();
+
+renderAdmin();
+
+toast(
+user.active
+?"Account enabled."
+:"Account disabled."
+);
+
+}
+
+
+function renderRecharge(){
+
+const box=
+document.getElementById(
+"rechargeTable"
+);
+
+const list=requests();
+
+if(!list.length){
+
+box.innerHTML=
+'<p class="small">No recharge requests.</p>';
+
+return;
+
+}
+
+box.innerHTML=`
+
+<div style="overflow-x:auto">
+
+<table style="
+width:100%;
+min-width:900px;
+border-collapse:collapse;
+">
+
+<tr style="background:#111a32">
+
+<th style="padding:12px">Request</th>
+<th style="padding:12px">Mobile</th>
+<th style="padding:12px">Coins</th>
+<th style="padding:12px">Demo Value</th>
+<th style="padding:12px">Reference</th>
+<th style="padding:12px">Status</th>
+<th style="padding:12px">Action</th>
+
+</tr>
+
+${list.map(r=>`
+
+<tr>
+
+<td style="padding:12px">
+${esc(r.id)}
+</td>
+
+<td style="padding:12px">
+${esc(r.mobile)}
+</td>
+
+<td style="padding:12px">
+${Number(r.coins).toLocaleString()}
+</td>
+
+<td style="padding:12px">
+Rs. ${Number(r.value).toLocaleString()}
+</td>
+
+<td style="padding:12px">
+${esc(r.receipt||"-")}
+</td>
+
+<td style="padding:12px">
+
+<span class="${
+r.status==="APPROVED"
+?"success":
+r.status==="REJECTED"
+?"danger":
+"warning"
+}">
+${esc(r.status)}
+</span>
+
+</td>
+
+<td style="padding:12px">
+
+${
+r.status==="PENDING"
+?`
+
+<button
+class="btn"
+onclick="approveRecharge('${r.id}')"
+>
+APPROVE
+</button>
+
+<button
+class="btn red"
+onclick="rejectRecharge('${r.id}')"
+>
+REJECT
+</button>
+
+`
+:"-"
+}
+
+</td>
+
+</tr>
+
+`).join("")}
+
+</table>
+
+</div>
+
+`;
+
+}
+
+
+function approveRecharge(id){
+
+const list=requests();
+
+const request=
+list.find(
+r=>r.id===id
+);
+
+if(!request)return;
+
+if(request.status!=="PENDING"){
+
+toast("Request already processed.");
+
+return;
+
+}
+
+const ul=users();
+
+const user=
+ul.find(
+u=>u.mobile===request.mobile
+);
+
+if(!user){
+
+toast("User account not found.");
+
+return;
+
+}
+
+user.balance=
+Number(user.balance)+
+Number(request.coins);
+
+user.activity=
+user.activity||[];
+
+user.activity.unshift({
+
+text:
+`Admin approved ${
+Number(request.coins).toLocaleString()
+} virtual coins`,
+
+time:
+new Date().toLocaleString()
+
+});
+
+request.status="APPROVED";
+
+request.approvedAt=
+new Date().toLocaleString();
+
+saveUsers(ul);
+saveRequests(list);
+
+renderAdmin();
+
+toast(
+"Approved. Virtual coins added."
+);
+
+}
+
+
+function rejectRecharge(id){
+
+const list=requests();
+
+const request=
+list.find(
+r=>r.id===id
+);
+
+if(!request)return;
+
+if(request.status!=="PENDING"){
+
+toast("Request already processed.");
+
+return;
+
+}
+
+request.status="REJECTED";
+
+request.rejectedAt=
+new Date().toLocaleString();
+
+const ul=users();
+
+const user=
+ul.find(
+u=>u.mobile===request.mobile
+);
+
+if(user){
+
+user.activity=
+user.activity||[];
+
+user.activity.unshift({
+
+text:
+`Recharge request ${request.id} rejected`,
+
+time:
+new Date().toLocaleString()
+
+});
+
+saveUsers(ul);
+
+}
+
+saveRequests(list);
+
+renderAdmin();
+
+toast("Recharge request rejected.");
+
+}
+
+
+function adminLogout(){
+
+document
+.getElementById("adminPage")
+.classList.add("hidden");
+
+document
+.getElementById("adminLoginPage")
+.classList.add("hidden");
+
+document
+.getElementById("authPage")
+.classList.remove("hidden");
+
+document
+.getElementById("adminUsername")
+.value="";
+
+document
+.getElementById("adminPassword")
+.value="";
+
+showLogin();
+
+}
+
+
+function back(){
+
+document
+.getElementById("adminLoginPage")
+.classList.add("hidden");
+
+document
+.getElementById("adminPage")
+.classList.add("hidden");
+
+document
+.getElementById("userPage")
+.classList.add("hidden");
+
+document
+.getElementById("authPage")
+.classList.remove("hidden");
+
+showLogin();
+
+}
+
+
+window.addEventListener(
+"load",
+()=>{
+
+const mobile=
+localStorage.getItem(SESSION);
+
+if(!mobile)return;
+
+const user=
+users().find(
+u=>u.mobile===mobile
+);
+
+if(
+user &&
+user.active
+){
+
+openWebsite();
+
+}else{
+
+localStorage.removeItem(SESSION);
+
+}
+
+});
+
+
+</script>
+
+</body>
+</html>
