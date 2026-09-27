@@ -1,1251 +1,1001 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="theme-color" content="#05070d">
-<title>ALINOVA — 3D Virtual Coin Platform</title>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALINOVA TRADING</title><style>
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
-}
-
-:root{
-  --bg:#03050a;
-  --panel:#0a0f19;
-  --panel2:#0d1420;
-  --line:rgba(255,255,255,.09);
-  --text:#f4f8ff;
-  --muted:#7d8ba3;
-  --green:#00ffc8;
-  --blue:#6585ff;
-  --purple:#9d68ff;
-  --danger:#ff5370;
-}
-
-html{
-  scroll-behavior:smooth;
+  font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
   min-height:100vh;
-  font-family:Inter,Arial,sans-serif;
-  color:var(--text);
   background:
-    radial-gradient(circle at 10% 0%,rgba(0,255,200,.12),transparent 25%),
-    radial-gradient(circle at 95% 10%,rgba(100,120,255,.15),transparent 27%),
-    radial-gradient(circle at 50% 100%,rgba(150,70,255,.08),transparent 30%),
-    var(--bg);
-  overflow-x:hidden;
+    radial-gradient(circle at top,#18234d 0%,#080b18 45%,#03040a 100%);
+  color:#fff;
 }
 
-/* ================= BACKGROUND ================= */
+.hidden{display:none!important}
 
-body:before,
-body:after{
+.app{
+  width:100%;
+  min-height:100vh;
+}
+
+/* AUTH */
+.auth{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.auth-box{
+  width:100%;
+  max-width:430px;
+  padding:30px 24px;
+  border-radius:28px;
+  background:rgba(15,20,42,.9);
+  border:1px solid rgba(0,220,255,.35);
+  box-shadow:
+    0 0 25px rgba(0,200,255,.18),
+    inset 0 0 25px rgba(100,80,255,.08);
+  position:relative;
+  overflow:hidden;
+}
+
+.auth-box:before{
   content:"";
-  position:fixed;
+  position:absolute;
+  inset:-2px;
+  border-radius:28px;
+  padding:2px;
+  background:linear-gradient(120deg,#00eaff,#735cff,#ff36c8,#00eaff);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
   pointer-events:none;
-  z-index:-1;
+}
+
+.logo{
+  text-align:center;
+  font-size:34px;
+  font-weight:900;
+  letter-spacing:2px;
+  margin-bottom:8px;
+}
+
+.logo span{
+  color:#00eaff;
+  text-shadow:0 0 15px rgba(0,234,255,.7);
+}
+
+.tagline{
+  text-align:center;
+  color:#9ca8c7;
+  margin-bottom:28px;
+  font-size:13px;
+}
+
+.tabs{
+  display:flex;
+  gap:8px;
+  margin-bottom:20px;
+}
+
+.tab{
+  flex:1;
+  padding:12px;
+  border:0;
+  border-radius:12px;
+  background:#111831;
+  color:#9ca8c7;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.tab.active{
+  background:linear-gradient(135deg,#00bcd4,#6757ff);
+  color:white;
+  box-shadow:0 8px 20px rgba(0,190,255,.2);
+}
+
+label{
+  display:block;
+  color:#b9c3dc;
+  font-size:13px;
+  margin-bottom:8px;
+}
+
+input{
+  width:100%;
+  padding:15px;
+  border-radius:13px;
+  border:1px solid #293252;
+  background:#090e20;
+  color:white;
+  outline:none;
+  margin-bottom:15px;
+  font-size:15px;
+}
+
+input:focus{
+  border-color:#00dfff;
+  box-shadow:0 0 12px rgba(0,223,255,.15);
+}
+
+.btn{
+  width:100%;
+  border:0;
+  border-radius:13px;
+  padding:15px;
+  cursor:pointer;
+  color:#fff;
+  font-weight:800;
+  font-size:15px;
+  background:linear-gradient(135deg,#00c9e8,#635bff);
+  box-shadow:0 8px 20px rgba(0,180,255,.2);
+  transition:.2s;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+}
+
+.small-note{
+  text-align:center;
+  color:#77819e;
+  font-size:11px;
+  margin-top:16px;
+  line-height:1.5;
+}
+
+/* DASHBOARD */
+.dashboard{
+  max-width:1150px;
+  margin:auto;
+  padding:18px;
+}
+
+.nav{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:22px;
+}
+
+.nav-logo{
+  font-size:25px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.nav-logo span{
+  color:#00eaff;
+}
+
+.nav-user{
+  color:#aeb8d4;
+  font-size:13px;
+}
+
+.logout{
+  border:1px solid #303957;
+  background:#10162b;
+  color:#fff;
+  border-radius:10px;
+  padding:10px 13px;
+  cursor:pointer;
+}
+
+/* HERO */
+.hero{
+  padding:26px;
+  border-radius:25px;
+  margin-bottom:18px;
+  background:
+    linear-gradient(135deg,rgba(0,204,255,.13),rgba(111,76,255,.14));
+  border:1px solid rgba(0,220,255,.3);
+  box-shadow:0 0 25px rgba(0,190,255,.1);
+  position:relative;
+  overflow:hidden;
+}
+
+.hero:after{
+  content:"";
+  position:absolute;
+  width:180px;
+  height:180px;
   border-radius:50%;
-  filter:blur(2px);
+  background:rgba(0,220,255,.08);
+  right:-60px;
+  top:-60px;
 }
 
-body:before{
-  width:350px;
-  height:350px;
-  left:-180px;
-  top:35%;
-  background:rgba(0,255,200,.06);
+.hero h1{
+  font-size:28px;
+  margin-bottom:8px;
 }
 
-body:after{
-  width:400px;
-  height:400px;
-  right:-200px;
-  bottom:5%;
-  background:rgba(90,100,255,.07);
+.hero p{
+  color:#a8b3ce;
+  font-size:14px;
 }
 
-.hidden{
-  display:none!important;
+/* CARDS */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+  margin-bottom:18px;
 }
-
-/* ================= 3D BORDER SYSTEM ================= */
 
 .card3d{
+  min-height:145px;
+  padding:20px;
+  border-radius:20px;
+  background:#0d1328;
   position:relative;
-  isolation:isolate;
-  border-radius:24px;
-  background:linear-gradient(145deg,#0d1420,#070b13);
-  border:1px solid rgba(255,255,255,.08);
+  overflow:hidden;
+  border:1px solid rgba(100,130,255,.25);
   box-shadow:
-    0 20px 45px rgba(0,0,0,.45),
-    inset 0 1px 0 rgba(255,255,255,.05);
-  transform:translateZ(0);
-  transition:
-    transform .35s ease,
-    box-shadow .35s ease;
+    0 12px 25px rgba(0,0,0,.3),
+    inset 0 0 20px rgba(90,80,255,.05);
+  transition:.25s;
+}
+
+.card3d:hover{
+  transform:translateY(-5px);
+  box-shadow:
+    0 18px 35px rgba(0,0,0,.4),
+    0 0 20px rgba(0,210,255,.1);
 }
 
 .card3d:before{
   content:"";
   position:absolute;
-  inset:-1px;
-  border-radius:inherit;
+  inset:0;
+  border-radius:20px;
   padding:1px;
-  background:linear-gradient(
-    120deg,
-    rgba(0,255,200,.7),
-    transparent 25%,
-    rgba(100,120,255,.55) 55%,
-    transparent 75%,
-    rgba(170,80,255,.5)
-  );
+  background:linear-gradient(135deg,#00eaff,#665cff,#ff36c8);
   -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
   -webkit-mask-composite:xor;
   mask-composite:exclude;
-  opacity:.45;
+  opacity:.65;
   pointer-events:none;
 }
 
-.card3d:hover{
-  transform:translateY(-5px) perspective(700px) rotateX(1deg);
-  box-shadow:
-    0 28px 60px rgba(0,0,0,.55),
-    0 0 30px rgba(0,255,200,.06),
-    inset 0 1px 0 rgba(255,255,255,.07);
-}
-
-/* ================= LOGIN ================= */
-
-.center-page{
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:20px;
-}
-
-.auth{
-  width:100%;
-  max-width:440px;
-  padding:34px 27px;
-  text-align:center;
-}
-
-.logo{
-  font-size:39px;
-  font-weight:900;
-  letter-spacing:3px;
-  background:linear-gradient(
-    90deg,
-    #00ffc8,
-    #72a0ff,
-    #a76cff
-  );
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
-  text-shadow:0 0 30px rgba(0,255,200,.08);
-}
-
-.logo-line{
-  width:90px;
-  height:3px;
-  margin:13px auto 16px;
-  border-radius:20px;
-  background:linear-gradient(90deg,#00ffc8,#728bff);
-  box-shadow:0 0 18px rgba(0,255,200,.45);
-}
-
-.auth-title{
-  font-size:18px;
-  font-weight:700;
-}
-
-.auth-sub{
-  color:var(--muted);
-  font-size:12px;
-  margin:8px 0 25px;
-}
-
-.input-wrap{
-  position:relative;
-  margin:10px 0;
-}
-
-.input-wrap span{
-  position:absolute;
-  left:15px;
-  top:50%;
-  transform:translateY(-50%);
-  opacity:.55;
-}
-
-input{
-  width:100%;
-  height:53px;
-  padding:0 15px 0 45px;
-  border-radius:15px;
-  border:1px solid rgba(255,255,255,.09);
-  background:#070c14;
-  color:white;
-  outline:none;
-  font-size:14px;
-  transition:.25s;
-}
-
-input:focus{
-  border-color:rgba(0,255,200,.6);
-  box-shadow:
-    0 0 0 3px rgba(0,255,200,.06),
-    0 0 25px rgba(0,255,200,.06);
-}
-
-.btn{
-  width:100%;
-  height:53px;
-  border:0;
-  border-radius:15px;
-  margin-top:10px;
-  cursor:pointer;
-  font-weight:800;
-  font-size:14px;
-  color:#02100d;
-  background:linear-gradient(
-    100deg,
-    #00ffc8,
-    #5e94ff
-  );
-  box-shadow:
-    0 12px 30px rgba(0,255,200,.12),
-    inset 0 1px 0 rgba(255,255,255,.5);
-  transition:.25s;
-}
-
-.btn:hover{
-  transform:translateY(-2px);
-  box-shadow:
-    0 17px 35px rgba(0,255,200,.18),
-    0 0 25px rgba(80,130,255,.1);
-}
-
-.btn:active{
-  transform:translateY(0);
-}
-
-.btn.dark{
-  background:#111927;
-  color:#dce5f4;
-  border:1px solid rgba(255,255,255,.08);
-  box-shadow:none;
-}
-
-.notice{
-  margin-top:20px;
-  padding:12px;
-  border-radius:13px;
-  background:rgba(0,255,200,.035);
-  border:1px solid rgba(0,255,200,.08);
-  color:#68768d;
-  font-size:10px;
-  line-height:1.7;
-}
-
-/* ================= DASHBOARD ================= */
-
-.dashboard{
-  min-height:100vh;
-  padding:18px;
-}
-
-.container{
-  width:100%;
-  max-width:1180px;
-  margin:auto;
-}
-
-.topbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:7px 2px 20px;
-}
-
-.brand{
-  font-size:25px;
-  font-weight:900;
-  letter-spacing:2px;
-}
-
-.brand b{
-  color:var(--green);
-}
-
-.user-pill{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  padding:9px 13px;
-  border-radius:100px;
-  background:#0a111d;
-  border:1px solid rgba(255,255,255,.08);
-  color:#8997ae;
-  font-size:11px;
-}
-
-.online{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:#00e8ae;
-  box-shadow:0 0 10px #00e8ae;
-}
-
-/* ================= HERO ================= */
-
-.hero{
-  padding:30px;
-  overflow:hidden;
-}
-
-.hero-inner{
-  position:relative;
-  z-index:2;
-}
-
-.hero-glow{
-  position:absolute;
-  width:330px;
-  height:330px;
-  right:-130px;
-  top:-170px;
-  border-radius:50%;
-  background:rgba(0,255,200,.09);
-  filter:blur(5px);
-}
-
-.hero-label{
-  color:#8997ad;
+.card-title{
+  color:#8e9bb9;
   font-size:12px;
   text-transform:uppercase;
-  letter-spacing:1.5px;
+  letter-spacing:1px;
 }
 
 .balance{
-  margin:8px 0 3px;
-  font-size:50px;
-  line-height:1.1;
+  font-size:28px;
   font-weight:900;
-  letter-spacing:-2px;
-}
-
-.balance-unit{
-  font-size:20px;
-  color:var(--green);
-  letter-spacing:0;
-}
-
-.hero-small{
-  color:#68768c;
-  font-size:11px;
-}
-
-.hero-bottom{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:20px;
-  margin-top:25px;
-  padding-top:20px;
-  border-top:1px solid rgba(255,255,255,.07);
-}
-
-.status{
-  display:flex;
-  gap:8px;
-  align-items:center;
-  color:#7e8ba1;
-  font-size:11px;
-}
-
-.status-dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:#00e8ae;
-  box-shadow:0 0 13px #00e8ae;
-}
-
-/* ================= STAT CARDS ================= */
-
-.grid3{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:15px;
-  margin-top:15px;
-}
-
-.stat{
-  padding:20px;
-}
-
-.stat-icon{
-  width:43px;
-  height:43px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  border-radius:13px;
-  background:linear-gradient(145deg,#172338,#0b111d);
-  border:1px solid rgba(255,255,255,.08);
-  box-shadow:
-    5px 5px 15px rgba(0,0,0,.3),
-    inset 1px 1px 2px rgba(255,255,255,.05);
-  margin-bottom:15px;
-}
-
-.stat-title{
-  color:#728097;
-  font-size:10px;
-  letter-spacing:1px;
-  text-transform:uppercase;
-}
-
-.stat-value{
-  font-size:22px;
-  font-weight:800;
-  margin-top:7px;
-}
-
-.green{
-  color:#00e8ad;
-}
-
-.blue{
-  color:#7895ff;
-}
-
-/* ================= SECTION ================= */
-
-.section{
-  margin-top:24px;
-}
-
-.section-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:12px;
-}
-
-.section-title{
-  font-size:18px;
-  font-weight:800;
-}
-
-.section-sub{
-  color:#65738a;
-  font-size:10px;
-}
-
-/* ================= DAILY CLAIM ================= */
-
-.claim{
-  padding:21px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:20px;
-}
-
-.claim-left{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
-
-.claim-icon{
-  width:52px;
-  height:52px;
-  flex:none;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:16px;
-  background:linear-gradient(145deg,#18283b,#0a101a);
-  border:1px solid rgba(0,255,200,.18);
-  box-shadow:
-    7px 7px 16px rgba(0,0,0,.4),
-    inset 1px 1px 2px rgba(255,255,255,.08);
-  font-size:22px;
-}
-
-.claim-title{
-  font-size:15px;
-  font-weight:800;
-}
-
-.claim-desc{
-  margin-top:5px;
-  color:#718096;
-  font-size:10px;
-}
-
-.claim .btn{
-  width:auto;
-  min-width:170px;
-  padding:0 20px;
-  margin:0;
-}
-
-/* ================= RECHARGE ================= */
-
-.recharge{
-  padding:22px;
-}
-
-.recharge-info{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-bottom:17px;
-}
-
-.recharge-icon{
-  width:44px;
-  height:44px;
-  border-radius:14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#172033;
-  border:1px solid rgba(110,140,255,.18);
-}
-
-.recharge-title{
-  font-size:15px;
-  font-weight:800;
-}
-
-.recharge-sub{
-  color:#68768c;
-  font-size:10px;
-  margin-top:4px;
-}
-
-.recharge-row{
-  display:grid;
-  grid-template-columns:1fr 210px;
-  gap:12px;
-}
-
-.preview{
-  height:53px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:15px;
-  background:#080e17;
-  border:1px solid rgba(255,255,255,.07);
-  color:#65738a;
-  font-size:11px;
-}
-
-.preview strong{
-  color:var(--green);
-  margin-left:6px;
-}
-
-.recharge .btn{
   margin-top:12px;
-}
-
-.recharge-note{
-  color:#5f6c82;
-  font-size:9px;
-  line-height:1.6;
-  margin-top:12px;
-}
-
-/* ================= MARKET ================= */
-
-.market{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:13px;
 }
 
 .coin{
-  padding:19px;
+  color:#00eaff;
 }
 
-.coin-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.coin-icon{
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-weight:900;
-  background:linear-gradient(145deg,#1a2940,#0b111c);
-  border:1px solid rgba(255,255,255,.08);
-  box-shadow:
-    5px 5px 14px rgba(0,0,0,.35),
-    inset 1px 1px 2px rgba(255,255,255,.08);
-}
-
-.coin-name{
-  margin-top:14px;
-  font-size:13px;
-  font-weight:800;
-}
-
-.coin-symbol{
-  margin-top:3px;
-  font-size:9px;
-  color:#627087;
-}
-
-.coin-price{
-  margin-top:15px;
-  font-size:17px;
-  font-weight:800;
-}
-
-.coin-change{
-  color:#00dca4;
-  font-size:9px;
-  margin-top:5px;
-}
-
-/* ================= ACTIVITY ================= */
-
-.activity{
-  overflow:hidden;
-}
-
-.activity-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:17px 19px;
-  border-bottom:1px solid rgba(255,255,255,.055);
+.sub{
+  color:#697594;
   font-size:11px;
+  margin-top:8px;
 }
 
-.activity-row:last-child{
+/* SECTIONS */
+.sections{
+  display:grid;
+  grid-template-columns:1.3fr .7fr;
+  gap:18px;
+}
+
+.panel{
+  background:#0c1225;
+  border:1px solid #222c4b;
+  border-radius:22px;
+  padding:22px;
+  box-shadow:0 10px 25px rgba(0,0,0,.25);
+}
+
+.panel h2{
+  font-size:18px;
+  margin-bottom:18px;
+}
+
+.market{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px;
+  background:#11182e;
+  border:1px solid #273252;
+  border-radius:15px;
+  margin-bottom:10px;
+}
+
+.market-name{
+  font-weight:bold;
+}
+
+.market-code{
+  color:#7785a6;
+  font-size:11px;
+  margin-top:4px;
+}
+
+.market-price{
+  text-align:right;
+  font-weight:bold;
+}
+
+.up{
+  color:#4dff9b;
+  font-size:11px;
+  margin-top:4px;
+}
+
+.action{
+  margin-top:12px;
+}
+
+.action input{
+  margin-bottom:10px;
+}
+
+.notice{
+  margin-top:15px;
+  padding:12px;
+  border-radius:12px;
+  background:#11182c;
+  color:#8995b3;
+  font-size:11px;
+  line-height:1.5;
+}
+
+/* ACTIVITY */
+.activity{
+  padding:13px 0;
+  border-bottom:1px solid #202a45;
+  font-size:13px;
+}
+
+.activity:last-child{
   border-bottom:0;
 }
 
-.activity-name{
-  color:#aeb9ca;
+.activity span{
+  color:#7d8aaa;
+  font-size:11px;
 }
 
-.activity-value{
-  color:var(--green);
-  font-weight:800;
-}
-
-/* ================= LOGOUT ================= */
-
-.logout{
-  margin-top:20px;
-}
-
-footer{
+/* FOOTER */
+.footer{
   text-align:center;
-  color:#4f5d73;
-  font-size:9px;
-  line-height:1.8;
-  padding:30px 0 15px;
+  color:#5f6b88;
+  font-size:11px;
+  padding:25px 10px;
 }
 
-/* ================= RESPONSIVE ================= */
+/* TOAST */
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:25px;
+  transform:translateX(-50%) translateY(100px);
+  background:#111a32;
+  border:1px solid #00dfff;
+  color:white;
+  padding:13px 18px;
+  border-radius:12px;
+  font-size:13px;
+  z-index:100;
+  transition:.3s;
+  box-shadow:0 0 20px rgba(0,220,255,.15);
+}
 
+.toast.show{
+  transform:translateX(-50%) translateY(0);
+}
+
+/* MOBILE */
 @media(max-width:850px){
-
-  .market{
+  .grid{
     grid-template-columns:repeat(2,1fr);
   }
 
-  .grid3{
+  .sections{
     grid-template-columns:1fr;
   }
-
 }
 
-@media(max-width:600px){
-
+@media(max-width:500px){
   .dashboard{
-    padding:11px;
+    padding:12px;
   }
 
-  .topbar{
-    padding-bottom:14px;
+  .nav{
+    flex-wrap:wrap;
   }
 
-  .brand{
-    font-size:21px;
-  }
-
-  .user-pill{
-    max-width:150px;
-    overflow:hidden;
-  }
-
-  .hero{
-    padding:22px;
-  }
-
-  .balance{
-    font-size:35px;
-  }
-
-  .balance-unit{
-    font-size:16px;
-  }
-
-  .hero-bottom{
-    align-items:flex-start;
-    flex-direction:column;
-    gap:12px;
-  }
-
-  .claim{
-    flex-direction:column;
-    align-items:stretch;
-  }
-
-  .claim .btn{
+  .nav-logo{
     width:100%;
   }
 
-  .recharge-row{
-    grid-template-columns:1fr;
-  }
-
-  .market{
+  .grid{
     grid-template-columns:1fr 1fr;
-    gap:9px;
+    gap:10px;
   }
 
-  .coin{
-    padding:14px;
-  }
-
-  .coin-price{
-    font-size:14px;
-  }
-
-}
-
-@media(max-width:390px){
-
-  .market{
-    grid-template-columns:1fr;
+  .card3d{
+    min-height:125px;
+    padding:15px;
   }
 
   .balance{
-    font-size:31px;
+    font-size:23px;
   }
 
+  .hero{
+    padding:20px;
+  }
+
+  .hero h1{
+    font-size:23px;
+  }
+
+  .panel{
+    padding:16px;
+  }
 }
-</style>
-</head>
+</style></head><body><div class="app"><!-- AUTH --><section id="authPage" class="auth">  <div class="auth-box"><div class="logo">ALI<span>NOVA</span></div>
+<div class="tagline">TRADING • DIGITAL VIRTUAL PLATFORM</div>
 
-<body>
+<div class="tabs">
+  <button id="loginTab" class="tab active" onclick="showLogin()">LOGIN</button>
+  <button id="registerTab" class="tab" onclick="showRegister()">REGISTER</button>
+</div>
 
-<!-- =====================================================
-     LOGIN PAGE
-===================================================== -->
+<!-- LOGIN -->
+<div id="loginForm">
 
-<section class="center-page" id="loginPage">
+  <label>Mobile Number</label>
+  <input
+    id="loginNumber"
+    type="tel"
+    inputmode="numeric"
+    placeholder="03XXXXXXXXX"
+    maxlength="11"
+  >
 
-  <div class="auth card3d">
+  <button class="btn" onclick="loginUser()">
+    LOGIN TO ALINOVA
+  </button>
 
-    <div class="logo">ALINOVA</div>
+  <div class="small-note">
+    Enter the same mobile number used during registration.
+  </div>
 
-    <div class="logo-line"></div>
+</div>
 
-    <div class="auth-title">
-      Welcome Back
+<!-- REGISTER -->
+<div id="registerForm" class="hidden">
+
+  <label>Mobile Number</label>
+  <input
+    id="registerNumber"
+    type="tel"
+    inputmode="numeric"
+    placeholder="03XXXXXXXXX"
+    maxlength="11"
+  >
+
+  <button class="btn" onclick="registerUser()">
+    CREATE ACCOUNT
+  </button>
+
+  <div class="small-note">
+    New accounts receive 500 virtual ALI Coins.
+  </div>
+
+</div>
+
+<div class="small-note">
+  ALINOVA TRADING is a virtual/demo platform.
+  Coins shown here have no real monetary value.
+</div>
+
+  </div>
+</section><!-- DASHBOARD --><section id="dashboardPage" class="dashboard hidden">  <div class="nav"><div class="nav-logo">
+  ALI<span>NOVA</span>
+</div>
+
+<div class="nav-user">
+  Account: <b id="userNumber"></b>
+</div>
+
+<button class="logout" onclick="logoutUser()">
+  Logout
+</button>
+
+  </div>  <div class="hero"><h1>Welcome to ALINOVA TRADING</h1>
+
+<p>
+  Manage your virtual portfolio and explore the digital market dashboard.
+</p>
+
+  </div>  <!-- STATS -->  <div class="grid"><div class="card3d">
+  <div class="card-title">Available Coins</div>
+  <div class="balance coin" id="coinBalance">500</div>
+  <div class="sub">Virtual ALI Coins</div>
+</div>
+
+<div class="card3d">
+  <div class="card-title">Account Status</div>
+  <div class="balance">ACTIVE</div>
+  <div class="sub">Account verified locally</div>
+</div>
+
+<div class="card3d">
+  <div class="card-title">Daily Reward</div>
+  <div class="balance">+20</div>
+  <div class="sub">Once every 24 hours</div>
+</div>
+
+<div class="card3d">
+  <div class="card-title">Platform</div>
+  <div class="balance">ALINOVA</div>
+  <div class="sub">Virtual Trading</div>
+</div>
+
+  </div>  <div class="sections"><!-- MARKET -->
+<div class="panel">
+
+  <h2>Market Overview</h2>
+
+  <div class="market">
+    <div>
+      <div class="market-name">ALI NOVA</div>
+      <div class="market-code">ALI</div>
     </div>
-
-    <div class="auth-sub">
-      Access your virtual coin dashboard
+    <div class="market-price">
+      1.00
+      <div class="up">+2.45%</div>
     </div>
+  </div>
 
-    <div class="input-wrap">
-      <span>📱</span>
-      <input
-        id="loginPhone"
-        type="tel"
-        maxlength="15"
-        placeholder="Registered mobile number"
-      >
+  <div class="market">
+    <div>
+      <div class="market-name">NOVA X</div>
+      <div class="market-code">NVX</div>
     </div>
+    <div class="market-price">
+      2.40
+      <div class="up">+4.18%</div>
+    </div>
+  </div>
 
-    <button class="btn" onclick="login()">
-      LOGIN TO ALINOVA
+  <div class="market">
+    <div>
+      <div class="market-name">APEX</div>
+      <div class="market-code">APX</div>
+    </div>
+    <div class="market-price">
+      4.75
+      <div class="up">+1.92%</div>
+    </div>
+  </div>
+
+  <div class="market">
+    <div>
+      <div class="market-name">ORBIT</div>
+      <div class="market-code">ORB</div>
+    </div>
+    <div class="market-price">
+      7.20
+      <div class="up">+3.61%</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ACTIONS -->
+<div class="panel">
+
+  <h2>Account Actions</h2>
+
+  <button class="btn" onclick="claimDaily()">
+    🎁 CLAIM 20 COINS
+  </button>
+
+  <div class="action">
+
+    <label>Recharge Request — Coin Quantity</label>
+
+    <input
+      id="rechargeAmount"
+      type="number"
+      min="1"
+      placeholder="Enter coin quantity"
+    >
+
+    <button class="btn" onclick="requestRecharge()">
+      📲 REQUEST VIA WHATSAPP
     </button>
 
-    <button class="btn dark" onclick="showRegister()">
-      CREATE NEW ACCOUNT
-    </button>
-
-    <div class="notice">
-      New accounts receive <b>500 virtual ALI coins</b>.
-      Daily claim reward: <b>20 virtual ALI</b>.
-      Coins displayed by this demo have no cash value.
-    </div>
-
   </div>
 
-</section>
-
-
-<!-- =====================================================
-     REGISTER PAGE
-===================================================== -->
-
-<section class="center-page hidden" id="registerPage">
-
-  <div class="auth card3d">
-
-    <div class="logo">ALINOVA</div>
-
-    <div class="logo-line"></div>
-
-    <div class="auth-title">
-      Create Account
-    </div>
-
-    <div class="auth-sub">
-      Register using your mobile number
-    </div>
-
-    <div class="input-wrap">
-      <span>📱</span>
-      <input
-        id="registerPhone"
-        type="tel"
-        maxlength="15"
-        placeholder="Enter mobile number"
-      >
-    </div>
-
-    <button class="btn" onclick="registerUser()">
-      REGISTER & GET 500 ALI
-    </button>
-
-    <button class="btn dark" onclick="showLogin()">
-      BACK TO LOGIN
-    </button>
-
-    <div class="notice">
-      Your number becomes your demo account login.
-      Keep it private. This single-file version stores
-      demo data only in the browser.
-    </div>
-
+  <div class="notice">
+    Recharge requests are sent for manual verification.
+    This demo does not automatically confirm payments or add real-money
+    balances.
   </div>
 
-</section>
+</div>
 
+  </div>  <!-- ACTIVITY -->  <div class="panel" style="margin-top:18px"><h2>Recent Activity</h2>
 
-<!-- =====================================================
-     DASHBOARD
-===================================================== -->
-
-<section class="dashboard hidden" id="dashboard">
-
-<div class="container">
-
-  <header class="topbar">
-
-    <div class="brand">
-      ALI<b>NOVA</b>
-    </div>
-
-    <div class="user-pill">
-      <span class="online"></span>
-      <span id="userDisplay">User</span>
-    </div>
-
-  </header>
-
-
-  <!-- BALANCE HERO -->
-
-  <div class="hero card3d">
-
-    <div class="hero-glow"></div>
-
-    <div class="hero-inner">
-
-      <div class="hero-label">
-        Total Virtual Balance
-      </div>
-
-      <div class="balance">
-        <span id="balance">0</span>
-        <span class="balance-unit"> ALI</span>
-      </div>
-
-      <div class="hero-small">
-        ALINOVA virtual portfolio
-      </div>
-
-      <div class="hero-bottom">
-
-        <div class="status">
-          <span class="status-dot"></span>
-          Account active
-        </div>
-
-        <div class="status">
-          🔐 Secure browser session
-        </div>
-
-      </div>
-
-    </div>
-
+<div id="activityList">
+  <div class="activity">
+    Account ready
+    <br>
+    <span>Your ALINOVA dashboard is active.</span>
   </div>
+</div>
+
+  </div>  <div class="footer">
+    © 2026 ALINOVA TRADING • Virtual/Demo Platform<br>
+    All displayed coins and balances are virtual and have no cash value.
+  </div></section></div><div id="toast" class="toast"></div><script>
+/* =========================
+   ALINOVA TRADING
+   LOCAL DEMO SYSTEM
+========================= */
+
+const USERS_KEY = "alinova_users";
+const SESSION_KEY = "alinova_session";
+
+let users = JSON.parse(localStorage.getItem(USERS_KEY) || "{}");
+
+function saveUsers(){
+  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+}
+
+function cleanNumber(number){
+  return number.replace(/\D/g,"").slice(0,11);
+}
+
+function validNumber(number){
+  return /^03\d{9}$/.test(number);
+}
+
+function showToast(message){
+  const toast = document.getElementById("toast");
+
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  setTimeout(()=>{
+    toast.classList.remove("show");
+  },2500);
+}
+
+function showLogin(){
+
+  document.getElementById("loginForm").classList.remove("hidden");
+  document.getElementById("registerForm").classList.add("hidden");
+
+  document.getElementById("loginTab").classList.add("active");
+  document.getElementById("registerTab").classList.remove("active");
+}
+
+function showRegister(){
+
+  document.getElementById("registerForm").classList.remove("hidden");
+  document.getElementById("loginForm").classList.add("hidden");
+
+  document.getElementById("registerTab").classList.add("active");
+  document.getElementById("loginTab").classList.remove("active");
+}
 
 
-  <!-- STAT CARDS -->
+/* REGISTER */
+function registerUser(){
 
-  <div class="grid3">
+  let number = cleanNumber(
+    document.getElementById("registerNumber").value
+  );
 
-    <div class="stat card3d">
+  document.getElementById("registerNumber").value = number;
 
-      <div class="stat-icon">🪙</div>
+  if(!validNumber(number)){
+    showToast("Enter a valid Pakistani mobile number.");
+    return;
+  }
 
-      <div class="stat-title">
-        Available Coins
-      </div>
+  if(users[number]){
+    showToast("This number is already registered.");
+    return;
+  }
 
-      <div class="stat-value green" id="balanceCard">
-        0 ALI
-      </div>
+  users[number] = {
+    number:number,
+    coins:500,
+    registeredAt:Date.now(),
+    lastClaim:0,
+    activity:[
+      {
+        text:"Account created",
+        time:Date.now()
+      },
+      {
+        text:"Welcome bonus: +500 virtual coins",
+        time:Date.now()
+      }
+    ]
+  };
 
-    </div>
+  saveUsers();
 
+  localStorage.setItem(SESSION_KEY,number);
 
-    <div class="stat card3d">
+  showToast("Registration successful!");
 
-      <div class="stat-icon">🎁</div>
-
-      <div class="stat-title">
-        Daily Reward
-      </div>
-
-      <div class="stat-value blue">
-        +20 ALI
-      </div>
-
-    </div>
-
-
-    <div class="stat card3d">
-
-      <div class="stat-icon">⚡</div>
-
-      <div class="stat-title">
-        Platform
-      </div>
-
-      <div class="stat-value">
-        ACTIVE
-      </div>
-
-    </div>
-
-  </div>
+  setTimeout(()=>{
+    openDashboard();
+  },500);
+}
 
 
-  <!-- DAILY CLAIM -->
+/* LOGIN */
+function loginUser(){
 
-  <div class="section">
+  let number = cleanNumber(
+    document.getElementById("loginNumber").value
+  );
 
-    <div class="section-head">
-      <div class="section-title">
-        🎁 Daily Reward
-      </div>
+  document.getElementById("loginNumber").value = number;
 
-      <div class="section-sub">
-        One claim every 24 hours
-      </div>
-    </div>
+  if(!validNumber(number)){
+    showToast("Enter a valid Pakistani mobile number.");
+    return;
+  }
+
+  if(!users[number]){
+    showToast("Number not registered. Please register first.");
+    return;
+  }
+
+  localStorage.setItem(SESSION_KEY,number);
+
+  showToast("Login successful!");
+
+  setTimeout(()=>{
+    openDashboard();
+  },400);
+}
 
 
-    <div class="claim card3d">
+/* DASHBOARD */
+function openDashboard(){
 
-      <div class="claim-left">
+  const number = localStorage.getItem(SESSION_KEY);
 
-        <div class="claim-icon">
-          🎁
+  if(!number || !users[number]){
+    return;
+  }
+
+  document.getElementById("authPage").classList.add("hidden");
+  document.getElementById("dashboardPage").classList.remove("hidden");
+
+  updateDashboard();
+}
+
+
+function updateDashboard(){
+
+  const number = localStorage.getItem(SESSION_KEY);
+  const user = users[number];
+
+  if(!user){
+    logoutUser();
+    return;
+  }
+
+  document.getElementById("userNumber").textContent = user.number;
+  document.getElementById("coinBalance").textContent =
+    Number(user.coins).toLocaleString();
+
+  renderActivity();
+}
+
+
+/* DAILY CLAIM */
+function claimDaily(){
+
+  const number = localStorage.getItem(SESSION_KEY);
+
+  if(!number || !users[number]){
+    return;
+  }
+
+  const user = users[number];
+
+  const now = Date.now();
+  const day = 24 * 60 * 60 * 1000;
+
+  if(user.lastClaim && (now - user.lastClaim) < day){
+
+    const remaining =
+      day - (now - user.lastClaim);
+
+    const hours =
+      Math.ceil(remaining / (60*60*1000));
+
+    showToast(
+      "Daily reward already claimed. Try again in " +
+      hours + " hour(s)."
+    );
+
+    return;
+  }
+
+  user.coins += 20;
+  user.lastClaim = now;
+
+  user.activity.unshift({
+    text:"Daily reward: +20 virtual coins",
+    time:now
+  });
+
+  saveUsers();
+
+  updateDashboard();
+
+  showToast("+20 virtual coins added!");
+}
+
+
+/* WHATSAPP RECHARGE REQUEST */
+function requestRecharge(){
+
+  const amount =
+    Number(document.getElementById("rechargeAmount").value);
+
+  const number =
+    localStorage.getItem(SESSION_KEY);
+
+  if(!number){
+    showToast("Please login first.");
+    return;
+  }
+
+  if(!amount || amount < 1){
+    showToast("Enter a valid coin quantity.");
+    return;
+  }
+
+  const message =
+    "ALINOVA TRADING Recharge Request%0A%0A" +
+    "Registered Number: " + encodeURIComponent(number) +
+    "%0ARequested Coins: " + encodeURIComponent(amount) +
+    "%0A%0APlease review and verify this request.";
+
+  const whatsappNumber = "923220751486";
+
+  const url =
+    "https://wa.me/" +
+    whatsappNumber +
+    "?text=" +
+    message;
+
+  window.open(url,"_blank");
+
+  users[number].activity.unshift({
+    text:"Recharge request submitted: " + amount + " coins",
+    time:Date.now()
+  });
+
+  saveUsers();
+  updateDashboard();
+
+  document.getElementById("rechargeAmount").value = "";
+
+  showToast("Recharge request opened in WhatsApp.");
+}
+
+
+/* ACTIVITY */
+function renderActivity(){
+
+  const number = localStorage.getItem(SESSION_KEY);
+  const user = users[number];
+
+  const list =
+    document.getElementById("activityList");
+
+  if(!user.activity || !user.activity.length){
+
+    list.innerHTML =
+      '<div class="activity">No recent activity.</div>';
+
+    return;
+  }
+
+  list.innerHTML = user.activity
+    .slice(0,6)
+    .map(item => {
+
+      const date =
+        new Date(item.time).toLocaleString();
+
+      return `
+        <div class="activity">
+          ${escapeHTML(item.text)}
+          <br>
+          <span>${escapeHTML(date)}</span>
         </div>
+      `;
+    })
+    .join("");
+}
 
-        <div>
 
-          <div class="claim-title">
-            Claim 20 ALI Coins
-          </div>
+/* BASIC HTML ESCAPE */
+function escapeHTML(value){
 
-          <div class="claim-desc" id="claimStatus">
-            Your daily reward is available
-          </div>
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
 
-        </div>
 
-      </div>
+/* LOGOUT */
+function logoutUser(){
 
+  localStorage.removeItem(SESSION_KEY);
 
-      <button
-        class="btn"
-        id="claimButton"
-        onclick="claimDaily()"
-      >
-        CLAIM 20 ALI
-      </button>
+  document.getElementById("dashboardPage")
+    .classList.add("hidden");
 
-    </div>
+  document.getElementById("authPage")
+    .classList.remove("hidden");
 
-  </div>
+  showLogin();
 
+  showToast("Logged out.");
+}
 
-  <!-- RECHARGE -->
 
-  <div class="section">
+/* AUTO LOGIN */
+window.addEventListener("load",()=>{
 
-    <div class="section-head">
+  const session =
+    localStorage.getItem(SESSION_KEY);
 
-      <div class="section-title">
-        🪙 Recharge Request
-      </div>
+  if(session && users[session]){
+    openDashboard();
+  }else{
+    showLogin();
+  }
 
-      <div class="section-sub">
-        WhatsApp inquiry
-      </div>
-
-    </div>
-
-
-    <div class="recharge card3d">
-
-      <div class="recharge-info">
-
-        <div class="recharge-icon">
-          💎
-        </div>
-
-        <div>
-
-          <div class="recharge-title">
-            Request Virtual Coins
-          </div>
-
-          <div class="recharge-sub">
-            Enter the quantity you want to request
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="recharge-row">
-
-        <div class="input-wrap" style="margin:0">
-          <span>🪙</span>
-
-          <input
-            id="rechargeAmount"
-            type="number"
-            min="1"
-            placeholder="Enter coin quantity"
-            oninput="updateRechargePreview()"
-          >
-        </div>
-
-
-        <div class="preview">
-          Requested:
-          <strong id="rechargePreview">
-            0 ALI
-          </strong>
-        </div>
-
-      </div>
-
-
-      <button
-        class="btn"
-        onclick="sendRechargeRequest()"
-      >
-        SEND REQUEST ON WHATSAPP
-      </button>
-
-
-      <div class="recharge-note">
-        This button only opens a WhatsApp recharge inquiry.
-        It does not automatically verify a payment or credit
-        coins. All coins on this demo are virtual.
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- MARKET -->
-
-  <div class="section">
-
-    <div class="section-head">
-
-      <div class="section-title">
-        📈 Market Overview
-      </div>
-
-      <div class="section-sub">
-        Virtual market display
-      </div>
-
-    </div>
-
-
-    <div class="market">
-
-
-      <div class="coin card3d">
-
-        <div class="coin-head">
-          <div class="coin-icon">A</div>
-          <span class="green">+4.82%</span>
-        </div>
-
-        <div class="coin-name">
-          ALINOVA
-        </div>
-
-        <div class="coin-symbol">
-          ALI
-        </div>
-
-        <div class="coin-price">
-          1.00 ALI
-        </div>
-
-        <div class="coin-change">
-          Virtual market
-        </div>
-
-      </div>
-
-
-      <div class="coin card3d">
-
-        <div class="coin-head">
-          <div class="coin-icon">N</div>
-          <span class="green">+2.31%</span>
-        </div>
-
-        <div class="coin-name">
-          NovaX
-        </div>
-
-        <div class="coin-symbol">
-          NVX
-        </div>
-
-        <div class="coin-price">
-          0.84 NVX
-        </div>
-
-        <div class="coin-change">
-          Virtual market
-        </div>
-
-      </div>
-
-
-      <div class="coin card3d">
-
-        <div class="coin-head">
-          <div class="coin-icon">P</div>
-          <span class="green">+6.14%</span>
-        </div>
-
-        <div class="coin-name">
-          Apex
-        </div>
-
-        <div class="coin-symbol">
-          APX
-        </div>
-
-        <div class="coin-price">
-          1.26 APX
-        </div>
-
-        <div class="coin-change">
-          Virtual market
-        </div>
-
-      </div>
-
-
-      <div class="coin card3d">
-
-        <div class="coin-head">
-          <div class="coin-icon">O</div>
-          <span class="green">+1.92%</span>
-        </div>
-
-        <div class="coin-name">
-          Orbit
-        </div>
-
-        <div class="coin-symbol">
-          ORB
-        </div>
-
-        <div class="coin-price">
-          0.67 ORB
-        </div>
-
-        <div class="coin-change">
-          Virtual market
-        </div>
-
-      </div>
-
-
-    </div>
-
-  </div>
-
-
-  <!-- ACTIVITY -->
-
-  <div class="section">
-
-    <div class="s
+});
+</script></body>
+        </html>
