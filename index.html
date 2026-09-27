@@ -2341,5 +2341,808 @@ footer{
 ></div>
 
 <script>
-  
+
+const USERS = "alinova_users";
+const RECHARGE = "alinova_recharge";
+const ACCESS = "alinova_access";
+const SESSION = "alinova_session";
+const ADMIN_SESSION = "alinova_admin_session";
+
+const RATE = 1.30;
+const WA_NUMBER = "923220751486";
+
+const ADMIN_USER = "Alig0014";
+const ADMIN_PASS = "alig0014";
+
+
+/* ---------- STORAGE ---------- */
+
+function getData(key, fallback = []) {
+  try {
+    return JSON.parse(localStorage.getItem(key)) || fallback;
+  } catch (e) {
+    return fallback;
+  }
+}
+
+function saveData(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
+function getUsers() {
+  return getData(USERS, []);
+}
+
+function saveUsers(users) {
+  saveData(USERS, users);
+}
+
+function getRequests() {
+  return getData(RECHARGE, []);
+}
+
+function saveRequests(data) {
+  saveData(RECHARGE, data);
+}
+
+function getAccessRequests() {
+  return getData(ACCESS, []);
+}
+
+function saveAccessRequests(data) {
+  saveData(ACCESS, data);
+}
+
+
+/* ---------- HELPERS ---------- */
+
+function nowText() {
+  return new Date().toLocaleString("en-PK", {
+    dateStyle: "medium",
+    timeStyle: "short"
+  });
+}
+
+function uid(prefix = "ID") {
+  return prefix + "-" + Date.now().toString(36).toUpperCase() +
+    Math.random().toString(36).slice(2, 7).toUpperCase();
+}
+
+function esc(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function currentUser() {
+  const phone = localStorage.getItem(SESSION);
+  if (!phone) return null;
+
+  return getUsers().find(u => u.phone === phone) || null;
+}
+
+function saveCurrentUser(user) {
+  const users = getUsers();
+  const index = users.findIndex(u => u.phone === user.phone);
+
+  if (index !== -1) {
+    users[index] = user;
+    saveUsers(users);
+  }
+}
+
+
+/* ---------- AUTH NAVIGATION ---------- */
+
+function hideAllPages() {
+  const ids = [
+    "authPage",
+    "userApp",
+    "adminLoginPage",
+    "adminPanel"
+  ];
+
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = "none";
+  });
+}
+
+function backToAuth() {
+  hideAllPages();
+
+  const auth = document.getElementById("authPage");
+  if (auth) auth.style.display = "flex";
+
+  localStorage.removeItem(ADMIN_SESSION);
+}
+
+function openWebsite() {
+  const user = currentUser();
+
+  if (!user) {
+    backToAuth();
+    return;
+  }
+
+  if (user.active === false) {
+    toast("Your demo account is disabled by admin.", "error");
+    localStorage.removeItem(SESSION);
+    backToAuth();
+    return;
+  }
+
+  hideAllPages();
+
+  const app = document.getElementById("userApp");
+  if (app) app.style.display = "block";
+
+  renderUserDashboard();
+}
+
+
+/* ---------- USER REGISTRATION ---------- */
+
+function registerUser() {
+  const input = document.getElementById("regPhone");
+  const phone = input ? input.value.trim() : "";
+
+  if (!/^03\d{9}$/.test(phone)) {
+    toast("Enter a valid Pakistani mobile number.", "error");
+    return;
+  }
+
+  const users = getUsers();
+
+  if (users.some(u => u.phone === phone)) {
+    toast("This number is already registered. Please login.", "error");
+    return;
+  }
+
+  const user = {
+    phone: phone,
+    balance: 500,
+    active: true,
+    registeredAt: nowText(),
+    lastReward: 0,
+    referralPoints: 0,
+    activity: [
+      {
+        id: uid("ACT"),
+        text: "Account created — 500 virtual ALI Coins credited",
+        time: nowText()
+      }
+    ]
+  };
+
+  users.push(user);
+  saveUsers(users);
+
+  localStorage.setItem(SESSION, phone);
+
+  toast("Registration successful! 500 virtual coins added.", "success");
+
+  setTimeout(() => {
+    openWebsite();
+  }, 500);
+}
+
+
+/* ---------- USER LOGIN ---------- */
+
+function loginUser() {
+  const input = document.getElementById("loginPhone");
+  const phone = input ? input.value.trim() : "";
+
+  if (!/^03\d{9}$/.test(phone)) {
+    toast("Enter your registered mobile number.", "error");
+    return;
+  }
+
+  const user = getUsers().find(u => u.phone === phone);
+
+  if (!user) {
+    toast("Account not found. Please register first.", "error");
+    return;
+  }
+
+  if (user.active === false) {
+    toast("This demo account is disabled.", "error");
+    return;
+  }
+
+  localStorage.setItem(SESSION, phone);
+
+  toast("Login successful.", "success");
+
+  setTimeout(() => {
+    openWebsite();
+  }, 300);
+}
+
+
+/* ---------- USER DASHBOARD ---------- */
+
+function renderUserDashboard() {
+  const user = currentUser();
+  if (!user) return;
+
+  const balanceEls = [
+    "userBalance",
+    "dashboardBalance",
+    "coinBalance"
+  ];
+
+  balanceEls.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.textContent = Number(user.balance || 0).toLocaleString();
+    }
+  });
+
+  const phoneEls = [
+    "userPhone",
+    "welcomePhone",
+    "profilePhone"
+  ];
+
+  phoneEls.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = user.phone;
+  });
+
+  const statusEls = [
+    "accountStatus",
+    "userStatus"
+  ];
+
+  statusEls.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.textContent = user.active === false ? "DISABLED" : "ACTIVE";
+    }
+  });
+
+  const memberEl = document.getElementById("memberSince");
+  if (memberEl) {
+    memberEl.textContent = user.registeredAt || "-";
+  }
+
+  renderActivity();
+}
+
+
+/* ---------- DAILY REWARD ---------- */
+
+function claimDailyReward() {
+  const user = currentUser();
+
+  if (!user) {
+    toast("Please login first.", "error");
+    return;
+  }
+
+  if (user.active === false) {
+    toast("Your account is disabled.", "error");
+    return;
+  }
+
+  const currentTime = Date.now();
+  const last = Number(user.lastReward || 0);
+  const oneDay = 24 * 60 * 60 * 1000;
+
+  if (currentTime - last < oneDay) {
+    const remaining = oneDay - (currentTime - last);
+    const hours = Math.ceil(remaining / (60 * 60 * 1000));
+
+    toast(
+      "Daily reward already claimed. Try again in about " +
+      hours + " hour(s).",
+      "error"
+    );
+
+    return;
+  }
+
+  user.balance = Number(user.balance || 0) + 20;
+  user.lastReward = currentTime;
+
+  user.activity = user.activity || [];
+
+  user.activity.unshift({
+    id: uid("ACT"),
+    text: "Daily reward +20 virtual ALI Coins",
+    time: nowText()
+  });
+
+  saveCurrentUser(user);
+
+  renderUserDashboard();
+
+  toast("🎁 +20 virtual ALI Coins added!", "success");
+}
+
+
+/* ---------- CALCULATOR ---------- */
+
+function calculateCoins() {
+  const input = document.getElementById("calcCoins");
+  const coins = Number(input ? input.value : 0);
+
+  const value = coins > 0 ? coins * RATE : 0;
+
+  const valueEl = document.getElementById("calcValue");
+  const bigEl = document.getElementById("calcBig");
+
+  if (valueEl) {
+    valueEl.textContent =
+      "Rs. " + value.toLocaleString("en-PK", {
+        maximumFractionDigits: 2
+      });
+  }
+
+  if (bigEl) {
+    bigEl.textContent =
+      value.toLocaleString("en-PK", {
+        maximumFractionDigits: 2
+      });
+  }
+}
+
+
+/* ---------- RECHARGE REQUEST ---------- */
+
+function submitRecharge() {
+  const user = currentUser();
+
+  if (!user) {
+    toast("Please login first.", "error");
+    return;
+  }
+
+  if (user.active === false) {
+    toast("Your account is disabled.", "error");
+    return;
+  }
+
+  const coinInput = document.getElementById("rechargeCoins");
+  const refInput = document.getElementById("receiptRef");
+
+  const coins = Number(coinInput ? coinInput.value : 0);
+  const reference = refInput ? refInput.value.trim() : "";
+
+  if (!coins || coins <= 0) {
+    toast("Enter the virtual coin quantity.", "error");
+    return;
+  }
+
+  if (!Number.isFinite(coins)) {
+    toast("Invalid coin quantity.", "error");
+    return;
+  }
+
+  const estimatedValue = coins * RATE;
+
+  const request = {
+    id: uid("REQ"),
+    phone: user.phone,
+    coins: coins,
+    estimatedValue: estimatedValue,
+    reference: reference || "Not provided",
+    createdAt: nowText(),
+    status: "PENDING"
+  };
+
+  const requests = getRequests();
+
+  requests.unshift(request);
+
+  saveRequests(requests);
+
+  user.activity = user.activity || [];
+
+  user.activity.unshift({
+    id: uid("ACT"),
+    text:
+      "Recharge request submitted: " +
+      coins.toLocaleString() +
+      " virtual coins",
+    time: nowText()
+  });
+
+  saveCurrentUser(user);
+
+  const message =
+`ALINOVA TRADING — VIRTUAL COIN REQUEST
+
+Request ID: ${request.id}
+Registered Mobile: ${user.phone}
+Requested Virtual Coins: ${coins.toLocaleString()}
+Estimated Demo Value: Rs. ${estimatedValue.toLocaleString("en-PK")}
+Receipt / Reference: ${reference || "Not provided"}
+
+STATUS: PENDING ADMIN VERIFICATION
+
+Note: This is a virtual/demo coin request.`;
+
+  const whatsappURL =
+    "https://wa.me/" +
+    WA_NUMBER +
+    "?text=" +
+    encodeURIComponent(message);
+
+  window.open(whatsappURL, "_blank");
+
+  if (coinInput) coinInput.value = "";
+  if (refInput) refInput.value = "";
+
+  toast(
+    "Request saved as PENDING. Coins are not added automatically.",
+    "success"
+  );
+
+  renderUserDashboard();
+}
+
+
+/* ---------- FORGOT ACCESS / HELP ---------- */
+
+function requestAccessHelp() {
+  const phone = prompt(
+    "Enter your registered Pakistani mobile number:"
+  );
+
+  if (!phone) return;
+
+  const cleanPhone = phone.trim();
+
+  if (!/^03\d{9}$/.test(cleanPhone)) {
+    toast("Invalid Pakistani mobile number.", "error");
+    return;
+  }
+
+  const user = getUsers().find(u => u.phone === cleanPhone);
+
+  if (!user) {
+    toast("No registered account found for this number.", "error");
+    return;
+  }
+
+  const requests = getAccessRequests();
+
+  const existing = requests.find(
+    r => r.phone === cleanPhone && r.status === "PENDING"
+  );
+
+  if (existing) {
+    toast("A support access request is already pending.", "error");
+    return;
+  }
+
+  requests.unshift({
+    id: uid("ACC"),
+    phone: cleanPhone,
+    createdAt: nowText(),
+    status: "PENDING"
+  });
+
+  saveAccessRequests(requests);
+
+  toast(
+    "Access help request sent to admin.",
+    "success"
+  );
+}
+
+
+/* ---------- ACTIVITY ---------- */
+
+function renderActivity() {
+  const user = currentUser();
+  const box = document.getElementById("activityList");
+
+  if (!box || !user) return;
+
+  const activities = user.activity || [];
+
+  if (!activities.length) {
+    box.innerHTML =
+      `<div class="empty-state">No recent activity.</div>`;
+    return;
+  }
+
+  box.innerHTML = activities
+    .slice(0, 12)
+    .map(item => `
+      <div class="activity-item">
+        <div>
+          <strong>${esc(item.text)}</strong>
+          <small>${esc(item.time)}</small>
+        </div>
+      </div>
+    `)
+    .join("");
+}
+
+
+/* ---------- REFERRAL ---------- */
+
+function shareReferral() {
+  const user = currentUser();
+
+  if (!user) {
+    toast("Please login first.", "error");
+    return;
+  }
+
+  const text =
+`🚀 Join ALINOVA TRADING
+
+Use my referral:
+${user.phone}
+
+Get started with virtual ALI Coins and explore the demo trading experience.
+
+DEMO / VIRTUAL PLATFORM`;
+
+  if (navigator.share) {
+    navigator.share({
+      title: "ALINOVA TRADING",
+      text: text
+    }).catch(() => {});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(text);
+
+    toast(
+      "Referral message copied.",
+      "success"
+    );
+  } else {
+    prompt(
+      "Copy this referral message:",
+      text
+    );
+  }
+}
+
+
+/* ---------- LUCKY DRAW ---------- */
+
+function spinLuckyDraw() {
+  const user = currentUser();
+
+  if (!user) {
+    toast("Please login first.", "error");
+    return;
+  }
+
+  const button =
+    document.getElementById("spinButton");
+
+  const wheel =
+    document.getElementById("luckyWheel");
+
+  const result =
+    document.getElementById("winnerResult");
+
+  const prizes = [
+    15000,
+    8000,
+    4000,
+    2000
+  ];
+
+  const prize =
+    prizes[Math.floor(Math.random() * prizes.length)];
+
+  const rotation =
+    1440 + Math.floor(Math.random() * 720);
+
+  if (button) {
+    button.disabled = true;
+    button.textContent = "DRAWING...";
+  }
+
+  if (wheel) {
+    wheel.style.transition =
+      "transform 4s cubic-bezier(.17,.67,.18,1)";
+
+    wheel.style.transform =
+      "rotate(" + rotation + "deg)";
+  }
+
+  setTimeout(() => {
+
+    if (result) {
+      result.innerHTML =
+        `🎉 DEMO WINNER<br>
+         <strong>${prize.toLocaleString()} DEMO POINTS</strong>`;
+    }
+
+    user.activity = user.activity || [];
+
+    user.activity.unshift({
+      id: uid("ACT"),
+      text:
+        "Lucky Draw demo result: " +
+        prize.toLocaleString() +
+        " demo points",
+      time: nowText()
+    });
+
+    saveCurrentUser(user);
+
+    renderActivity();
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = "SPIN DEMO DRAW";
+    }
+
+    toast(
+      "Demo draw completed — no cash prize or withdrawal.",
+      "success"
+    );
+
+  }, 4300);
+}
+
+
+/* ---------- USER LOGOUT ---------- */
+
+function logoutUser() {
+  localStorage.removeItem(SESSION);
+
+  hideAllPages();
+
+  const auth =
+    document.getElementById("authPage");
+
+  if (auth) {
+    auth.style.display = "flex";
+  }
+
+  toast("Logged out successfully.", "success");
+}
+
+
+/* ---------- ADMIN LOGIN ---------- */
+
+function showAdminLogin() {
+  hideAllPages();
+
+  const page =
+    document.getElementById("adminLoginPage");
+
+  if (page) {
+    page.style.display = "flex";
+  }
+}
+
+function adminLogin() {
+  const usernameEl =
+    document.getElementById("adminUsername");
+
+  const passwordEl =
+    document.getElementById("adminPassword");
+
+  const username =
+    usernameEl ? usernameEl.value.trim() : "";
+
+  const password =
+    passwordEl ? passwordEl.value : "";
+
+  if (
+    username !== ADMIN_USER ||
+    password !== ADMIN_PASS
+  ) {
+    toast("Invalid admin credentials.", "error");
+    return;
+  }
+
+  localStorage.setItem(
+    ADMIN_SESSION,
+    "true"
+  );
+
+  localStorage.removeItem(SESSION);
+
+  toast("Admin login successful.", "success");
+
+  setTimeout(() => {
+    if (typeof openAdminPanel === "function") {
+      openAdminPanel();
+    }
+  }, 400);
+}
+
+
+/* ---------- MODAL ---------- */
+
+function closeModal() {
+  const modal =
+    document.getElementById("mainModal");
+
+  if (modal) {
+    modal.style.display = "none";
+  }
+}
+
+function openModal(title, content) {
+  const modal =
+    document.getElementById("mainModal");
+
+  const titleEl =
+    document.getElementById("modalTitle");
+
+  const bodyEl =
+    document.getElementById("modalBody");
+
+  if (titleEl) {
+    titleEl.textContent = title;
+  }
+
+  if (bodyEl) {
+    bodyEl.innerHTML = content;
+  }
+
+  if (modal) {
+    modal.style.display = "flex";
+  }
+}
+
+
+/* ---------- TOAST ---------- */
+
+function toast(message, type = "info") {
+  let box =
+    document.getElementById("toastBox");
+
+  if (!box) {
+    box = document.createElement("div");
+    box.id = "toastBox";
+
+    box.style.position = "fixed";
+    box.style.left = "50%";
+    box.style.bottom = "25px";
+    box.style.transform = "translateX(-50%)";
+    box.style.zIndex = "99999";
+    box.style.padding = "13px 20px";
+    box.style.borderRadius = "14px";
+    box.style.background = "rgba(10,15,30,.95)";
+    box.style.color = "#fff";
+    box.style.border = "1px solid rgba(255,255,255,.15)";
+    box.style.boxShadow =
+      "0 15px 40px rgba(0,0,0,.35)";
+    box.style.fontWeight = "700";
+    box.style.maxWidth = "90%";
+    box.style.textAlign = "center";
+
+    document.body.appendChild(box);
+  }
+
+  box.textContent = message;
+
+  if (type === "error") {
+    box.style.borderColor = "#ff4d6d";
+  } else if (type === "success") {
+    box.style.borderColor = "#00e5ff";
+  } else {
+    box.style.borderColor =
+      "rgba(255,255,255,.15)";
+  }
+
+  box.style.opacity = "1";
+
+  clearTimeout(window.__toastTimer);
+
+  window.__toastTimer =
+    setTimeout(() => {
+      box.style.opacity = "0";
+    }, 3500);
+}
+
       
