@@ -456,6 +456,1061 @@ and have no cash value or withdrawal facility.
 <h1 style="font-size:clamp(32px,6vw,55px)">
 WELCOME TO <span class="gradient-text">ALINOVA</span>
 </h1>
+  <!-- RECHARGE -->
+
+<div class="card">
+
+<h2 class="section-title">⚡ Virtual Coin Recharge Request</h2>
+
+<p class="small">
+Request virtual ALI Coins. Every request is manually reviewed by admin.
+</p>
+
+<input
+id="rechargeCoins"
+type="number"
+placeholder="Enter virtual coin quantity"
+>
+
+<input
+id="receiptRef"
+type="text"
+placeholder="Receipt / Reference (optional)"
+>
+
+<button class="btn full" onclick="recharge()">
+SEND RECHARGE REQUEST
+</button>
+
+<div class="notice">
+Requests remain <b>PENDING</b> until admin verification.
+Coins are not automatically added.
+</div>
+
+</div>
+
+
+<!-- CALCULATOR -->
+
+<div class="card">
+
+<h2 class="section-title">🧮 Coin Calculator</h2>
+
+<input
+id="calcCoins"
+type="number"
+placeholder="Enter virtual coins"
+oninput="calculate()"
+>
+
+<h3 id="calcResult">
+Estimated Demo Value: Rs. 0
+</h3>
+
+<p class="small">
+Rate: 5,000 virtual coins = Rs. 6,500 estimated demo value.
+</p>
+
+</div>
+
+
+<!-- MARKET -->
+
+<div class="card">
+
+<h2 class="section-title">📊 Virtual Market Overview</h2>
+
+<div class="market">
+
+<div class="coin">
+<b>ALI</b>
+<p>ALI NOVA</p>
+<p class="small">Virtual Market</p>
+</div>
+
+<div class="coin">
+<b>NVX</b>
+<p>NOVA X</p>
+<p class="small">Virtual Market</p>
+</div>
+
+<div class="coin">
+<b>APX</b>
+<p>APEX</p>
+<p class="small">Virtual Market</p>
+</div>
+
+<div class="coin">
+<b>ORB</b>
+<p>ORBIT</p>
+<p class="small">Virtual Market</p>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- PREMIUM LUCKY DRAW -->
+
+<div class="card draw-card">
+
+<div class="draw-top">
+
+<div class="crown">👑</div>
+
+<h2>ALINOVA LUCKY DRAW</h2>
+
+<p>
+Exclusive Virtual Demo Rewards
+</p>
+
+</div>
+
+<div class="wheel-wrap">
+
+<div class="pointer">▼</div>
+
+<div id="wheel" class="wheel"></div>
+
+</div>
+
+<div class="draw-result">
+
+<div class="small">
+LATEST DEMO WINNER
+</div>
+
+<div id="winnerName" class="winner">
+ALI NOVA MEMBER
+</div>
+
+<div id="winnerPrize" style="margin-top:6px">
+15,000 Demo Points
+</div>
+
+<button
+class="btn"
+style="margin-top:15px"
+onclick="spinDraw()"
+>
+✨ SPIN DEMO DRAW
+</button>
+
+</div>
+
+<div class="prizes">
+
+<div class="prize">
+<b>15,000</b>
+Demo Points
+</div>
+
+<div class="prize">
+<b>8,000</b>
+Demo Points
+</div>
+
+<div class="prize">
+<b>4,000</b>
+Demo Points
+</div>
+
+<div class="prize">
+<b>2,000</b>
+Demo Points
+</div>
+
+</div>
+
+<div class="notice" style="text-align:center;margin-top:18px">
+⚠️ DEMO / PROMOTIONAL DISPLAY — NOT A CASH PRIZE SYSTEM
+</div>
+
+</div>
+
+
+<!-- REFERRAL -->
+
+<div class="card">
+
+<h2 class="section-title">🚀 Referral</h2>
+
+<p class="small">
+Share ALINOVA with friends and receive virtual referral points.
+No cash commission is offered.
+</p>
+
+<button class="btn full" onclick="shareReferral()">
+SHARE REFERRAL
+</button>
+
+</div>
+
+
+<!-- ACTIVITY -->
+
+<div class="card">
+
+<h2 class="section-title">🕘 Recent Activity</h2>
+
+<div id="activityList">
+<p class="small">No activity yet.</p>
+</div>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- ADMIN LOGIN -->
+
+<div id="adminLoginPage" class="hidden">
+
+<div class="container">
+
+<header>
+<div class="logo">ALI<span>NOVA</span> ADMIN</div>
+</header>
+
+<div class="card auth">
+
+<h2 style="text-align:center;margin-bottom:8px">
+ADMIN CONTROL CENTER
+</h2>
+
+<p class="small" style="text-align:center;margin-bottom:20px">
+Authorized administration area
+</p>
+
+<input
+id="adminUsername"
+type="text"
+placeholder="Admin Username"
+>
+
+<input
+id="adminPassword"
+type="password"
+placeholder="Admin Password"
+>
+
+<button class="btn full" onclick="adminLogin()">
+🔐 SECURE ADMIN LOGIN
+</button>
+
+<button
+class="btn dark full"
+onclick="back()"
+>
+BACK TO WEBSITE
+</button>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- ADMIN PANEL -->
+
+<div id="adminPage" class="hidden">
+
+<div class="container">
+
+<header>
+
+<div class="logo">
+ALI<span>NOVA</span> ADMIN
+</div>
+
+<button class="btn red" onclick="adminLogout()">
+ADMIN LOGOUT
+</button>
+
+</header>
+
+<div class="hero">
+
+<span class="badge">ADMIN CONTROL CENTER</span>
+
+<h1 style="font-size:45px">
+CONTROL <span class="gradient-text">PANEL</span>
+</h1>
+
+<p>
+Manage demo users, virtual balances, access requests
+and recharge requests.
+</p>
+
+</div>
+
+
+<div class="stats">
+
+<div class="stat">
+<small>PENDING</small>
+<h2 id="pendingCount">0</h2>
+</div>
+
+<div class="stat">
+<small>APPROVED</small>
+<h2 id="approvedCount">0</h2>
+</div>
+
+<div class="stat">
+<small>REJECTED</small>
+<h2 id="rejectedCount">0</h2>
+</div>
+
+</div>
+
+
+<!-- ACCESS REQUESTS -->
+
+<div class="card">
+
+<h2 class="section-title">
+🔑 Forgot Access Requests
+</h2>
+
+<div id="accessRequests">
+<p class="small">
+No access requests.
+</p>
+</div>
+
+</div>
+
+
+<!-- USERS -->
+
+<div class="card">
+
+<h2 class="section-title">
+👥 User Management
+</h2>
+
+<input
+id="userSearch"
+type="text"
+placeholder="Search mobile number"
+oninput="renderUsers()"
+>
+
+<div id="usersTable"></div>
+
+</div>
+
+
+<!-- RECHARGE -->
+
+<div class="card">
+
+<h2 class="section-title">
+💳 Recharge Requests
+</h2>
+
+<div id="rechargeTable"></div>
+
+</div>
+
+<div class="notice warning">
+Client-side demo admin panel. Real multi-user security requires
+a backend/database.
+</div>
+
+</div>
+</div>
+
+
+<!-- USER MODAL -->
+
+<div
+id="userModal"
+class="hidden"
+style="
+position:fixed;
+inset:0;
+background:#000c;
+z-index:1000;
+padding:20px;
+overflow:auto;
+"
+>
+
+<div
+class="card"
+style="max-width:450px;margin:50px auto"
+>
+
+<h2>Manage User</h2>
+
+<p
+id="modalMobile"
+class="small"
+style="margin:10px 0"
+></p>
+
+<input
+id="coinAdjustment"
+type="number"
+placeholder="Coins to add/remove"
+>
+
+<button
+class="btn full"
+onclick="adjustCoins()"
+>
+UPDATE VIRTUAL COINS
+</button>
+
+<button
+id="toggleAccountBtn"
+class="btn full"
+onclick="toggleAccount()"
+>
+ENABLE / DISABLE ACCOUNT
+</button>
+
+<button
+class="btn dark full"
+onclick="closeModal()"
+>
+CLOSE
+</button>
+
+</div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div
+id="toast"
+style="
+position:fixed;
+bottom:22px;
+left:50%;
+transform:translateX(-50%);
+background:#101a31;
+border:1px solid #00eaff66;
+padding:14px 20px;
+border-radius:14px;
+display:none;
+z-index:3000;
+box-shadow:0 0 30px #000;
+"
+></div>
+
+
+<script>
+
+const USERS="ALINOVA_USERS";
+const RECHARGE="ALINOVA_RECHARGE";
+const ACCESS="ALINOVA_ACCESS";
+const SESSION="ALINOVA_SESSION";
+
+const RATE=1.30;
+
+const ADMIN_USERNAME="Alig0014";
+const ADMIN_PASSWORD="alig0014";
+
+let selectedUser=null;
+let drawRotation=0;
+
+
+function users(){
+return JSON.parse(
+localStorage.getItem(USERS)||"[]"
+);
+}
+
+function saveUsers(data){
+localStorage.setItem(
+USERS,
+JSON.stringify(data)
+);
+}
+
+function requests(){
+return JSON.parse(
+localStorage.getItem(RECHARGE)||"[]"
+);
+}
+
+function saveRequests(data){
+localStorage.setItem(
+RECHARGE,
+JSON.stringify(data)
+);
+}
+
+function accessRequests(){
+return JSON.parse(
+localStorage.getItem(ACCESS)||"[]"
+);
+}
+
+function saveAccess(data){
+localStorage.setItem(
+ACCESS,
+JSON.stringify(data)
+);
+}
+
+function valid(mobile){
+return /^03[0-9]{9}$/.test(mobile);
+}
+
+function esc(text){
+return String(text)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+}
+
+function toast(message){
+
+const t=document.getElementById("toast");
+
+t.innerText=message;
+t.style.display="block";
+
+setTimeout(()=>{
+t.style.display="none";
+},3000);
+
+}
+
+
+function showLogin(){
+
+document
+.getElementById("loginBox")
+.classList.remove("hidden");
+
+document
+.getElementById("registerBox")
+.classList.add("hidden");
+
+document
+.getElementById("loginTab")
+.classList.add("active");
+
+document
+.getElementById("registerTab")
+.classList.remove("active");
+
+}
+
+
+function showRegister(){
+
+document
+.getElementById("loginBox")
+.classList.add("hidden");
+
+document
+.getElementById("registerBox")
+.classList.remove("hidden");
+
+document
+.getElementById("loginTab")
+.classList.remove("active");
+
+document
+.getElementById("registerTab")
+.classList.add("active");
+
+}
+
+
+function register(){
+
+const mobile=
+document
+.getElementById("registerMobile")
+.value
+.trim();
+
+if(!valid(mobile)){
+toast("Enter a valid Pakistani mobile number.");
+return;
+}
+
+const list=users();
+
+if(list.some(u=>u.mobile===mobile)){
+toast("This number is already registered.");
+return;
+}
+
+list.push({
+
+mobile:mobile,
+
+balance:500,
+
+active:true,
+
+registeredAt:
+new Date().toLocaleString(),
+
+lastReward:0,
+
+activity:[{
+text:"Account created with 500 virtual ALI Coins",
+time:new Date().toLocaleString()
+}]
+
+});
+
+saveUsers(list);
+
+localStorage.setItem(
+SESSION,
+mobile
+);
+
+openWebsite();
+
+}
+
+
+function login(){
+
+const mobile=
+document
+.getElementById("loginMobile")
+.value
+.trim();
+
+if(!valid(mobile)){
+toast("Enter a valid Pakistani mobile number.");
+return;
+}
+
+const user=
+users().find(
+u=>u.mobile===mobile
+);
+
+if(!user){
+toast("Account not found. Please register first.");
+return;
+}
+
+if(!user.active){
+toast("This demo account is disabled.");
+return;
+}
+
+localStorage.setItem(
+SESSION,
+mobile
+);
+
+openWebsite();
+
+}
+
+
+function openWebsite(){
+
+document.getElementById("authPage")
+.classList.add("hidden");
+
+document.getElementById("adminLoginPage")
+.classList.add("hidden");
+
+document.getElementById("adminPage")
+.classList.add("hidden");
+
+document.getElementById("userPage")
+.classList.remove("hidden");
+
+updateDashboard();
+
+}
+
+
+function updateDashboard(){
+
+const mobile=
+localStorage.getItem(SESSION);
+
+const user=
+users().find(
+u=>u.mobile===mobile
+);
+
+if(!user){
+logout();
+return;
+}
+
+document.getElementById("userMobile")
+.innerText=user.mobile;
+
+document.getElementById("balance")
+.innerText=
+Number(user.balance).toLocaleString();
+
+document.getElementById("demoValue")
+.innerText=
+"Rs. "+
+(Number(user.balance)*RATE)
+.toLocaleString();
+
+renderActivity();
+
+}
+
+
+function dailyReward(){
+
+const mobile=
+localStorage.getItem(SESSION);
+
+const list=users();
+
+const user=
+list.find(
+u=>u.mobile===mobile
+);
+
+if(!user)return;
+
+const now=Date.now();
+const last=Number(user.lastReward||0);
+
+if(
+last &&
+now-last<86400000
+){
+
+toast("Daily reward already claimed. Try again later.");
+return;
+
+}
+
+user.balance=
+Number(user.balance)+20;
+
+user.lastReward=now;
+
+user.activity.unshift({
+
+text:"Claimed +20 virtual daily reward",
+
+time:new Date().toLocaleString()
+
+});
+
+saveUsers(list);
+
+updateDashboard();
+
+toast("+20 virtual ALI Coins added.");
+
+}
+
+
+function calculate(){
+
+const coins=
+Number(
+document.getElementById("calcCoins").value
+)||0;
+
+document.getElementById("calcResult")
+.innerText=
+"Estimated Demo Value: Rs. "+
+(coins*RATE).toLocaleString();
+
+}
+
+
+function recharge(){
+
+const mobile=
+localStorage.getItem(SESSION);
+
+const coins=
+Number(
+document.getElementById("rechargeCoins").value
+);
+
+const receipt=
+document.getElementById("receiptRef")
+.value.trim();
+
+if(!coins||coins<=0){
+toast("Enter a valid virtual coin quantity.");
+return;
+}
+
+const id=
+"REQ-"+Date.now().toString().slice(-8);
+
+const list=requests();
+
+list.unshift({
+
+id:id,
+mobile:mobile,
+coins:coins,
+value:coins*RATE,
+receipt:receipt,
+status:"PENDING",
+time:new Date().toLocaleString()
+
+});
+
+saveRequests(list);
+
+const message=
+`ALINOVA TRADING RECHARGE REQUEST
+
+Mobile: ${mobile}
+Virtual Coins: ${coins.toLocaleString()}
+Estimated Demo Value: Rs. ${(coins*RATE).toLocaleString()}
+Reference: ${receipt||"Not provided"}
+Request ID: ${id}
+
+STATUS: PENDING ADMIN VERIFICATION
+
+Virtual/demo coins only.`;
+
+window.open(
+"https://wa.me/923220751486?text="+
+encodeURIComponent(message),
+"_blank"
+);
+
+const ul=users();
+
+const user=
+ul.find(u=>u.mobile===mobile);
+
+if(user){
+
+user.activity.unshift({
+
+text:
+`Recharge request ${id} submitted`,
+
+time:
+new Date().toLocaleString()
+
+});
+
+saveUsers(ul);
+
+}
+
+document.getElementById("rechargeCoins").value="";
+document.getElementById("receiptRef").value="";
+
+toast("Recharge request submitted.");
+
+}
+
+
+function forgotAccess(){
+
+const mobile=prompt(
+"Enter your registered mobile number:"
+);
+
+if(!mobile)return;
+
+if(!valid(mobile)){
+toast("Invalid Pakistani mobile number.");
+return;
+}
+
+if(
+!users().some(
+u=>u.mobile===mobile
+)
+){
+
+toast("No registered account found.");
+return;
+
+}
+
+const list=accessRequests();
+
+list.unshift({
+
+id:"ACC-"+Date.now().toString().slice(-8),
+mobile:mobile,
+status:"PENDING",
+time:new Date().toLocaleString()
+
+});
+
+saveAccess(list);
+
+toast("Access request sent to admin.");
+
+}
+
+
+function renderActivity(){
+
+const mobile=
+localStorage.getItem(SESSION);
+
+const user=
+users().find(
+u=>u.mobile===mobile
+);
+
+const box=
+document.getElementById("activityList");
+
+if(!user||!user.activity.length){
+
+box.innerHTML=
+'<p class="small">No activity yet.</p>';
+
+return;
+
+}
+
+box.innerHTML=
+user.activity.slice(0,10)
+.map(a=>`
+
+<div style="
+padding:12px;
+margin:8px 0;
+border-radius:12px;
+background:#080f22;
+border:1px solid #ffffff0d;
+">
+
+<div>${esc(a.text)}</div>
+
+<div class="small">
+${esc(a.time)}
+</div>
+
+</div>
+
+`)
+.join("");
+
+}
+
+
+function shareReferral(){
+
+const mobile=
+localStorage.getItem(SESSION);
+
+const text=
+`ALINOVA TRADING
+
+Join my virtual trading demo.
+
+Referral:
+${mobile}
+
+Virtual/demo platform only.`;
+
+if(navigator.share){
+
+navigator.share({
+title:"ALINOVA TRADING",
+text:text
+});
+
+}else{
+
+navigator.clipboard
+.writeText(text)
+.then(()=>{
+toast("Referral text copied.");
+})
+.catch(()=>{
+prompt("Copy referral text:",text);
+});
+
+}
+
+
+}
+
+
+function logout(){
+
+localStorage.removeItem(SESSION);
+
+document.getElementById("userPage")
+.classList.add("hidden");
+
+document.getElementById("adminPage")
+.classList.add("hidden");
+
+document.getElementById("adminLoginPage")
+.classList.add("hidden");
+
+document.getElementById("authPage")
+.classList.remove("hidden");
+
+showLogin();
+
+}
+
+
+function spinDraw(){
+
+const wheel=
+document.getElementById("wheel");
+
+drawRotation+=
+1440+
+Math.floor(Math.random()*360);
+
+wheel.style.transform=
+"rotate("+drawRotation+"deg)";
+
+setTimeout(()=>{
+
+const winners=[
+
+["ALI NOVA MEMBER","15,000 Demo Points"],
+["NOVA MEMBER","8,000 Demo Points"],
+["ALINOVA USER","4,000 Demo Points"],
+["VIP DEMO MEMBER","2,000 Demo Points"]
+
+];
+
+const w=
+winners[
+Math.floor(Math.random()*winners.length)
+];
+
+document.getElementById("winnerName")
+.innerText=w[0];
+
+document.getElementById("winnerPrize")
+.innerText=w[1];
+
+toast("Demo draw result displayed.");
+
+},1200);
+
+}
 <p>
 Member: <strong id="userMobile"></strong>
 </p>
