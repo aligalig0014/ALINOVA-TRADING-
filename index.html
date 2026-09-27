@@ -2,5336 +2,1473 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#050914">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>ALINOVA TRADING</title>
 
 <style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
-
-:root{
-  --bg:#050914;
-  --card:rgba(13,22,40,.82);
-  --line:rgba(255,255,255,.10);
-  --text:#f5f8ff;
-  --muted:#91a0b8;
-  --cyan:#20e7ff;
-  --purple:#8b5cf6;
-  --pink:#ff3cac;
-  --green:#22c55e;
-  --red:#ef4444;
-  --yellow:#facc15;
-}
-
-html{
-  scroll-behavior:smooth;
-}
-
+*{box-sizing:border-box;margin:0;padding:0}
 body{
-  min-height:100vh;
-  color:var(--text);
-  font-family:Arial,Helvetica,sans-serif;
-  background:
-    radial-gradient(circle at 10% 10%,rgba(32,231,255,.13),transparent 28%),
-    radial-gradient(circle at 90% 15%,rgba(139,92,246,.16),transparent 30%),
-    radial-gradient(circle at 50% 90%,rgba(255,60,172,.09),transparent 35%),
-    var(--bg);
-  overflow-x:hidden;
+font-family:Arial,sans-serif;
+background:
+radial-gradient(circle at 20% 10%,#142a4d 0,transparent 35%),
+radial-gradient(circle at 90% 80%,#30154b 0,transparent 35%),
+#050813;
+color:#fff;
+min-height:100vh;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+
+.page{
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px;
 }
 
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  opacity:.35;
-  background-image:
-    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
-  background-size:42px 42px;
+.auth-card,.panel,.card{
+background:rgba(10,17,35,.82);
+border:1px solid rgba(0,229,255,.2);
+box-shadow:0 20px 70px rgba(0,0,0,.4),0 0 35px rgba(0,229,255,.07);
+backdrop-filter:blur(18px);
+border-radius:24px;
 }
 
-button,
-input{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-}
-
-.hidden{
-  display:none !important;
-}
-
-/* =========================
-   NAVIGATION
-========================= */
-
-.topbar{
-  position:sticky;
-  top:0;
-  z-index:1000;
-  padding:13px 5%;
-  background:rgba(5,9,20,.78);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--line);
-}
-
-.nav{
-  max-width:1250px;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
+.auth-card{
+width:100%;
+max-width:430px;
+padding:30px;
 }
 
 .logo{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-size:15px;
-  font-weight:900;
-  letter-spacing:1px;
+font-size:30px;
+font-weight:900;
+letter-spacing:2px;
+text-align:center;
+background:linear-gradient(90deg,#00e5ff,#9b5cff,#ff4fd8);
+-webkit-background-clip:text;
+color:transparent;
 }
 
-.logo-orb{
-  width:40px;
-  height:40px;
-  display:grid;
-  place-items:center;
-  border-radius:13px;
-  color:white;
-  background:linear-gradient(
-    135deg,
-    var(--cyan),
-    var(--purple),
-    var(--pink)
-  );
-  box-shadow:
-    0 0 22px rgba(32,231,255,.35),
-    inset 0 0 18px rgba(255,255,255,.15);
-}
-
-.logo-text{
-  background:linear-gradient(
-    90deg,
-    #fff,
-    var(--cyan),
-    #c4b5fd
-  );
-  -webkit-background-clip:text;
-  color:transparent;
-}
-
-.nav-actions{
-  display:flex;
-  gap:8px;
-}
-
-/* =========================
-   BUTTONS
-========================= */
-
-.btn{
-  border:1px solid var(--line);
-  color:#fff;
-  background:rgba(255,255,255,.055);
-  padding:11px 17px;
-  border-radius:12px;
-  transition:.25s ease;
-}
-
-.btn:hover{
-  transform:translateY(-2px);
-  border-color:rgba(32,231,255,.45);
-  box-shadow:0 0 22px rgba(32,231,255,.12);
-}
-
-.btn-primary{
-  border:0;
-  background:linear-gradient(
-    135deg,
-    var(--cyan),
-    var(--purple)
-  );
-  box-shadow:0 10px 35px rgba(32,231,255,.18);
-}
-
-.btn-admin{
-  color:#ffd5ed;
-  border-color:rgba(255,60,172,.32);
-}
-
-.btn-danger{
-  color:#ffabab;
-  border-color:rgba(239,68,68,.25);
-}
-
-.btn-success{
-  color:#8af2a7;
-  border-color:rgba(34,197,94,.25);
-}
-
-.full{
-  width:100%;
-}
-
-.btn-sm{
-  padding:7px 10px;
-  font-size:11px;
-  border-radius:8px;
-}
-
-/* =========================
-   AUTH / LANDING
-========================= */
-
-.auth-wrap{
-  min-height:calc(100vh - 67px);
-  display:grid;
-  place-items:center;
-  padding:45px 20px;
-}
-
-.auth-grid{
-  width:min(1120px,100%);
-  display:grid;
-  grid-template-columns:1.15fr .85fr;
-  gap:28px;
-  align-items:center;
-}
-
-.hero{
-  position:relative;
-  min-height:520px;
-  padding:46px;
-  overflow:hidden;
-  border-radius:30px;
-  border:1px solid var(--line);
-  background:
-    linear-gradient(
-      145deg,
-      rgba(18,31,53,.82),
-      rgba(7,12,24,.60)
-    );
-  backdrop-filter:blur(20px);
-  box-shadow:0 30px 90px rgba(0,0,0,.38);
-}
-
-.hero::after{
-  content:"";
-  position:absolute;
-  width:350px;
-  height:350px;
-  right:-130px;
-  top:-120px;
-  border-radius:50%;
-  background:
-    radial-gradient(
-      circle,
-      rgba(32,231,255,.23),
-      transparent 68%
-    );
-}
-
-.badge{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:8px 13px;
-  border-radius:999px;
-  border:1px solid rgba(32,231,255,.25);
-  background:rgba(32,231,255,.055);
-  color:#a8f6ff;
-  font-size:11px;
-  font-weight:800;
-  letter-spacing:.8px;
-}
-
-.hero h1{
-  position:relative;
-  z-index:2;
-  margin-top:22px;
-  font-size:clamp(45px,7vw,78px);
-  line-height:.94;
-  letter-spacing:-4px;
-}
-
-.gradient-text{
-  background:
-    linear-gradient(
-      90deg,
-      #fff,
-      var(--cyan),
-      #b794ff,
-      var(--pink)
-    );
-  -webkit-background-clip:text;
-  color:transparent;
-}
-
-.hero p{
-  position:relative;
-  z-index:2;
-  max-width:620px;
-  margin-top:22px;
-  color:var(--muted);
-  line-height:1.8;
-  font-size:15px;
-}
-
-.hero-buttons{
-  position:relative;
-  z-index:5;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:25px;
-}
-
-.features{
-  position:relative;
-  z-index:5;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin-top:38px;
-}
-
-.feature{
-  padding:15px;
-  border-radius:15px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.035);
-}
-
-.feature b{
-  display:block;
-  font-size:14px;
-}
-
-.feature small{
-  display:block;
-  margin-top:5px;
-  color:var(--muted);
-  font-size:10px;
-}
-
-.hero-orb{
-  position:absolute;
-  right:8%;
-  bottom:7%;
-  width:155px;
-  height:155px;
-  border-radius:50%;
-  background:
-    radial-gradient(
-      circle at 35% 28%,
-      #fff,
-      transparent 8%
-    ),
-    radial-gradient(
-      circle at 40% 35%,
-      var(--cyan),
-      transparent 36%
-    ),
-    radial-gradient(
-      circle at 70% 68%,
-      var(--purple),
-      transparent 58%
-    );
-  box-shadow:
-    0 0 35px rgba(32,231,255,.35),
-    0 0 90px rgba(139,92,246,.23);
-  animation:floatOrb 5s ease-in-out infinite;
-}
-
-@keyframes floatOrb{
-  0%,100%{
-    transform:translateY(0) rotate(0deg);
-  }
-  50%{
-    transform:translateY(-18px) rotate(8deg);
-  }
-}
-
-/* =========================
-   AUTH CARD
-========================= */
-
-.auth-card{
-  padding:29px;
-  border-radius:25px;
-  border:1px solid var(--line);
-  background:var(--card);
-  backdrop-filter:blur(22px);
-  box-shadow:0 30px 80px rgba(0,0,0,.42);
-}
-
-.auth-card h2{
-  font-size:28px;
-}
-
-.sub{
-  margin-top:7px;
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.6;
-}
-
-.auth-tabs{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:7px;
-  margin:22px 0;
-  padding:5px;
-  border-radius:14px;
-  background:rgba(255,255,255,.045);
-}
-
-.auth-tabs button{
-  padding:11px;
-  border:0;
-  border-radius:10px;
-  background:transparent;
-  color:var(--muted);
-}
-
-.auth-tabs button.active{
-  color:#fff;
-  background:
-    linear-gradient(
-      135deg,
-      rgba(32,231,255,.20),
-      rgba(139,92,246,.22)
-    );
-}
-
-.form-group{
-  margin-top:15px;
-}
-
-.form-group label{
-  display:block;
-  margin-bottom:7px;
-  color:#b6c1d5;
-  font-size:11px;
-  font-weight:700;
+.tagline{
+text-align:center;
+color:#9eabc5;
+margin:10px 0 25px;
+font-size:13px;
 }
 
 .input{
-  width:100%;
-  padding:13px 14px;
-  outline:none;
-  border:1px solid var(--line);
-  border-radius:12px;
-  color:#fff;
-  background:rgba(0,0,0,.22);
-}
-
-.input::placeholder{
-  color:#66748b;
+width:100%;
+padding:15px;
+border-radius:13px;
+border:1px solid #263754;
+background:#080f20;
+color:#fff;
+outline:none;
+margin-bottom:12px;
 }
 
 .input:focus{
-  border-color:rgba(32,231,255,.55);
-  box-shadow:0 0 0 3px rgba(32,231,255,.06);
+border-color:#00e5ff;
+box-shadow:0 0 15px rgba(0,229,255,.15);
+}
+
+.btn{
+width:100%;
+padding:14px 18px;
+border:0;
+border-radius:13px;
+font-weight:800;
+color:#fff;
+margin-top:8px;
+transition:.2s;
+}
+
+.btn:hover{transform:translateY(-2px)}
+
+.primary{
+background:linear-gradient(90deg,#00a9d8,#7655ff);
+}
+
+.green{
+background:linear-gradient(90deg,#00a878,#00d9b0);
+}
+
+.red{
+background:linear-gradient(90deg,#e32655,#ff5a76);
+}
+
+.dark{
+background:#131d31;
+border:1px solid #263754;
+}
+
+.admin-btn{
+margin-top:15px;
+background:linear-gradient(90deg,#752cff,#d43cff);
 }
 
 .note{
-  margin-top:15px;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid rgba(32,231,255,.12);
-  background:rgba(32,231,255,.045);
-  color:#a8b5ca;
-  font-size:10px;
-  line-height:1.7;
+font-size:11px;
+line-height:1.6;
+color:#8290aa;
+text-align:center;
+margin-top:15px;
 }
 
-.auth-help{
-  margin-top:16px;
-  text-align:center;
-}
-
-.auth-help button{
-  border:0;
-  background:none;
-  color:#a8f6ff;
-  font-size:12px;
-}
-
-/* =========================
-   MAIN APP
-========================= */
+/* USER APP */
 
 .app{
-  width:min(1250px,100%);
-  margin:auto;
-  padding:25px 5% 60px;
+display:none;
+min-height:100vh;
 }
 
-.dashboard-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-  margin-bottom:24px;
+.topbar{
+position:sticky;
+top:0;
+z-index:20;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 5%;
+background:rgba(5,8,19,.85);
+backdrop-filter:blur(15px);
+border-bottom:1px solid rgba(255,255,255,.08);
 }
 
-.welcome small{
-  color:var(--muted);
-  font-size:10px;
-  letter-spacing:1px;
+.brand{
+font-size:20px;
+font-weight:900;
+color:#00e5ff;
 }
 
-.welcome h2{
-  margin-top:5px;
-  font-size:28px;
+.top-actions{
+display:flex;
+gap:8px;
 }
 
-.user-actions{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
+.small-btn{
+padding:9px 13px;
+border-radius:10px;
+border:1px solid #293a59;
+background:#101a2e;
+color:#fff;
+font-size:12px;
+font-weight:700;
 }
 
-/* BALANCE */
-
-.balance-card{
-  position:relative;
-  overflow:hidden;
-  padding:29px;
-  border-radius:25px;
-  border:1px solid rgba(32,231,255,.16);
-  background:
-    linear-gradient(
-      135deg,
-      rgba(32,231,255,.09),
-      rgba(139,92,246,.10)
-    ),
-    rgba(12,20,36,.82);
-  box-shadow:0 25px 70px rgba(0,0,0,.28);
+.container{
+width:min(1150px,92%);
+margin:auto;
+padding:30px 0 60px;
 }
 
-.balance-card::before{
-  content:"";
-  position:absolute;
-  width:250px;
-  height:250px;
-  right:-90px;
-  top:-90px;
-  border-radius:50%;
-  background:
-    radial-gradient(
-      circle,
-      rgba(32,231,255,.18),
-      transparent 70%
-    );
+.hero{
+padding:30px;
+margin-bottom:20px;
+background:
+linear-gradient(135deg,rgba(0,229,255,.08),rgba(155,92,255,.08)),
+rgba(10,17,35,.8);
+border:1px solid rgba(0,229,255,.16);
+border-radius:25px;
 }
 
-.balance-label{
-  color:var(--muted);
-  font-size:12px;
+.hero h1{
+font-size:clamp(27px,5vw,48px);
+margin-bottom:8px;
 }
 
-.balance{
-  position:relative;
-  z-index:2;
-  margin-top:7px;
-  font-size:48px;
-  font-weight:900;
-  letter-spacing:-2px;
+.hero p{
+color:#9eabc5;
+max-width:700px;
+line-height:1.6;
 }
-
-.balance span{
-  font-size:15px;
-  color:#a8f6ff;
-}
-
-/* STATS */
 
 .stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
-  margin-top:18px;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+margin-bottom:20px;
 }
 
-.stat{
-  padding:20px;
-  border-radius:18px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.035);
+.card{
+padding:20px;
 }
 
-.stat small{
-  color:var(--muted);
-  font-size:11px;
+.stat-title{
+font-size:11px;
+color:#8290aa;
+text-transform:uppercase;
+letter-spacing:1px;
 }
 
-.stat b{
-  display:block;
-  margin-top:7px;
-  font-size:21px;
+.stat-value{
+font-size:27px;
+font-weight:900;
+margin-top:8px;
+color:#fff;
 }
 
-/* SECTIONS */
-
-.section{
-  margin-top:25px;
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:18px;
+margin-bottom:20px;
 }
 
-.section-title{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  margin-bottom:14px;
-}
-
-.section-title h3{
-  font-size:20px;
-}
-
-.section-title span{
-  color:var(--muted);
-  font-size:11px;
-}
-
-/* MARKET */
-
-.market-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
+.card h2{
+font-size:19px;
+margin-bottom:16px;
 }
 
 .market{
-  padding:20px;
-  border-radius:19px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.035);
-  transition:.25s;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
 }
 
-.market:hover{
-  transform:translateY(-4px);
-  border-color:rgba(139,92,246,.40);
+.market-item{
+padding:15px;
+border-radius:15px;
+background:#0a1223;
+border:1px solid #20304c;
 }
 
-.market-top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+.market-item b{
+display:block;
+font-size:17px;
+margin-bottom:5px;
 }
 
-.coin-icon{
-  width:40px;
-  height:40px;
-  display:grid;
-  place-items:center;
-  border-radius:12px;
-  color:#fff;
-  font-weight:900;
-  background:
-    linear-gradient(
-      135deg,
-      var(--purple),
-      var(--cyan)
-    );
+.market-item span{
+font-size:11px;
+color:#00e5ff;
 }
 
-.market h4{
-  margin-top:15px;
-  font-size:17px;
-}
-
-.market small{
-  color:var(--muted);
-  font-size:10px;
-}
-
-.price{
-  margin-top:15px;
-  font-size:18px;
-  font-weight:800;
-}
-
-.up{
-  color:#72e99a;
-  font-size:11px;
-}
-
-/* PANELS */
-
-.panel-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:18px;
-}
-
-.panel{
-  padding:23px;
-  border-radius:20px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.035);
-}
-
-.panel h3{
-  margin-bottom:6px;
-}
-
-.panel p{
-  color:var(--muted);
-  font-size:11px;
-  line-height:1.7;
-}
-
-.row{
-  display:flex;
-  gap:10px;
-  margin-top:13px;
-}
-
-.row .input{
-  flex:1;
-}
-
-/* ACTIVITY */
-
-.activity{
-  display:flex;
-  flex-direction:column;
-  gap:9px;
-}
-
-.activity-item{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  padding:13px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.05);
-  background:rgba(255,255,255,.035);
-}
-
-.activity-item small{
-  color:var(--muted);
-}
-
-.positive{
-  color:#72e99a;
-}
-
-/* DRAW */
-
-.draw-wrap{
-  position:relative;
-  overflow:hidden;
-  padding:30px;
-  border-radius:25px;
-  border:1px solid rgba(255,255,255,.10);
-  background:
-    radial-gradient(
-      circle at 50% 0%,
-      rgba(139,92,246,.15),
-      transparent 45%
-    ),
-    rgba(10,17,31,.80);
-}
-
-.draw-layout{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:30px;
-  align-items:center;
-}
-
-.wheel-box{
-  position:relative;
-  width:min(350px,90vw);
-  aspect-ratio:1;
-  margin:auto;
-  display:grid;
-  place-items:center;
-}
-
-.wheel{
-  width:100%;
-  height:100%;
-  border-radius:50%;
-  border:10px solid rgba(255,255,255,.08);
-  background:
-    conic-gradient(
-      #20e7ff 0deg 90deg,
-      #8b5cf6 90deg 180deg,
-      #ff3cac 180deg 270deg,
-      #22c55e 270deg 360deg
-    );
-  box-shadow:
-    0 0 35px rgba(32,231,255,.18),
-    inset 0 0 40px rgba(0,0,0,.35);
-  transition:
-    transform 1.2s
-    cubic-bezier(.15,.75,.15,1);
-}
-
-.wheel-center{
-  position:absolute;
-  width:92px;
-  height:92px;
-  display:grid;
-  place-items:center;
-  border-radius:50%;
-  border:3px solid rgba(255,255,255,.12);
-  background:#07101e;
-  box-shadow:0 0 25px rgba(0,0,0,.5);
-  font-size:12px;
-  font-weight:900;
-}
-
-.pointer{
-  position:absolute;
-  top:-2px;
-  left:50%;
-  z-index:5;
-  width:0;
-  height:0;
-  transform:translateX(-50%);
-  border-left:14px solid transparent;
-  border-right:14px solid transparent;
-  border-top:28px solid #fff;
-  filter:drop-shadow(0 0 8px rgba(255,255,255,.5));
-}
-
-.prizes{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:20px;
+.prize-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
+margin:15px 0;
 }
 
 .prize{
-  padding:15px;
-  border-radius:15px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.04);
+padding:16px 8px;
+text-align:center;
+border-radius:14px;
+background:linear-gradient(145deg,#111d36,#080e1c);
+border:1px solid #293b5e;
 }
 
 .prize b{
-  display:block;
-  font-size:18px;
+display:block;
+font-size:19px;
 }
 
-.prize span{
-  color:var(--muted);
-  font-size:10px;
+.prize small{
+color:#8492aa;
 }
 
-.warning{
-  margin-top:15px;
-  padding:11px;
-  border-radius:11px;
-  border:1px solid rgba(250,204,21,.20);
-  background:rgba(250,204,21,.04);
-  color:#e7d89d;
-  font-size:10px;
-  line-height:1.6;
+.wheel-wrap{
+display:flex;
+justify-content:center;
+padding:20px;
+}
+
+.wheel{
+width:220px;
+height:220px;
+border-radius:50%;
+background:conic-gradient(
+#00e5ff 0 25%,
+#8c55ff 25% 50%,
+#ff4fd8 50% 75%,
+#00c896 75% 100%
+);
+border:8px solid #111a2d;
+box-shadow:0 0 40px rgba(0,229,255,.2);
+display:flex;
+align-items:center;
+justify-content:center;
+transition:transform 4s cubic-bezier(.17,.67,.18,1);
+position:relative;
+}
+
+.wheel:after{
+content:"ALINOVA";
+width:82px;
+height:82px;
+border-radius:50%;
+background:#071020;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:11px;
+font-weight:900;
+border:2px solid #fff;
 }
 
 .winner{
-  min-height:80px;
-  display:grid;
-  place-items:center;
-  margin-top:15px;
-  padding:12px;
-  border-radius:15px;
-  border:1px solid rgba(32,231,255,.12);
-  background:rgba(32,231,255,.045);
-  text-align:center;
+text-align:center;
+padding:14px;
+color:#00e5ff;
+min-height:45px;
 }
 
-.winner small{
-  display:block;
-  color:var(--muted);
-  font-size:10px;
+.warning{
+font-size:11px;
+color:#ffcf70;
+line-height:1.5;
+padding:10px;
+border:1px solid rgba(255,207,112,.2);
+border-radius:10px;
+margin-top:12px;
 }
 
-.winner b{
-  display:block;
-  margin-top:4px;
-  color:#a8f6ff;
-  font-size:21px;
+.activity{
+display:flex;
+flex-direction:column;
+gap:9px;
+}
+
+.activity-item{
+padding:12px;
+border-radius:12px;
+background:#091225;
+border:1px solid #1c2b46;
+}
+
+.activity-item strong{
+font-size:12px;
+display:block;
+}
+
+.activity-item small{
+color:#687792;
+font-size:10px;
+display:block;
+margin-top:4px;
 }
 
 /* ADMIN */
 
-.admin-shell{
-  width:min(1250px,100%);
-  margin:auto;
-  padding:25px 5% 60px;
+.admin-page{
+display:none;
+min-height:100vh;
+padding:20px;
+}
+
+.admin-container{
+width:min(1200px,95%);
+margin:auto;
 }
 
 .admin-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-  margin-bottom:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:15px;
+margin-bottom:20px;
+flex-wrap:wrap;
 }
 
-.admin-badge{
-  display:inline-block;
-  padding:6px 10px;
-  border-radius:999px;
-  border:1px solid rgba(255,60,172,.25);
-  background:rgba(255,60,172,.06);
-  color:#ffd6ed;
-  font-size:10px;
-  font-weight:800;
-}
-
-.admin-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
-}
-
-.admin-card{
-  padding:20px;
-  border-radius:18px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.035);
-}
-
-.admin-card small{
-  color:var(--muted);
-  font-size:11px;
-}
-
-.admin-card b{
-  display:block;
-  margin-top:7px;
-  font-size:27px;
-}
-
-.admin-section{
-  margin-top:22px;
-  padding:22px;
-  border-radius:20px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.035);
-}
-
-.table-wrap{
-  overflow:auto;
-  margin-top:15px;
-  border:1px solid var(--line);
-  border-radius:15px;
-}
-
-table{
-  width:100%;
-  min-width:760px;
-  border-collapse:collapse;
-}
-
-th,
-td{
-  padding:13px;
-  text-align:left;
-  border-bottom:1px solid rgba(255,255,255,.06);
-  font-size:11px;
-}
-
-th{
-  color:#a8f6ff;
-  background:rgba(255,255,255,.03);
-}
-
-td{
-  color:#d5dced;
-}
-
-.status{
-  display:inline-block;
-  padding:5px 8px;
-  border-radius:999px;
-  font-size:9px;
-  font-weight:800;
-}
-
-.status-pending{
-  color:#ffe17a;
-  background:rgba(250,204,21,.08);
-}
-
-.status-approved{
-  color:#7bf0a0;
-  background:rgba(34,197,94,.08);
-}
-
-.status-rejected{
-  color:#ff9b9b;
-  background:rgba(239,68,68,.08);
+.admin-head h1{
+color:#c7a4ff;
 }
 
 .admin-actions{
-  display:flex;
-  gap:5px;
-  flex-wrap:wrap;
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-top:15px;
 }
 
-/* MODAL */
+.admin-actions button{
+padding:9px 12px;
+border:0;
+border-radius:9px;
+color:#fff;
+font-weight:700;
+font-size:11px;
+}
+
+.a-primary{background:#6245dc}
+.a-green{background:#009d79}
+.a-red{background:#c92f50}
+.a-yellow{background:#9b761b}
+.a-dark{background:#172238}
+
+.admin-stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
+margin-bottom:20px;
+}
+
+.admin-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:18px;
+}
+
+.request,.user-box{
+padding:16px;
+background:#091225;
+border:1px solid #1c2b46;
+border-radius:15px;
+margin-bottom:10px;
+}
+
+.request-head{
+display:flex;
+justify-content:space-between;
+gap:10px;
+margin-bottom:12px;
+}
+
+.request-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+font-size:12px;
+}
+
+.request-grid label{
+display:block;
+color:#71809a;
+font-size:10px;
+margin-bottom:3px;
+}
+
+.status{
+font-size:9px;
+font-weight:900;
+padding:5px 7px;
+border-radius:7px;
+background:#172238;
+}
+
+.pending{color:#ffd166}
+.approved{color:#00d9a0}
+.rejected{color:#ff6684}
+
+.search{
+display:flex;
+gap:8px;
+margin-bottom:15px;
+}
+
+.search input{
+margin:0;
+}
+
+.empty{
+text-align:center;
+padding:25px;
+color:#6f7c94;
+}
 
 .modal{
-  position:fixed;
-  inset:0;
-  z-index:3000;
-  display:none;
-  place-items:center;
-  padding:20px;
-  background:rgba(0,0,0,.74);
-  backdrop-filter:blur(10px);
-}
-
-.modal.show{
-  display:grid;
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.7);
+z-index:100;
+align-items:center;
+justify-content:center;
+padding:20px;
 }
 
 .modal-box{
-  width:min(480px,100%);
-  padding:25px;
-  border-radius:22px;
-  border:1px solid var(--line);
-  background:#0b1425;
-  box-shadow:0 30px 100px rgba(0,0,0,.6);
+width:min(600px,100%);
+max-height:80vh;
+overflow:auto;
+padding:22px;
+background:#0b1426;
+border:1px solid #263a5b;
+border-radius:20px;
 }
 
 .modal-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
+display:flex;
+justify-content:space-between;
+margin-bottom:15px;
 }
 
-.close{
-  border:0;
-  background:none;
-  color:#fff;
-  font-size:25px;
+.modal-head button{
+background:none;
+border:0;
+color:#fff;
+font-size:24px;
 }
-
-/* TOAST */
 
 .toast{
-  position:fixed;
-  right:20px;
-  bottom:20px;
-  z-index:5000;
-  max-width:330px;
-  padding:14px 17px;
-  border-radius:14px;
-  border:1px solid rgba(32,231,255,.22);
-  background:#101c30;
-  box-shadow:0 15px 50px rgba(0,0,0,.45);
-  transform:translateY(30px);
-  opacity:0;
-  pointer-events:none;
-  transition:.3s;
+position:fixed;
+left:50%;
+bottom:25px;
+transform:translateX(-50%);
+z-index:200;
+padding:13px 20px;
+border-radius:12px;
+background:#101a2d;
+border:1px solid #00e5ff;
+box-shadow:0 15px 40px #0008;
+display:none;
+font-weight:700;
+font-size:13px;
+max-width:90%;
+text-align:center;
 }
 
-.toast.show{
-  transform:translateY(0);
-  opacity:1;
+@media(max-width:800px){
+.stats,.admin-stats{grid-template-columns:repeat(2,1fr)}
+.grid,.admin-grid{grid-template-columns:1fr}
+.market{grid-template-columns:repeat(2,1fr)}
+.prize-grid{grid-template-columns:repeat(2,1fr)}
+.topbar{padding:13px 4%}
 }
 
-/* FOOTER */
-
-footer{
-  padding:30px 15px;
-  text-align:center;
-  color:#617089;
-  font-size:10px;
-}
-
-/* RESPONSIVE */
-
-@media(max-width:950px){
-
-  .auth-grid{
-    grid-template-columns:1fr;
-  }
-
-  .hero{
-    min-height:450px;
-  }
-
-  .stats{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .market-grid{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .panel-grid,
-  .draw-layout{
-    grid-template-columns:1fr;
-  }
-
-  .admin-grid{
-    grid-template-columns:1fr 1fr;
-  }
-}
-
-@media(max-width:600px){
-
-  .topbar{
-    padding:11px 14px;
-  }
-
-  .logo{
-    font-size:12px;
-  }
-
-  .logo-orb{
-    width:35px;
-    height:35px;
-  }
-
-  .nav-actions .btn{
-    padding:8px 10px;
-    font-size:10px;
-  }
-
-  .auth-wrap{
-    padding:25px 13px;
-  }
-
-  .hero{
-    padding:28px 22px;
-    border-radius:22px;
-  }
-
-  .hero h1{
-    font-size:46px;
-    letter-spacing:-2px;
-  }
-
-  .features{
-    grid-template-columns:1fr;
-  }
-
-  .hero-orb{
-    width:110px;
-    height:110px;
-    opacity:.55;
-  }
-
-  .auth-card{
-    padding:22px;
-  }
-
-  .dashboard-head,
-  .admin-head{
-    align-items:flex-start;
-    flex-direction:column;
-  }
-
-  .stats,
-  .market-grid,
-  .admin-grid{
-    grid-template-columns:1fr;
-  }
-
-  .balance{
-    font-size:39px;
-  }
-
-  .draw-wrap{
-    padding:18px;
-  }
-
-  .wheel-box{
-    width:min(290px,85vw);
-  }
-
-  .prizes{
-    grid-template-columns:1fr 1fr;
-  }
+@media(max-width:500px){
+.stats{grid-template-columns:1fr 1fr}
+.container{width:94%}
+.hero,.card{padding:17px}
+.market-item{padding:12px}
+.wheel{width:190px;height:190px}
 }
 </style>
 </head>
 
 <body>
 
+<!-- ================= AUTH ================= -->
+
+<section id="authPage" class="page">
+
+<div class="auth-card">
+
+<div class="logo">ALINOVA TRADING</div>
+
+<div class="tagline">
+Virtual Trading • Demo Coins • Modern Digital Experience
+</div>
+
+<div id="loginBox">
+
+<h2 style="margin-bottom:15px">Welcome Back</h2>
+
+<input
+id="loginPhone"
+class="input"
+type="tel"
+maxlength="11"
+placeholder="03XXXXXXXXX">
+
+<button
+id="loginBtn"
+class="btn primary"
+type="button">
+LOGIN
+</button>
+
+<button
+id="registerShowBtn"
+class="btn dark"
+type="button">
+CREATE ACCOUNT
+</button>
+
+<button
+id="adminBtn"
+class="btn admin-btn"
+type="button">
+ADMIN
+</button>
+
+<button
+id="accessHelpBtn"
+class="btn dark"
+type="button">
+FORGOT ACCESS / HELP
+</button>
+
+</div>
+
+
+<div id="registerBox" style="display:none">
+
+<h2 style="margin-bottom:15px">
+Create Account
+</h2>
+
+<input
+id="regPhone"
+class="input"
+type="tel"
+maxlength="11"
+placeholder="03XXXXXXXXX">
+
+<button
+id="registerBtn"
+class="btn green"
+type="button">
+REGISTER
+</button>
+
+<button
+id="loginShowBtn"
+class="btn dark"
+type="button">
+BACK TO LOGIN
+</button>
+
+</div>
+
+<div class="note">
+500 virtual ALI Coins are provided for new demo accounts.
+<br>
+No real-money withdrawal is available.
+</div>
+
+</div>
+</section>
+
+
+<!-- ================= USER APP ================= -->
+
+<section id="userApp" class="app">
+
 <header class="topbar">
-  <nav class="nav">
 
-    <div class="logo">
-      <div class="logo-orb">A</div>
-      <div class="logo-text">ALINOVA TRADING</div>
-    </div>
+<div class="brand">
+ALINOVA
+</div>
 
-    <div class="nav-actions">
-      <button
-        class="btn btn-admin"
-        onclick="showAdminLogin()"
-      >
-        ADMIN
-      </button>
-    </div>
+<div class="top-actions">
 
-  </nav>
+<button
+class="small-btn"
+onclick="claimDailyReward()">
+🎁 DAILY +20
+</button>
+
+<button
+class="small-btn"
+onclick="logoutUser()">
+LOGOUT
+</button>
+
+</div>
+
 </header>
 
 
-<!-- =====================================================
-     USER AUTH PAGE
-===================================================== -->
+<div class="container">
 
-<section id="authPage" class="auth-wrap">
+<section class="hero">
 
-  <div class="auth-grid">
+<h1>
+Welcome to ALINOVA TRADING
+</h1>
 
-    <div class="hero">
+<p>
+A modern virtual trading experience with demo coins,
+market insights, daily rewards and interactive features.
+</p>
 
-      <div class="badge">
-        ✦ VIRTUAL TRADING EXPERIENCE
-      </div>
-
-      <h1>
-        Trade Your<br>
-        <span class="gradient-text">ALINOVA</span>
-      </h1>
-
-      <p>
-        ALINOVA TRADING is a modern virtual trading platform
-        with a professional 3D interface, virtual coins,
-        market insights, daily rewards and easy account management.
-      </p>
-
-      <div class="hero-buttons">
-
-        <button
-          class="btn btn-primary"
-          onclick="showRegister()"
-        >
-          CREATE ACCOUNT
-        </button>
-
-        <button
-          class="btn"
-          onclick="showLogin()"
-        >
-          USER LOGIN
-        </button>
-
-      </div>
-
-      <div class="features">
-
-        <div class="feature">
-          <b>500 Coins</b>
-          <small>New demo account bonus</small>
-        </div>
-
-        <div class="feature">
-          <b>+20 Daily</b>
-          <small>Virtual daily reward</small>
-        </div>
-
-        <div class="feature">
-          <b>4 Markets</b>
-          <small>Demo market overview</small>
-        </div>
-
-      </div>
-
-      <div class="hero-orb"></div>
-
-    </div>
-
-
-    <!-- AUTH CARD -->
-
-    <div class="auth-card">
-
-      <h2 id="authTitle">
-        Welcome Back
-      </h2>
-
-      <div id="authSub" class="sub">
-        Login with your registered mobile number.
-      </div>
-
-
-      <div class="auth-tabs">
-
-        <button
-          id="loginTab"
-          class="active"
-          onclick="showLogin()"
-        >
-          USER LOGIN
-        </button>
-
-        <button
-          id="registerTab"
-          onclick="showRegister()"
-        >
-          REGISTER
-        </button>
-
-      </div>
-
-
-      <!-- LOGIN -->
-      
- <div id="loginForm">
-
-        <div class="form-group">
-
-          <label>
-            PAKISTANI MOBILE NUMBER
-          </label>
-
-          <input
-            id="loginPhone"
-            class="input"
-            type="tel"
-            maxlength="11"
-            placeholder="03XXXXXXXXX"
-          >
-
-        </div>
-
-        <button
-          class="btn btn-primary full"
-          style="margin-top:18px"
-          onclick="login()"
-        >
-          LOGIN TO DASHBOARD
-        </button>
-
-        <div class="auth-help">
-
-          <button onclick="forgotAccess()">
-            Forgot Access / Need Help?
-          </button>
-
-        </div>
-
-      </div>
-
-
-      <!-- REGISTER -->
-
-      <div id="registerForm" class="hidden">
-
-        <div class="form-group">
-
-          <label>
-            PAKISTANI MOBILE NUMBER
-          </label>
-
-          <input
-            id="registerPhone"
-            class="input"
-            type="tel"
-            maxlength="11"
-            placeholder="03XXXXXXXXX"
-          >
-
-        </div>
-
-        <button
-          class="btn btn-primary full"
-          style="margin-top:18px"
-          onclick="register()"
-        >
-          CREATE DEMO ACCOUNT
-        </button>
-
-        <div class="note">
-          New accounts receive
-          <b>500 virtual ALI Coins</b>.
-          User login does not require a password.
-        </div>
-
-      </div>
-
-
-      <div class="note">
-
-        ⚠️ <b>DEMO PLATFORM:</b>
-        All coins shown here are virtual/demo units only.
-        They have no cash value and do not represent an
-        investment, deposit, guaranteed return or withdrawable balance.
-
-      </div>
-
-    </div>
-
-  </div>
+<p style="margin-top:8px">
+Logged in: <strong id="userPhone">---</strong>
+</p>
 
 </section>
 
 
-<!-- =====================================================
-     USER WEBSITE
-===================================================== -->
-
-<section id="userApp" class="hidden">
-
-  <main class="app">
-
-    <div class="dashboard-head">
-
-      <div class="welcome">
-
-        <small>
-          WELCOME TO ALINOVA
-        </small>
-
-        <h2 id="welcomeUser">
-          User Dashboard
-        </h2>
-
-      </div>
-
-      <div class="user-actions">
-
-        <button
-          class="btn"
-          onclick="dailyReward()"
-        >
-          🎁 Daily Reward
-        </button>
-
-        <button
-          class="btn"
-          onclick="shareReferral()"
-        >
-          🔗 Referral
-        </button>
-
-        <button
-          class="btn btn-danger"
-          onclick="logout()"
-        >
-          Logout
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <!-- BALANCE -->
-
-    <div class="balance-card">
-
-      <div class="balance-label">
-        YOUR VIRTUAL BALANCE
-      </div>
-
-      <div class="balance">
-        <span id="coinBalance">0</span>
-        <span>ALI COINS</span>
-      </div>
-
-      <div class="balance-label">
-        Demo account • No cash withdrawal
-      </div>
-
-    </div>
-
-
-    <!-- STATS -->
-
-    <div class="stats">
-
-      <div class="stat">
-        <small>Account Status</small>
-        <b id="accountStatus">ACTIVE</b>
-      </div>
-
-      <div class="stat">
-        <small>Daily Reward</small>
-        <b>+20</b>
-      </div>
-
-      <div class="stat">
-        <small>Demo Rate</small>
-        <b>1.30</b>
-      </div>
-
-      <div class="stat">
-        <small>Member Since</small>
-        <b id="memberSince">—</b>
-      </div>
-
-    </div>
-
-
-    <!-- MARKET -->
-
-    <div class="section">
-
-      <div class="section-title">
-
-        <h3>
-          Market Overview
-        </h3>
-
-        <span>
-          Virtual market display
-        </span>
-
-      </div>
-
-      <div class="market-grid">
-
-        <div class="market">
-
-          <div class="market-top">
-
-            <div class="coin-icon">
-              A
-            </div>
-
-            <span class="up">
-              +4.82%
-            </span>
-
-          </div>
-
-          <h4>ALI</h4>
-
-          <small>
-            ALI NOVA
-          </small>
-
-          <div class="price">
-            1.30 DEMO
-          </div>
-
-        </div>
-
-
-        <div class="market">
-
-          <div class="market-top">
-
-            <div class="coin-icon">
-              N
-            </div>
-
-            <span class="up">
-              +3.41%
-            </span>
-
-          </div>
-
-          <h4>NVX</h4>
-
-          <small>
-            NOVA X
-          </small>
-
-          <div class="price">
-            2.15 DEMO
-          </div>
-
-        </div>
-
-
-        <div class="market">
-
-          <div class="market-top">
-
-            <div class="coin-icon">
-              P
-            </div>
-
-            <span class="up">
-              +6.20%
-            </span>
-
-          </div>
-
-          <h4>APX</h4>
-
-          <small>
-            APEX
-          </small>
-
-          <div class="price">
-            3.70 DEMO
-          </div>
-
-        </div>
-
-
-        <div class="market">
-
-          <div class="market-top">
-
-            <div class="coin-icon">
-              O
-            </div>
-
-            <span class="up">
-              +2.86%
-            </span>
-
-          </div>
-
-          <h4>ORB</h4>
-
-          <small>
-            ORBIT
-          </small>
-
-          <div class="price">
-            4.25 DEMO
-          </div>
-
-        </div>
-
-      </div>
-
-<!-- =====================================================
-     USER COIN REQUEST + CALCULATOR
-===================================================== -->
-
-<div class="section">
-
-  <div class="panel-grid">
-
-    <!-- RECHARGE REQUEST -->
-
-    <div class="panel">
-
-      <h3>
-        Virtual Coin Request
-      </h3>
-
-      <p>
-        Request virtual ALI Coins for your demo account.
-        Requests are reviewed manually by the administrator.
-        Coins are not added automatically.
-      </p>
-
-
-      <div class="form-group">
-
-        <label>
-          VIRTUAL COINS
-        </label>
-
-        <input
-          id="rechargeCoins"
-          class="input"
-          type="number"
-          min="1"
-          placeholder="Example: 5000"
-          oninput="calculate()"
-        >
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label>
-          RECEIPT / REFERENCE
-        </label>
-
-        <input
-          id="rechargeRef"
-          class="input"
-          type="text"
-          placeholder="Optional reference number"
-        >
-
-      </div>
-
-
-      <div class="note">
-
-        Estimated demo value:
-        <b id="calcValue">
-          Rs. 0
-        </b>
-
-      </div>
-
-
-      <button
-        class="btn btn-primary full"
-        style="margin-top:16px"
-        onclick="recharge()"
-      >
-        REQUEST VIA WHATSAPP
-      </button>
-
-
-      <div class="note">
-
-        WhatsApp requests are sent as
-        <b>PENDING ADMIN VERIFICATION</b>.
-        This demo does not automatically verify payments.
-
-      </div>
-
-    </div>
-
-
-    <!-- CALCULATOR -->
-
-    <div class="panel">
-
-      <h3>
-        Coin Calculator
-      </h3>
-
-      <p>
-        Demo reference rate:
-        <b>5,000 virtual coins = Rs. 6,500</b>
-        estimated demo value.
-      </p>
-
-
-      <div class="form-group">
-
-        <label>
-          VIRTUAL COINS
-        </label>
-
-        <input
-          id="calcCoins"
-          class="input"
-          type="number"
-          min="0"
-          placeholder="5000"
-          oninput="calculate()"
-        >
-
-      </div>
-
-
-      <div
-        class="balance-card"
-        style="margin-top:15px;padding:20px"
-      >
-
-        <div class="balance-label">
-          ESTIMATED DEMO VALUE
-        </div>
-
-        <div
-          class="balance"
-          style="font-size:32px"
-        >
-          Rs.
-          <span id="calcBig">
-            0
-          </span>
-        </div>
-
-      </div>
-
-
-      <div class="note">
-
-        Formula:
-        <b>Virtual Coins × 1.30</b>
-
-      </div>
-
-    </div>
-
-  </div>
+<div class="stats">
+
+<div class="card">
+<div class="stat-title">Virtual Balance</div>
+<div class="stat-value">
+<span id="userBalance">0</span>
+</div>
+</div>
+
+<div class="card">
+<div class="stat-title">Account</div>
+<div class="stat-value" style="font-size:20px">
+<span id="accountStatus">ACTIVE</span>
+</div>
+</div>
+
+<div class="card">
+<div class="stat-title">Member Since</div>
+<div class="stat-value" style="font-size:15px">
+<span id="memberSince">---</span>
+</div>
+</div>
+
+<div class="card">
+<div class="stat-title">Coin Rate</div>
+<div class="stat-value" style="font-size:17px">
+5,000 = Rs. 6,500*
+</div>
+</div>
 
 </div>
 
 
-<!-- =====================================================
-     LUCKY DRAW
-===================================================== -->
+<!-- MARKET -->
 
-<div class="section">
+<div class="card" style="margin-bottom:20px">
 
-  <div class="section-title">
+<h2>📊 Market Overview</h2>
 
-    <h3>
-      ALINOVA Demo Lucky Draw
-    </h3>
+<div class="market">
 
-    <span>
-      Promotional demo feature
-    </span>
+<div class="market-item">
+<b>ALI</b>
+<span>ALI NOVA</span>
+</div>
 
-  </div>
+<div class="market-item">
+<b>NVX</b>
+<span>NOVA X</span>
+</div>
 
+<div class="market-item">
+<b>APX</b>
+<span>APEX</span>
+</div>
 
-  <div class="draw-wrap">
+<div class="market-item">
+<b>ORB</b>
+<span>ORBIT</span>
+</div>
 
-    <div class="draw-layout">
-
-
-      <!-- WHEEL -->
-
-      <div class="wheel-box">
-
-        <div class="pointer"></div>
-
-        <div
-          id="wheel"
-          class="wheel"
-        ></div>
-
-        <div class="wheel-center">
-          ALINOVA
-        </div>
-
-      </div>
-
-
-      <!-- DRAW INFO -->
-
-      <div>
-
-        <div class="badge">
-          ♛ DEMO DRAW
-        </div>
-
-
-        <h2
-          style="
-            margin-top:15px;
-            font-size:32px;
-          "
-        >
-          Spin the Virtual Wheel
-        </h2>
-
-
-        <p
-          style="
-            margin-top:10px;
-            color:var(--muted);
-            line-height:1.7;
-            font-size:13px;
-          "
-        >
-          Try the ALINOVA promotional demo draw
-          and receive a virtual demo-points result.
-        </p>
-
-
-        <button
-          id="spinBtn"
-          class="btn btn-primary full"
-          style="margin-top:18px"
-          onclick="spinDraw()"
-        >
-          🎡 SPIN DEMO DRAW
-        </button>
-
-
-        <div class="winner">
-
-          <div>
-
-            <small>
-              DEMO RESULT
-            </small>
-
-            <b id="winnerText">
-              Ready to Spin
-            </b>
-
-          </div>
-
-        </div>
-
-
-        <div class="prizes">
-
-          <div class="prize">
-
-            <b>
-              15,000
-            </b>
-
-            <span>
-              Demo Points
-            </span>
-
-          </div>
-
-
-          <div class="prize">
-
-            <b>
-              8,000
-            </b>
-
-            <span>
-              Demo Points
-            </span>
-
-          </div>
-
-
-          <div class="prize">
-
-            <b>
-              4,000
-            </b>
-
-            <span>
-              Demo Points
-            </span>
-
-          </div>
-
-
-          <div class="prize">
-
-            <b>
-              2,000
-            </b>
-
-            <span>
-              Demo Points
-            </span>
-
-          </div>
-
-        </div>
-
-
-        <div class="warning">
-
-          ⚠️
-          <b>DEMO / PROMOTIONAL DISPLAY</b>
-          — NOT A CASH PRIZE SYSTEM.
-          Demo results have no cash value.
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
+</div>
 
 </div>
 
 
-<!-- =====================================================
-     REFERRAL
-===================================================== -->
+<div class="grid">
 
-<div class="section">
+<!-- RECHARGE -->
 
-  <div class="panel">
+<div class="card">
 
-    <h3>
-      Invite & Referral
-    </h3>
+<h2>💳 Virtual Coin Request</h2>
 
-    <p>
-      Share your ALINOVA demo invitation with friends.
-      Referral rewards shown on this website are
-      virtual/demo points only.
-    </p>
+<input
+id="rechargeCoins"
+class="input"
+type="number"
+min="1"
+placeholder="Enter virtual coins">
 
-
-    <div class="row">
-
-      <input
-        id="referralText"
-        class="input"
-        readonly
-        value="Join ALINOVA TRADING — Virtual Demo Platform"
-      >
-
-      <button
-        class="btn btn-primary"
-        onclick="shareReferral()"
-      >
-        SHARE
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- =====================================================
-     RECENT ACTIVITY
-===================================================== -->
-
-<div class="section">
-
-  <div class="section-title">
-
-    <h3>
-      Recent Activity
-    </h3>
-
-    <span>
-      Account history
-    </span>
-
-  </div>
-
-
-  <div
-    id="activityList"
-    class="activity"
-  >
-
-    <div class="activity-item">
-
-      <div>
-        <b>
-          Account Ready
-        </b>
-
-        <br>
-
-        <small>
-          Your demo activity will appear here.
-        </small>
-      </div>
-
-      <span class="positive">
-        •
-      </span>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-</main>
-
-
-<footer>
-
-  ALINOVA TRADING
-  • Virtual Demo Platform
-  • No cash value
-
-</footer>
-
-</section>
-
-
-<!-- =====================================================
-     ADMIN LOGIN PAGE
-===================================================== -->
-
-<section
-  id="adminLoginPage"
-  class="auth-wrap hidden"
->
-
-  <div
-    class="auth-card"
-    style="width:min(450px,100%)"
-  >
-
-    <div class="admin-badge">
-      ADMIN ACCESS
-    </div>
-
-
-    <h2 style="margin-top:12px">
-      Admin Control Panel
-    </h2>
-
-
-    <div class="sub">
-      Authorized demo administrator login.
-    </div>
-
-
-    <div class="form-group">
-
-      <label>
-        ADMIN USERNAME
-      </label>
-
-      <input
-        id="adminUsername"
-        class="input"
-        type="text"
-        placeholder="Enter admin username"
-      >
-
-    </div>
-
-
-    <div class="form-group">
-
-      <label>
-        ADMIN PASSWORD
-      </label>
-
-      <input
-        id="adminPassword"
-        class="input"
-        type="password"
-        placeholder="Enter admin password"
-      >
-
-    </div>
-
-
-    <button
-      class="btn btn-primary full"
-      style="margin-top:18px"
-      onclick="adminLogin()"
-    >
-      OPEN ADMIN PANEL
-    </button>
-
-
-    <button
-      class="btn full"
-      style="margin-top:10px"
-      onclick="backToAuth()"
-    >
-      ← BACK TO USER LOGIN
-    </button>
-
-
-    <div class="note">
-
-      Demo credentials:
-
-      <br>
-
-      Username:
-      <b>Alig0014</b>
-
-      <br>
-
-      Password:
-      <b>alig0014</b>
-
-      <br><br>
-
-      ⚠️ This is a client-side demo.
-      Do not use this authentication for
-      real financial or sensitive systems.
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =====================================================
-     ADMIN PANEL
-===================================================== -->
-
-<section
-  id="adminPanel"
-  class="hidden"
->
-
-  <main class="admin-shell">
-
-
-    <div class="admin-head">
-
-      <div>
-
-        <div class="admin-badge">
-          ALINOVA ADMIN
-        </div>
-
-        <h2 style="margin-top:8px">
-          Control Panel
-        </h2>
-
-        <p
-          style="
-            color:var(--muted);
-            font-size:11px;
-            margin-top:5px;
-          "
-        >
-          Manage demo users, requests and
-          virtual balances.
-        </p>
-
-      </div>
-
-
-      <div class="user-actions">
-
-        <button
-          class="btn"
-          onclick="backToAuth()"
-        >
-          User Login
-        </button>
-
-        <button
-          class="btn btn-danger"
-          onclick="adminLogout()"
-        >
-          Admin Logout
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <!-- ADMIN STATS -->
-
-    <div class="admin-grid">
-
-      <div class="admin-card">
-
-        <small>
-          Total Users
-        </small>
-
-        <b id="adminUsers">
-          0
-        </b>
-
-      </div>
-
-
-      <div class="admin-card">
-
-        <small>
-          Pending Requests
-        </small>
-
-        <b id="adminPending">
-          0
-        </b>
-
-      </div>
-
-
-      <div class="admin-card">
-
-        <small>
-          Approved Requests
-        </small>
-
-        <b id="adminApproved">
-          0
-        </b>
-
-      </div>
-      /* ==========================================
-   ALINOVA TRADING — PART 5/5
-   FINAL EVENTS + PAGE INITIALIZATION
-========================================== */
-
-
-/* ---------- SAFE CLICK HELPER ---------- */
-
-function bindClick(id, handler) {
-
-  const el =
-    document.getElementById(id);
-
-  if (el) {
-    el.addEventListener("click", handler);
-  }
-}
-
-
-/* ---------- AUTH BUTTONS ---------- */
-
-bindClick(
-  "registerBtn",
-  registerUser
-);
-
-bindClick(
-  "loginBtn",
-  loginUser
-);
-
-bindClick(
-  "adminBtn",
-  showAdminLogin
-);
-
-
-/* ---------- ADMIN LOGIN ---------- */
-
-bindClick(
-  "adminLoginBtn",
-  adminLogin
-);
-
-bindClick(
-  "adminBackBtn",
-  backToAuth
-);
-
-
-/* ---------- USER BUTTONS ---------- */
-
-bindClick(
-  "dailyRewardBtn",
-  claimDailyReward
-);
-
-bindClick(
-  "rechargeBtn",
-  submitRecharge
-);
-
-bindClick(
-  "calculateBtn",
-  calculateCoins
-);
-
-bindClick(
-  "referralBtn",
-  shareReferral
-);
-
-bindClick(
-  "spinButton",
-  spinLuckyDraw
-);
-
-bindClick(
-  "logoutBtn",
-  logoutUser
-);
-
-
-/* ---------- ADMIN BUTTONS ---------- */
-
-bindClick(
-  "adminLogoutBtn",
-  adminLogout
-);
-
-bindClick(
-  "adminRefreshBtn",
-  refreshAdmin
-);
-
-bindClick(
-  "adminNoticeBtn",
-  showAdminNotice
-);
-
-
-/* ---------- SEARCH ---------- */
-
-const adminSearch =
-  document.getElementById(
-    "adminUserSearch"
-  );
-
-if (adminSearch) {
-
-  adminSearch.addEventListener(
-    "input",
-    searchAdminUsers
-  );
-
-}
-
-
-/* ---------- CALCULATOR LIVE UPDATE ---------- */
-
-const calcInput =
-  document.getElementById(
-    "calcCoins"
-  );
-
-if (calcInput) {
-
-  calcInput.addEventListener(
-    "input",
-    calculateCoins
-  );
-
-}
-
-
-/* ---------- MODAL CLOSE ---------- */
-
-const modal =
-  document.getElementById(
-    "mainModal"
-  );
-
-if (modal) {
-
-  modal.addEventListener(
-    "click",
-    function(e) {
-
-      if (e.target === modal) {
-        closeModal();
-      }
-
-    }
-  );
-
-}
-
-
-/* ---------- ENTER KEY LOGIN ---------- */
-
-const loginPhone =
-  document.getElementById(
-    "loginPhone"
-  );
-
-if (loginPhone) {
-
-  loginPhone.addEventListener(
-    "keydown",
-    function(e) {
-
-      if (e.key === "Enter") {
-        loginUser();
-      }
-
-    }
-  );
-
-}
-
-
-const regPhone =
-  document.getElementById(
-    "regPhone"
-  );
-
-if (regPhone) {
-
-  regPhone.addEventListener(
-    "keydown",
-    function(e) {
-
-      if (e.key === "Enter") {
-        registerUser();
-      }
-
-    }
-  );
-
-}
-
-
-const adminPassword =
-  document.getElementById(
-    "adminPassword"
-  );
-
-if (adminPassword) {
-
-  adminPassword.addEventListener(
-    "keydown",
-    function(e) {
-
-      if (e.key === "Enter") {
-        adminLogin();
-      }
-
-    }
-  );
-
-}
-
-
-/* ---------- MOBILE NUMBER FORMAT ---------- */
-
-function formatPakistaniNumber(input) {
-
-  if (!input) return;
-
-  input.addEventListener(
-    "input",
-    function() {
-
-      this.value =
-        this.value
-          .replace(/\D/g, "")
-          .slice(0, 11);
-
-    }
-  );
-
-}
-
-
-formatPakistaniNumber(
-  document.getElementById("loginPhone")
-);
-
-formatPakistaniNumber(
-  document.getElementById("regPhone")
-);
-
-
-/* ---------- RECHARGE INPUT ---------- */
-
-const rechargeCoins =
-  document.getElementById(
-    "rechargeCoins"
-  );
-
-if (rechargeCoins) {
-
-  rechargeCoins.addEventListener(
-    "input",
-    function() {
-
-      let value =
-        Number(this.value || 0);
-
-      if (value < 0) {
-        this.value = 0;
-      }
-
-      const preview =
-        document.getElementById(
-          "rechargePreview"
-        );
-
-      if (preview) {
-
-        preview.textContent =
-          "Estimated demo value: Rs. " +
-          (
-            value * RATE
-          ).toLocaleString("en-PK", {
-            maximumFractionDigits: 2
-          });
-
-      }
-
-    }
-  );
-
-}
-
-
-/* ---------- AUTH PAGE ACCESS HELP ---------- */
-
-const accessHelp =
-  document.getElementById(
-    "accessHelpBtn"
-  );
-
-if (accessHelp) {
-
-  accessHelp.addEventListener(
-    "click",
-    requestAccessHelp
-  );
-
-}
-
-
-/* ---------- ADMIN PANEL NAVIGATION ---------- */
-
-function showAdminSection(section) {
-
-  const sections = [
-    "adminRequestsSection",
-    "adminUsersSection",
-    "adminAccessSection"
-  ];
-
-  sections.forEach(id => {
-
-    const el =
-      document.getElementById(id);
-
-    if (el) {
-      el.style.display = "none";
-    }
-
-  });
-
-
-  const selected =
-    document.getElementById(
-      section
-    );
-
-  if (selected) {
-    selected.style.display = "block";
-  }
-
-}
-
-
-/* ---------- USER SECTION NAVIGATION ---------- */
-
-function scrollToSection(id) {
-
-  const target =
-    document.getElementById(id);
-
-  if (!target) return;
-
-  target.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
-
-}
-
-
-/* ---------- COPY MOBILE ---------- */
-
-function copyUserPhone() {
-
-  const user =
-    currentUser();
-
-  if (!user) return;
-
-
-  if (
-    navigator.clipboard &&
-    navigator.clipboard.writeText
-  ) {
-
-    navigator.clipboard.writeText(
-      user.phone
-    );
-
-    toast(
-      "Mobile number copied.",
-      "success"
-    );
-
-  }
-
-}
-
-
-/* ---------- RESET DEMO DATA ---------- */
-
-function resetDemoData() {
-
-  if (
-    localStorage.getItem(
-      ADMIN_SESSION
-    ) !== "true"
-  ) {
-
-    toast(
-      "Admin login required.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  const confirmation =
-    prompt(
-      "Type RESET to clear all ALINOVA demo data:"
-    );
-
-
-  if (confirmation !== "RESET") {
-
-    toast(
-      "Reset cancelled.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  localStorage.removeItem(USERS);
-  localStorage.removeItem(RECHARGE);
-  localStorage.removeItem(ACCESS);
-  localStorage.removeItem(SESSION);
-
-
-  toast(
-    "All demo data has been reset.",
-    "success"
-  );
-
-
-  setTimeout(() => {
-
-    renderAdminPanel();
-
-  }, 500);
-
-}
-
-
-/* ---------- INITIAL PAGE STATE ---------- */
-
-function initializeApp() {
-
-  const userSession =
-    localStorage.getItem(
-      SESSION
-    );
-
-  const adminSession =
-    localStorage.getItem(
-      ADMIN_SESSION
-    );
-
-
-  /* Admin session has priority */
-
-  if (adminSession === "true") {
-
-    if (
-      typeof openAdminPanel ===
-      "function"
-    ) {
-
-      openAdminPanel();
-
-    }
-
-    return;
-  }
-
-
-  /* Existing user session */
-
-  if (userSession) {
-
-    const user =
-      currentUser();
-
-    if (
-      user &&
-      user.active !== false
-    ) {
-
-      openWebsite();
-
-      return;
-
-    }
-
-    localStorage.removeItem(
-      SESSION
-    );
-
-  }
-
-
-  /* Default login screen */
-
-  hideAllPages();
-
-  const auth =
-    document.getElementById(
-      "authPage"
-    );
-
-  if (auth) {
-    auth.style.display = "flex";
-  }
-
-}
-
-
-/* ---------- DEFAULT CALCULATOR ---------- */
-
-calculateCoins();
-
-
-/* ---------- START APPLICATION ---------- */
-
-if (
-  document.readyState ===
-  "loading"
-) {
-
-  document.addEventListener(
-    "DOMContentLoaded",
-    initializeApp
-  );
-
-} else {
-
-  initializeApp();
-
-}
-
-</script>
-
-</body>
-      </html>
-
-
-      <div class="admin-card">
-
-        <small>
-          Rejected Requests
-        </small>
-
-        <b id="adminRejected">
-          0
-        </b>
-
-      </div>
-
-    </div>
-
-
-    <!-- ADMIN CONTENT -->
-
-    <div id="adminContent">
-
-      <!-- Part 4 will populate this area -->
-
-    </div>
-
-
-    <div class="admin-section">
-
-      <div class="note">
-
-        ⚠️
-        <b>ADMIN DEMO NOTICE:</b>
-        User balances and requests are stored
-        locally in this browser using localStorage.
-        For a real multi-user platform, a secure
-        server/database is required.
-
-      </div>
-
-    </div>
-
-  </main>
-
-</section>
-
-
-<!-- =====================================================
-     MODAL
-===================================================== -->
+<input
+id="receiptRef"
+class="input"
+type="text"
+placeholder="Receipt / reference (optional)">
 
 <div
-  id="modal"
-  class="modal"
->
+id="rechargePreview"
+style="color:#00e5ff;font-size:12px;margin-bottom:10px">
+Estimated demo value: Rs. 0
+</div>
 
-  <div class="modal-box">
+<button
+id="rechargeBtn"
+class="btn primary"
+type="button">
+SEND REQUEST ON WHATSAPP
+</button>
 
-    <div class="modal-head">
-
-      <h3 id="modalTitle">
-        Details
-      </h3>
-
-      <button
-        class="close"
-        onclick="closeModal()"
-      >
-        ×
-      </button>
-
-    </div>
-
-
-    <div id="modalContent"></div>
-
-  </div>
+<div class="warning">
+Request is sent for admin verification.
+Virtual coins are NOT added automatically.
+</div>
 
 </div>
 
 
-<!-- TOAST -->
+<!-- CALCULATOR -->
+
+<div class="card">
+
+<h2>🧮 Coin Calculator</h2>
+
+<input
+id="calcCoins"
+class="input"
+type="number"
+min="0"
+placeholder="Enter coins">
 
 <div
-  id="toast"
-  class="toast"
-></div>
+style="text-align:center;padding:20px">
+
+<div style="color:#8290aa;font-size:12px">
+ESTIMATED DEMO VALUE
+</div>
+
+<div
+id="calcBig"
+style="font-size:35px;font-weight:900;color:#00e5ff">
+0
+</div>
+
+<div
+id="calcValue"
+style="color:#9eabc5">
+Rs. 0
+</div>
+
+</div>
+
+<p class="note">
+Rate: 1 virtual coin = Rs. 1.30 estimated demo value.
+</p>
+
+</div>
+
+</div>
+
+
+<!-- LUCKY DRAW -->
+
+<div class="card" style="margin-bottom:20px">
+
+<h2>👑 ALINOVA Demo Draw</h2>
+
+<div class="wheel-wrap">
+
+<div
+id="luckyWheel"
+class="wheel">
+</div>
+
+</div>
+
+<div
+id="winnerResult"
+class="winner">
+Press the button to start the demo draw.
+</div>
+
+<button
+id="spinButton"
+class="btn primary"
+type="button">
+SPIN DEMO DRAW
+</button>
+
+<div class="prize-grid">
+
+<div class="prize">
+<b>15,000</b>
+<small>Demo Points</small>
+</div>
+
+<div class="prize">
+<b>8,000</b>
+<small>Demo Points</small>
+</div>
+
+<div class="prize">
+<b>4,000</b>
+<small>Demo Points</small>
+</div>
+
+<div class="prize">
+<b>2,000</b>
+<small>Demo Points</small>
+</div>
+
+</div>
+
+<div class="warning">
+DEMO / PROMOTIONAL DISPLAY — NOT A CASH PRIZE SYSTEM.
+No cash withdrawal or cash payout is provided.
+</div>
+
+</div>
+
+
+<div class="grid">
+
+<!-- REFERRAL -->
+
+<div class="card">
+
+<h2>🔗 Referral</h2>
+
+<p style="color:#9eabc5;line-height:1.6;font-size:13px">
+Invite friends to explore the ALINOVA virtual demo.
+Referral activity is promotional and does not create
+a cash commission.
+</p>
+
+<button
+id="referralBtn"
+class="btn green"
+type="button">
+SHARE REFERRAL
+</button>
+
+</div>
+
+
+<!-- ACTIVITY -->
+
+<div class="card">
+
+<h2>🕒 Recent Activity</h2>
+
+<div
+id="activityList"
+class="activity">
+<div class="empty">
+No activity yet.
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+</section>
+
+
+<!-- ================= ADMIN LOGIN ================= -->
+
+<section id="adminLoginPage" class="page" style="display:none">
+
+<div class="auth-card">
+
+<div class="logo">
+ALINOVA ADMIN
+</div>
+
+<div class="tagline">
+Demo Administration Panel
+</div>
+
+<input
+id="adminUsername"
+class="input"
+type="text"
+placeholder="Admin Username">
+
+<input
+id="adminPassword"
+class="input"
+type="password"
+placeholder="Admin Password">
+
+<button
+id="adminLoginBtn"
+class="btn primary"
+type="button">
+ADMIN LOGIN
+</button>
+
+<button
+id="adminBackBtn"
+class="btn dark"
+type="button">
+BACK TO USER LOGIN
+</button>
+
+<div class="note">
+Demo credentials:
+<br>
+Username: Alig0014
+<br>
+Password: alig0014
+</div>
+
+</div>
+</section>
+
+
+<!-- ================= ADMIN PANEL ================= -->
+
+<section id="adminPanel" class="admin-page">
+
+<div class="admin-container">
+
+<div class="admin-head">
+
+<div>
+<h1>ALINOVA ADMIN</h1>
+<p style="color:#71809a;margin-top:5px">
+Virtual Demo Management
+</p>
+</div>
+
+<div class="admin-actions">
+
+<button
+class="a-dark"
+onclick="showAdminNotice()">
+INFO
+</button>
+
+<button
+class="a-dark"
+onclick="refreshAdmin()">
+REFRESH
+</button>
+
+<button
+class="a-red"
+onclick="adminLogout()">
+LOGOUT
+</button>
+
+</div>
+
+</div>
+
+
+<div class="admin-stats">
+
+<div class="card">
+<div class="stat-title">Users</div>
+<div id="adminUsersCount" class="stat-value">0</div>
+</div>
+
+<div class="card">
+<div class="stat-title">Pending</div>
+<div id="adminPendingCount" class="stat-value">0</div>
+</div>
+
+<div class="card">
+<div class="stat-title">Approved</div>
+<div id="adminApprovedCount" class="stat-value">0</div>
+</div>
+
+<div class="card">
+<div class="stat-title">Rejected</div>
+<div id="adminRejectedCount" class="stat-value">0</div>
+</div>
+
+</div>
+
+
+<div class="admin-grid">
+
+<div class="card">
+
+<h2>💳 Recharge Requests</h2>
+
+<div id="adminRequests">
+<div class="empty">
+No requests found.
+</div>
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>👥 Registered Users</h2>
+
+<div class="search">
+
+<input
+id="adminUserSearch"
+class="input"
+type="text"
+placeholder="Search mobile number">
+
+</div>
+
+<div id="adminUsers">
+<div class="empty">
+No users found.
+</div>
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>🔐 Access Help Requests</h2>
+
+<div id="adminAccessRequests">
+<div class="empty">
+No access requests.
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+</section>
+
+
+<!-- ================= MODAL ================= -->
+
+<div
+id="mainModal"
+class="modal">
+
+<div class="modal-box">
+
+<div class="modal-head">
+
+<h2 id="modalTitle">
+Information
+</h2>
+
+<button
+onclick="closeModal()">
+×
+</button>
+
+</div>
+
+<div id="modalBody"></div>
+
+</div>
+
+</div>
+
+
+<div id="toast" class="toast"></div>
+
 
 <script>
 
-const USERS = "alinova_users";
-const RECHARGE = "alinova_recharge";
-const ACCESS = "alinova_access";
-const SESSION = "alinova_session";
-const ADMIN_SESSION = "alinova_admin_session";
+/* ==========================================
+   DATABASE / SETTINGS
+========================================== */
+
+const USERS_KEY = "alinova_users";
+const REQUESTS_KEY = "alinova_requests";
+const ACCESS_KEY = "alinova_access";
+const SESSION_KEY = "alinova_session";
+const ADMIN_KEY = "alinova_admin";
 
 const RATE = 1.30;
-const WA_NUMBER = "923220751486";
+const WHATSAPP = "923220751486";
 
 const ADMIN_USER = "Alig0014";
 const ADMIN_PASS = "alig0014";
 
 
-/* ---------- STORAGE ---------- */
+/* ==========================================
+   STORAGE
+========================================== */
 
-function getData(key, fallback = []) {
-  try {
-    return JSON.parse(localStorage.getItem(key)) || fallback;
-  } catch (e) {
-    return fallback;
-  }
+function get(key, fallback = []) {
+try {
+return JSON.parse(localStorage.getItem(key)) || fallback;
+} catch {
+return fallback;
+}
 }
 
-function saveData(key, data) {
-  localStorage.setItem(key, JSON.stringify(data));
+function save(key, value) {
+localStorage.setItem(
+key,
+JSON.stringify(value)
+);
 }
 
-function getUsers() {
-  return getData(USERS, []);
+function users() {
+return get(USERS_KEY, []);
 }
 
-function saveUsers(users) {
-  saveData(USERS, users);
+function requests() {
+return get(REQUESTS_KEY, []);
 }
 
-function getRequests() {
-  return getData(RECHARGE, []);
-}
-
-function saveRequests(data) {
-  saveData(RECHARGE, data);
-}
-
-function getAccessRequests() {
-  return getData(ACCESS, []);
-}
-
-function saveAccessRequests(data) {
-  saveData(ACCESS, data);
-}
-
-
-/* ---------- HELPERS ---------- */
-
-function nowText() {
-  return new Date().toLocaleString("en-PK", {
-    dateStyle: "medium",
-    timeStyle: "short"
-  });
-}
-
-function uid(prefix = "ID") {
-  return prefix + "-" + Date.now().toString(36).toUpperCase() +
-    Math.random().toString(36).slice(2, 7).toUpperCase();
-}
-
-function esc(value) {
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+function accessRequests() {
+return get(ACCESS_KEY, []);
 }
 
 function currentUser() {
-  const phone = localStorage.getItem(SESSION);
-  if (!phone) return null;
 
-  return getUsers().find(u => u.phone === phone) || null;
+const phone =
+localStorage.getItem(SESSION_KEY);
+
+if (!phone) return null;
+
+return users().find(
+u => u.phone === phone
+) || null;
 }
 
-function saveCurrentUser(user) {
-  const users = getUsers();
-  const index = users.findIndex(u => u.phone === user.phone);
-
-  if (index !== -1) {
-    users[index] = user;
-    saveUsers(users);
-  }
+function timeNow() {
+return new Date().toLocaleString(
+"en-PK",
+{
+dateStyle:"medium",
+timeStyle:"short"
+}
+);
 }
 
-
-/* ---------- AUTH NAVIGATION ---------- */
-
-function hideAllPages() {
-  const ids = [
-    "authPage",
-    "userApp",
-    "adminLoginPage",
-    "adminPanel"
-  ];
-
-  ids.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = "none";
-  });
+function id(prefix) {
+return prefix + "-" +
+Date.now().toString(36).toUpperCase() +
+Math.random().toString(36)
+.slice(2,6)
+.toUpperCase();
 }
 
-function backToAuth() {
-  hideAllPages();
-
-  const auth = document.getElementById("authPage");
-  if (auth) auth.style.display = "flex";
-
-  localStorage.removeItem(ADMIN_SESSION);
-}
-
-function openWebsite() {
-  const user = currentUser();
-
-  if (!user) {
-    backToAuth();
-    return;
-  }
-
-  if (user.active === false) {
-    toast("Your demo account is disabled by admin.", "error");
-    localStorage.removeItem(SESSION);
-    backToAuth();
-    return;
-  }
-
-  hideAllPages();
-
-  const app = document.getElementById("userApp");
-  if (app) app.style.display = "block";
-
-  renderUserDashboard();
+function esc(value) {
+return String(value ?? "")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 }
 
 
-/* ---------- USER REGISTRATION ---------- */
+/* ==========================================
+   TOAST
+========================================== */
 
-function registerUser() {
-  const input = document.getElementById("regPhone");
-  const phone = input ? input.value.trim() : "";
+function toast(message) {
 
-  if (!/^03\d{9}$/.test(phone)) {
-    toast("Enter a valid Pakistani mobile number.", "error");
-    return;
-  }
+const box =
+document.getElementById("toast");
 
-  const users = getUsers();
+box.textContent = message;
+box.style.display = "block";
 
-  if (users.some(u => u.phone === phone)) {
-    toast("This number is already registered. Please login.", "error");
-    return;
-  }
+clearTimeout(window.toastTimer);
 
-  const user = {
-    phone: phone,
-    balance: 500,
-    active: true,
-    registeredAt: nowText(),
-    lastReward: 0,
-    referralPoints: 0,
-    activity: [
-      {
-        id: uid("ACT"),
-        text: "Account created — 500 virtual ALI Coins credited",
-        time: nowText()
-      }
-    ]
-  };
+window.toastTimer =
+setTimeout(() => {
+box.style.display = "none";
+},3500);
 
-  users.push(user);
-  saveUsers(users);
-
-  localStorage.setItem(SESSION, phone);
-
-  toast("Registration successful! 500 virtual coins added.", "success");
-
-  setTimeout(() => {
-    openWebsite();
-  }, 500);
 }
 
 
-/* ---------- USER LOGIN ---------- */
+/* ==========================================
+   PAGE CONTROL
+========================================== */
+
+function hidePages() {
+
+[
+"authPage",
+"userApp",
+"adminLoginPage",
+"adminPanel"
+].forEach(id => {
+
+const el =
+document.getElementById(id);
+
+if(el) {
+el.style.display = "none";
+}
+
+});
+
+}
+
+
+/* ==========================================
+   USER LOGIN
+========================================== */
 
 function loginUser() {
-  const input = document.getElementById("loginPhone");
-  const phone = input ? input.value.trim() : "";
 
-  if (!/^03\d{9}$/.test(phone)) {
-    toast("Enter your registered mobile number.", "error");
-    return;
-  }
+const phone =
+document.getElementById(
+"loginPhone"
+).value.trim();
 
-  const user = getUsers().find(u => u.phone === phone);
+if(!/^03\d{9}$/.test(phone)) {
 
-  if (!user) {
-    toast("Account not found. Please register first.", "error");
-    return;
-  }
-
-  if (user.active === false) {
-    toast("This demo account is disabled.", "error");
-    return;
-  }
-
-  localStorage.setItem(SESSION, phone);
-
-  toast("Login successful.", "success");
-
-  setTimeout(() => {
-    openWebsite();
-  }, 300);
-}
-
-
-/* ---------- USER DASHBOARD ---------- */
-
-function renderUserDashboard() {
-  const user = currentUser();
-  if (!user) return;
-
-  const balanceEls = [
-    "userBalance",
-    "dashboardBalance",
-    "coinBalance"
-  ];
-
-  balanceEls.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.textContent = Number(user.balance || 0).toLocaleString();
-    }
-  });
-
-  const phoneEls = [
-    "userPhone",
-    "welcomePhone",
-    "profilePhone"
-  ];
-
-  phoneEls.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = user.phone;
-  });
-
-  const statusEls = [
-    "accountStatus",
-    "userStatus"
-  ];
-
-  statusEls.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.textContent = user.active === false ? "DISABLED" : "ACTIVE";
-    }
-  });
-
-  const memberEl = document.getElementById("memberSince");
-  if (memberEl) {
-    memberEl.textContent = user.registeredAt || "-";
-  }
-
-  renderActivity();
-}
-
-
-/* ---------- DAILY REWARD ---------- */
-
-function claimDailyReward() {
-  const user = currentUser();
-
-  if (!user) {
-    toast("Please login first.", "error");
-    return;
-  }
-
-  if (user.active === false) {
-    toast("Your account is disabled.", "error");
-    return;
-  }
-
-  const currentTime = Date.now();
-  const last = Number(user.lastReward || 0);
-  const oneDay = 24 * 60 * 60 * 1000;
-
-  if (currentTime - last < oneDay) {
-    const remaining = oneDay - (currentTime - last);
-    const hours = Math.ceil(remaining / (60 * 60 * 1000));
-
-    toast(
-      "Daily reward already claimed. Try again in about " +
-      hours + " hour(s).",
-      "error"
-    );
-
-    return;
-  }
-
-  user.balance = Number(user.balance || 0) + 20;
-  user.lastReward = currentTime;
-
-  user.activity = user.activity || [];
-
-  user.activity.unshift({
-    id: uid("ACT"),
-    text: "Daily reward +20 virtual ALI Coins",
-    time: nowText()
-  });
-
-  saveCurrentUser(user);
-
-  renderUserDashboard();
-
-  toast("🎁 +20 virtual ALI Coins added!", "success");
-}
-
-
-/* ---------- CALCULATOR ---------- */
-
-function calculateCoins() {
-  const input = document.getElementById("calcCoins");
-  const coins = Number(input ? input.value : 0);
-
-  const value = coins > 0 ? coins * RATE : 0;
-
-  const valueEl = document.getElementById("calcValue");
-  const bigEl = document.getElementById("calcBig");
-
-  if (valueEl) {
-    valueEl.textContent =
-      "Rs. " + value.toLocaleString("en-PK", {
-        maximumFractionDigits: 2
-      });
-  }
-
-  if (bigEl) {
-    bigEl.textContent =
-      value.toLocaleString("en-PK", {
-        maximumFractionDigits: 2
-      });
-  }
-}
-
-
-/* ---------- RECHARGE REQUEST ---------- */
-
-function submitRecharge() {
-  const user = currentUser();
-
-  if (!user) {
-    toast("Please login first.", "error");
-    return;
-  }
-
-  if (user.active === false) {
-    toast("Your account is disabled.", "error");
-    return;
-  }
-
-  const coinInput = document.getElementById("rechargeCoins");
-  const refInput = document.getElementById("receiptRef");
-
-  const coins = Number(coinInput ? coinInput.value : 0);
-  const reference = refInput ? refInput.value.trim() : "";
-
-  if (!coins || coins <= 0) {
-    toast("Enter the virtual coin quantity.", "error");
-    return;
-  }
-
-  if (!Number.isFinite(coins)) {
-    toast("Invalid coin quantity.", "error");
-    return;
-  }
-
-  const estimatedValue = coins * RATE;
-
-  const request = {
-    id: uid("REQ"),
-    phone: user.phone,
-    coins: coins,
-    estimatedValue: estimatedValue,
-    reference: reference || "Not provided",
-    createdAt: nowText(),
-    status: "PENDING"
-  };
-
-  const requests = getRequests();
-
-  requests.unshift(request);
-
-  saveRequests(requests);
-
-  user.activity = user.activity || [];
-
-  user.activity.unshift({
-    id: uid("ACT"),
-    text:
-      "Recharge request submitted: " +
-      coins.toLocaleString() +
-      " virtual coins",
-    time: nowText()
-  });
-
-  saveCurrentUser(user);
-
-  const message =
-`ALINOVA TRADING — VIRTUAL COIN REQUEST
-
-Request ID: ${request.id}
-Registered Mobile: ${user.phone}
-Requested Virtual Coins: ${coins.toLocaleString()}
-Estimated Demo Value: Rs. ${estimatedValue.toLocaleString("en-PK")}
-Receipt / Reference: ${reference || "Not provided"}
-
-STATUS: PENDING ADMIN VERIFICATION
-
-Note: This is a virtual/demo coin request.`;
-
-  const whatsappURL =
-    "https://wa.me/" +
-    WA_NUMBER +
-    "?text=" +
-    encodeURIComponent(message);
-
-  window.open(whatsappURL, "_blank");
-
-  if (coinInput) coinInput.value = "";
-  if (refInput) refInput.value = "";
-
-  toast(
-    "Request saved as PENDING. Coins are not added automatically.",
-    "success"
-  );
-
-  renderUserDashboard();
-}
-
-
-/* ---------- FORGOT ACCESS / HELP ---------- */
-
-function requestAccessHelp() {
-  const phone = prompt(
-    "Enter your registered Pakistani mobile number:"
-  );
-
-  if (!phone) return;
-
-  const cleanPhone = phone.trim();
-
-  if (!/^03\d{9}$/.test(cleanPhone)) {
-    toast("Invalid Pakistani mobile number.", "error");
-    return;
-  }
-
-  const user = getUsers().find(u => u.phone === cleanPhone);
-
-  if (!user) {
-    toast("No registered account found for this number.", "error");
-    return;
-  }
-
-  const requests = getAccessRequests();
-
-  const existing = requests.find(
-    r => r.phone === cleanPhone && r.status === "PENDING"
-  );
-
-  if (existing) {
-    toast("A support access request is already pending.", "error");
-    return;
-  }
-
-  requests.unshift({
-    id: uid("ACC"),
-    phone: cleanPhone,
-    createdAt: nowText(),
-    status: "PENDING"
-  });
-
-  saveAccessRequests(requests);
-
-  toast(
-    "Access help request sent to admin.",
-    "success"
-  );
-}
-
-
-/* ---------- ACTIVITY ---------- */
-
-function renderActivity() {
-  const user = currentUser();
-  const box = document.getElementById("activityList");
-
-  if (!box || !user) return;
-
-  const activities = user.activity || [];
-
-  if (!activities.length) {
-    box.innerHTML =
-      `<div class="empty-state">No recent activity.</div>`;
-    return;
-  }
-
-  box.innerHTML = activities
-    .slice(0, 12)
-    .map(item => `
-      <div class="activity-item">
-        <div>
-          <strong>${esc(item.text)}</strong>
-          <small>${esc(item.time)}</small>
-        </div>
-      </div>
-    `)
-    .join("");
-}
-
-
-/* ---------- REFERRAL ---------- */
-
-function shareReferral() {
-  const user = currentUser();
-
-  if (!user) {
-    toast("Please login first.", "error");
-    return;
-  }
-
-  const text =
-`🚀 Join ALINOVA TRADING
-
-Use my referral:
-${user.phone}
-
-Get started with virtual ALI Coins and explore the demo trading experience.
-
-DEMO / VIRTUAL PLATFORM`;
-
-  if (navigator.share) {
-    navigator.share({
-      title: "ALINOVA TRADING",
-      text: text
-    }).catch(() => {});
-  } else if (navigator.clipboard) {
-    navigator.clipboard.writeText(text);
-
-    toast(
-      "Referral message copied.",
-      "success"
-    );
-  } else {
-    prompt(
-      "Copy this referral message:",
-      text
-    );
-  }
-}
-
-
-/* ---------- LUCKY DRAW ---------- */
-
-function spinLuckyDraw() {
-  const user = currentUser();
-
-  if (!user) {
-    toast("Please login first.", "error");
-    return;
-  }
-
-  const button =
-    document.getElementById("spinButton");
-
-  const wheel =
-    document.getElementById("luckyWheel");
-
-  const result =
-    document.getElementById("winnerResult");
-
-  const prizes = [
-    15000,
-    8000,
-    4000,
-    2000
-  ];
-
-  const prize =
-    prizes[Math.floor(Math.random() * prizes.length)];
-
-  const rotation =
-    1440 + Math.floor(Math.random() * 720);
-
-  if (button) {
-    button.disabled = true;
-    button.textContent = "DRAWING...";
-  }
-
-  if (wheel) {
-    wheel.style.transition =
-      "transform 4s cubic-bezier(.17,.67,.18,1)";
-
-    wheel.style.transform =
-      "rotate(" + rotation + "deg)";
-  }
-
-  setTimeout(() => {
-
-    if (result) {
-      result.innerHTML =
-        `🎉 DEMO WINNER<br>
-         <strong>${prize.toLocaleString()} DEMO POINTS</strong>`;
-    }
-
-    user.activity = user.activity || [];
-
-    user.activity.unshift({
-      id: uid("ACT"),
-      text:
-        "Lucky Draw demo result: " +
-        prize.toLocaleString() +
-        " demo points",
-      time: nowText()
-    });
-
-    saveCurrentUser(user);
-
-    renderActivity();
-
-    if (button) {
-      button.disabled = false;
-      button.textContent = "SPIN DEMO DRAW";
-    }
-
-    toast(
-      "Demo draw completed — no cash prize or withdrawal.",
-      "success"
-    );
-
-  }, 4300);
-}
-
-
-/* ---------- USER LOGOUT ---------- */
-
-function logoutUser() {
-  localStorage.removeItem(SESSION);
-
-  hideAllPages();
-
-  const auth =
-    document.getElementById("authPage");
-
-  if (auth) {
-    auth.style.display = "flex";
-  }
-
-  toast("Logged out successfully.", "success");
-}
-
-
-/* ---------- ADMIN LOGIN ---------- */
-
-function showAdminLogin() {
-  hideAllPages();
-
-  const page =
-    document.getElementById("adminLoginPage");
-
-  if (page) {
-    page.style.display = "flex";
-  }
-}
-
-function adminLogin() {
-  const usernameEl =
-    document.getElementById("adminUsername");
-
-  const passwordEl =
-    document.getElementById("adminPassword");
-
-  const username =
-    usernameEl ? usernameEl.value.trim() : "";
-
-  const password =
-    passwordEl ? passwordEl.value : "";
-
-  if (
-    username !== ADMIN_USER ||
-    password !== ADMIN_PASS
-  ) {
-    toast("Invalid admin credentials.", "error");
-    return;
-  }
-
-  localStorage.setItem(
-    ADMIN_SESSION,
-    "true"
-  );
-
-  localStorage.removeItem(SESSION);
-
-  toast("Admin login successful.", "success");
-
-  setTimeout(() => {
-    if (typeof openAdminPanel === "function") {
-      openAdminPanel();
-    }
-  }, 400);
-}
-
-
-/* ---------- MODAL ---------- */
-
-function closeModal() {
-  const modal =
-    document.getElementById("mainModal");
-
-  if (modal) {
-    modal.style.display = "none";
-  }
-}
-
-function openModal(title, content) {
-  const modal =
-    document.getElementById("mainModal");
-
-  const titleEl =
-    document.getElementById("modalTitle");
-
-  const bodyEl =
-    document.getElementById("modalBody");
-
-  if (titleEl) {
-    titleEl.textContent = title;
-  }
-
-  if (bodyEl) {
-    bodyEl.innerHTML = content;
-  }
-
-  if (modal) {
-    modal.style.display = "flex";
-  }
-}
-
-
-/* ---------- TOAST ---------- */
-
-function toast(message, type = "info") {
-  let box =
-    document.getElementById("toastBox");
-
-  if (!box) {
-    box = document.createElement("div");
-    box.id = "toastBox";
-
-    box.style.position = "fixed";
-    box.style.left = "50%";
-    box.style.bottom = "25px";
-    box.style.transform = "translateX(-50%)";
-    box.style.zIndex = "99999";
-    box.style.padding = "13px 20px";
-    box.style.borderRadius = "14px";
-    box.style.background = "rgba(10,15,30,.95)";
-    box.style.color = "#fff";
-    box.style.border = "1px solid rgba(255,255,255,.15)";
-    box.style.boxShadow =
-      "0 15px 40px rgba(0,0,0,.35)";
-    box.style.fontWeight = "700";
-    box.style.maxWidth = "90%";
-    box.style.textAlign = "center";
-
-    document.body.appendChild(box);
-  }
-
-  box.textContent = message;
-
-  if (type === "error") {
-    box.style.borderColor = "#ff4d6d";
-  } else if (type === "success") {
-    box.style.borderColor = "#00e5ff";
-  } else {
-    box.style.borderColor =
-      "rgba(255,255,255,.15)";
-  }
-
-  box.style.opacity = "1";
-
-  clearTimeout(window.__toastTimer);
-
-  window.__toastTimer =
-    setTimeout(() => {
-      box.style.opacity = "0";
-    }, 3500);
-}
-/* ---------- OPEN ADMIN PANEL ---------- */
-
-function openAdminPanel() {
-
-  if (localStorage.getItem(ADMIN_SESSION) !== "true") {
-    showAdminLogin();
-    return;
-  }
-
-  hideAllPages();
-
-  const panel =
-    document.getElementById("adminPanel");
-
-  if (panel) {
-    panel.style.display = "block";
-  }
-
-  renderAdminPanel();
-}
-
-
-/* ---------- ADMIN LOGOUT ---------- */
-
-function adminLogout() {
-
-  localStorage.removeItem(ADMIN_SESSION);
-
-  hideAllPages();
-
-  const page =
-    document.getElementById("adminLoginPage");
-
-  if (page) {
-    page.style.display = "flex";
-  }
-
-  const username =
-    document.getElementById("adminUsername");
-
-  const password =
-    document.getElementById("adminPassword");
-
-  if (username) username.value = "";
-  if (password) password.value = "";
-
-  toast("Admin logged out.", "success");
-}
-
-
-/* ---------- ADMIN STATS ---------- */
-
-function renderAdminStats() {
-
-  const users = getUsers();
-  const requests = getRequests();
-  const access = getAccessRequests();
-
-  const pending =
-    requests.filter(r => r.status === "PENDING").length;
-
-  const approved =
-    requests.filter(r => r.status === "APPROVED").length;
-
-  const rejected =
-    requests.filter(r => r.status === "REJECTED").length;
-
-  const pendingAccess =
-    access.filter(r => r.status === "PENDING").length;
-
-
-  const elements = {
-
-    adminUsersCount: users.length,
-
-    adminPendingCount: pending,
-
-    adminApprovedCount: approved,
-
-    adminRejectedCount: rejected,
-
-    adminAccessCount: pendingAccess
-  };
-
-
-  Object.keys(elements).forEach(id => {
-
-    const el =
-      document.getElementById(id);
-
-    if (el) {
-      el.textContent = elements[id];
-    }
-
-  });
-}
-
-
-/* ---------- ADMIN PANEL ---------- */
-
-function renderAdminPanel() {
-
-  if (localStorage.getItem(ADMIN_SESSION) !== "true") {
-    showAdminLogin();
-    return;
-  }
-
-  renderAdminStats();
-
-  renderAdminRequests();
-
-  renderAdminUsers();
-
-  renderAdminAccessRequests();
-}
-
-
-/* ---------- RECHARGE REQUESTS ---------- */
-
-function renderAdminRequests() {
-
-  const box =
-    document.getElementById("adminRequests");
-
-  if (!box) return;
-
-  const requests =
-    getRequests();
-
-  if (!requests.length) {
-
-    box.innerHTML = `
-      <div class="empty-state">
-        No recharge requests found.
-      </div>
-    `;
-
-    return;
-  }
-
-
-  box.innerHTML = requests.map(req => {
-
-    let statusClass =
-      "status-pending";
-
-    if (req.status === "APPROVED") {
-      statusClass = "status-approved";
-    }
-
-    if (req.status === "REJECTED") {
-      statusClass = "status-rejected";
-    }
-
-
-    return `
-      <div class="admin-request-card">
-
-        <div class="request-top">
-
-          <div>
-            <strong>${esc(req.id)}</strong>
-
-            <span class="${statusClass}">
-              ${esc(req.status)}
-            </span>
-          </div>
-
-          <small>
-            ${esc(req.createdAt)}
-          </small>
-
-        </div>
-
-
-        <div class="request-grid">
-
-          <div>
-            <label>Mobile</label>
-            <strong>${esc(req.phone)}</strong>
-          </div>
-
-          <div>
-            <label>Virtual Coins</label>
-            <strong>
-              ${Number(req.coins).toLocaleString()}
-            </strong>
-          </div>
-
-          <div>
-            <label>Demo Value</label>
-            <strong>
-              Rs. ${Number(req.estimatedValue).toLocaleString("en-PK")}
-            </strong>
-          </div>
-
-          <div>
-            <label>Reference</label>
-            <strong>
-              ${esc(req.reference)}
-            </strong>
-          </div>
-
-        </div>
-
-
-        ${
-          req.status === "PENDING"
-          ? `
-            <div class="admin-actions">
-
-              <button
-                class="btn-primary"
-                onclick="approveRecharge('${esc(req.id)}')">
-                ✓ APPROVE
-              </button>
-
-              <button
-                class="btn-danger"
-                onclick="rejectRecharge('${esc(req.id)}')">
-                ✕ REJECT
-              </button>
-
-            </div>
-          `
-          : `
-            <div class="request-final">
-              Request ${esc(req.status.toLowerCase())}.
-            </div>
-          `
-        }
-
-      </div>
-    `;
-
-  }).join("");
-}
-
-
-/* ---------- APPROVE RECHARGE ---------- */
-
-function approveRecharge(requestId) {
-
-  if (localStorage.getItem(ADMIN_SESSION) !== "true") {
-    toast("Admin login required.", "error");
-    return;
-  }
-
-
-  const requests =
-    getRequests();
-
-  const request =
-    requests.find(r => r.id === requestId);
-
-  if (!request) {
-    toast("Request not found.", "error");
-    return;
-  }
-
-  if (request.status !== "PENDING") {
-    toast("This request is already processed.", "error");
-    return;
-  }
-
-
-  const users =
-    getUsers();
-
-  const user =
-    users.find(u => u.phone === request.phone);
-
-  if (!user) {
-
-    request.status = "REJECTED";
-
-    request.adminNote =
-      "User account not found.";
-
-    request.processedAt =
-      nowText();
-
-    saveRequests(requests);
-
-    toast(
-      "User account not found. Request rejected.",
-      "error"
-    );
-
-    renderAdminPanel();
-
-    return;
-  }
-
-
-  if (user.active === false) {
-
-    toast(
-      "This user's account is disabled.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  const coins =
-    Number(request.coins) || 0;
-
-
-  user.balance =
-    Number(user.balance || 0) + coins;
-
-
-  user.activity =
-    user.activity || [];
-
-
-  user.activity.unshift({
-
-    id: uid("ACT"),
-
-    text:
-      "Admin approved recharge: +" +
-      coins.toLocaleString() +
-      " virtual ALI Coins",
-
-    time:
-      nowText()
-
-  });
-
-
-  request.status =
-    "APPROVED";
-
-  request.processedAt =
-    nowText();
-
-  request.adminNote =
-    "Virtual/demo coins credited by admin.";
-
-
-  saveUsers(users);
-
-  saveRequests(requests);
-
-
-  toast(
-    "Request approved. Virtual coins credited.",
-    "success"
-  );
-
-
-  renderAdminPanel();
-}
-
-
-/* ---------- REJECT RECHARGE ---------- */
-
-function rejectRecharge(requestId) {
-
-  if (localStorage.getItem(ADMIN_SESSION) !== "true") {
-    toast("Admin login required.", "error");
-    return;
-  }
-
-
-  const requests =
-    getRequests();
-
-  const request =
-    requests.find(r => r.id === requestId);
-
-
-  if (!request) {
-    toast("Request not found.", "error");
-    return;
-  }
-
-
-  if (request.status !== "PENDING") {
-    toast("This request is already processed.", "error");
-    return;
-  }
-
-
-  request.status =
-    "REJECTED";
-
-  request.processedAt =
-    nowText();
-
-  request.adminNote =
-    "Request rejected by admin.";
-
-
-  saveRequests(requests);
-
-
-  const user =
-    getUsers().find(
-      u => u.phone === request.phone
-    );
-
-
-  if (user) {
-
-    user.activity =
-      user.activity || [];
-
-    user.activity.unshift({
-
-      id: uid("ACT"),
-
-      text:
-        "Recharge request rejected: " +
-        Number(request.coins).toLocaleString() +
-        " virtual coins",
-
-      time:
-        nowText()
-
-    });
-
-    saveCurrentUser(user);
-  }
-
-
-  toast(
-    "Recharge request rejected.",
-    "success"
-  );
-
-
-  renderAdminPanel();
-}
-
-
-/* ---------- USERS TABLE ---------- */
-
-function renderAdminUsers(searchTerm = "") {
-
-  const box =
-    document.getElementById("adminUsers");
-
-  if (!box) return;
-
-
-  let users =
-    getUsers();
-
-
-  searchTerm =
-    String(searchTerm || "")
-      .trim()
-      .toLowerCase();
-
-
-  if (searchTerm) {
-
-    users =
-      users.filter(user =>
-        user.phone
-          .toLowerCase()
-          .includes(searchTerm)
-      );
-
-  }
-
-
-  if (!users.length) {
-
-    box.innerHTML = `
-      <div class="empty-state">
-        No users found.
-      </div>
-    `;
-
-    return;
-  }
-
-
-  box.innerHTML = users.map(user => {
-
-    const status =
-      user.active === false
-        ? "DISABLED"
-        : "ACTIVE";
-
-
-    return `
-      <div class="admin-user-card">
-
-        <div class="user-card-head">
-
-          <div>
-            <strong>
-              ${esc(user.phone)}
-            </strong>
-
-            <span class="${
-              user.active === false
-                ? "status-rejected"
-                : "status-approved"
-            }">
-              ${status}
-            </span>
-          </div>
-
-          <strong>
-            ${Number(user.balance || 0).toLocaleString()}
-            <small> COINS</small>
-          </strong>
-
-        </div>
-
-
-        <div class="user-info">
-
-          <span>
-            Registered:
-            ${esc(user.registeredAt || "-")}
-          </span>
-
-          <span>
-            Referral Points:
-            ${Number(user.referralPoints || 0).toLocaleString()}
-          </span>
-
-        </div>
-
-
-        <div class="admin-actions">
-
-          <button
-            class="btn-primary"
-            onclick="adjustUserCoins('${esc(user.phone)}', 'add')">
-            + COINS
-          </button>
-
-          <button
-            class="btn-warning"
-            onclick="adjustUserCoins('${esc(user.phone)}', 'remove')">
-            − COINS
-          </button>
-
-          <button
-            class="btn-secondary"
-            onclick="toggleUserAccount('${esc(user.phone)}')">
-
-            ${
-              user.active === false
-                ? "ENABLE"
-                : "DISABLE"
-            }
-
-          </button>
-
-          <button
-            class="btn-secondary"
-            onclick="viewUserActivity('${esc(user.phone)}')">
-            ACTIVITY
-          </button>
-
-        </div>
-
-      </div>
-    `;
-
-  }).join("");
-}
-
-
-/* ---------- SEARCH USERS ---------- */
-
-function searchAdminUsers() {
-
-  const input =
-    document.getElementById("adminUserSearch");
-
-  const value =
-    input ? input.value : "";
-
-  renderAdminUsers(value);
-}
-
-
-/* ---------- ADJUST VIRTUAL COINS ---------- */
-
-function adjustUserCoins(phone, mode) {
-
-  if (localStorage.getItem(ADMIN_SESSION) !== "true") {
-    toast("Admin login required.", "error");
-    return;
-  }
-
-
-  const amountText =
-    prompt(
-      mode === "add"
-        ? "Enter virtual coins to ADD:"
-        : "Enter virtual coins to REMOVE:"
-    );
-
-
-  if (amountText === null) return;
-
-
-  const amount =
-    Number(amountText);
-
-
-  if (
-    !Number.isFinite(amount) ||
-    amount <= 0
-  ) {
-
-    toast(
-      "Enter a valid positive number.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  const users =
-    getUsers();
-
-  const user =
-    users.find(u => u.phone === phone);
-
-
-  if (!user) {
-
-    toast(
-      "User not found.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  if (mode === "add") {
-
-    user.balance =
-      Number(user.balance || 0) + amount;
-
-    user.activity =
-      user.activity || [];
-
-    user.activity.unshift({
-
-      id: uid("ACT"),
-
-      text:
-        "Admin added " +
-        amount.toLocaleString() +
-        " virtual ALI Coins",
-
-      time:
-        nowText()
-
-    });
-
-  } else {
-
-    user.balance =
-      Math.max(
-        0,
-        Number(user.balance || 0) - amount
-      );
-
-    user.activity =
-      user.activity || [];
-
-    user.activity.unshift({
-
-      id: uid("ACT"),
-
-      text:
-        "Admin removed " +
-        amount.toLocaleString() +
-        " virtual ALI Coins",
-
-      time:
-        nowText()
-
-    });
-
-  }
-
-
-  saveUsers(users);
-
-
-  toast(
-    "Virtual coin balance updated.",
-    "success"
-  );
-
-
-  renderAdminPanel();
-}
-
-
-/* ---------- ENABLE / DISABLE ACCOUNT ---------- */
-
-function toggleUserAccount(phone) {
-
-  if (localStorage.getItem(ADMIN_SESSION) !== "true") {
-    toast("Admin login required.", "error");
-    return;
-  }
-
-
-  const users =
-    getUsers();
-
-  const user =
-    users.find(u => u.phone === phone);
-
-
-  if (!user) {
-    toast("User not found.", "error");
-    return;
-  }
-
-
-  user.active =
-    user.active === false;
-
-
-  user.activity =
-    user.activity || [];
-
-
-  user.activity.unshift({
-
-    id: uid("ACT"),
-
-    text:
-      "Account status changed to " +
-      (user.active ? "ACTIVE" : "DISABLED"),
-
-    time:
-      nowText()
-
-  });
-
-
-  saveUsers(users);
-
-
-  toast(
-    user.active
-      ? "Account enabled."
-      : "Account disabled.",
-    "success"
-  );
-
-
-  renderAdminPanel();
-}
-
-
-/* ---------- USER ACTIVITY ---------- */
-
-function viewUserActivity(phone) {
-
-  const user =
-    getUsers().find(
-      u => u.phone === phone
-    );
-
-
-  if (!user) {
-
-    toast(
-      "User not found.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  const activity =
-    user.activity || [];
-
-
-  let html = "";
-
-
-  if (!activity.length) {
-
-    html =
-      `<p>No activity recorded.</p>`;
-
-  } else {
-
-    html = activity
-      .slice(0, 30)
-      .map(item => `
-        <div class="modal-activity">
-
-          <strong>
-            ${esc(item.text)}
-          </strong>
-
-          <small>
-            ${esc(item.time)}
-          </small>
-
-        </div>
-      `)
-      .join("");
-
-  }
-
-
-  openModal(
-    "USER ACTIVITY — " + phone,
-    html
-  );
-}
-
-
-/* ---------- ACCESS REQUESTS ---------- */
-
-function renderAdminAccessRequests() {
-
-  const box =
-    document.getElementById("adminAccessRequests");
-
-  if (!box) return;
-
-
-  const requests =
-    getAccessRequests();
-
-
-  if (!requests.length) {
-
-    box.innerHTML = `
-      <div class="empty-state">
-        No access requests.
-      </div>
-    `;
-
-    return;
-  }
-
-
-  box.innerHTML =
-    requests.map(req => `
-
-      <div class="admin-request-card">
-
-        <div class="request-top">
-
-          <div>
-            <strong>
-              ${esc(req.id)}
-            </strong>
-
-            <span class="${
-              req.status === "PENDING"
-                ? "status-pending"
-                : req.status === "APPROVED"
-                  ? "status-approved"
-                  : "status-rejected"
-            }">
-              ${esc(req.status)}
-            </span>
-          </div>
-
-          <small>
-            ${esc(req.createdAt)}
-          </small>
-
-        </div>
-
-
-        <div class="request-grid">
-
-          <div>
-            <label>Mobile</label>
-
-            <strong>
-              ${esc(req.phone)}
-            </strong>
-          </div>
-
-          <div>
-            <label>Request ID</label>
-
-            <strong>
-              ${esc(req.id)}
-            </strong>
-          </div>
-
-        </div>
-
-
-        ${
-          req.status === "PENDING"
-          ? `
-            <div class="admin-actions">
-
-              <button
-                class="btn-primary"
-                onclick="approveAccess('${esc(req.id)}')">
-                ✓ APPROVE
-              </button>
-
-              <button
-                class="btn-danger"
-                onclick="rejectAccess('${esc(req.id)}')">
-                ✕ REJECT
-              </button>
-
-            </div>
-          `
-          : ""
-        }
-
-      </div>
-
-    `).join("");
-}
-
-
-/* ---------- APPROVE ACCESS ---------- */
-
-function approveAccess(id) {
-
-  const requests =
-    getAccessRequests();
-
-  const request =
-    requests.find(r => r.id === id);
-
-
-  if (!request) {
-
-    toast(
-      "Access request not found.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  request.status =
-    "APPROVED";
-
-  request.processedAt =
-    nowText();
-
-  request.adminNote =
-    "Support access request approved.";
-
-
-  saveAccessRequests(requests);
-
-
-  toast(
-    "Access request approved.",
-    "success"
-  );
-
-
-  renderAdminPanel();
-}
-
-
-/* ---------- REJECT ACCESS ---------- */
-
-function rejectAccess(id) {
-
-  const requests =
-    getAccessRequests();
-
-  const request =
-    requests.find(r => r.id === id);
-
-
-  if (!request) {
-
-    toast(
-      "Access request not found.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  request.status =
-    "REJECTED";
-
-  request.processedAt =
-    nowText();
-
-  request.adminNote =
-    "Support access request rejected.";
-
-
-  saveAccessRequests(requests);
-
-
-  toast(
-    "Access request rejected.",
-    "success"
-  );
-
-
-  renderAdminPanel();
-}
-
-
-/* ---------- ADMIN REFRESH ---------- */
-
-function refreshAdmin() {
-
-  if (
-    localStorage.getItem(ADMIN_SESSION)
-    !== "true"
-  ) {
-
-    showAdminLogin();
-
-    return;
-  }
-
-
-  renderAdminPanel();
-
-  toast(
-    "Admin data refreshed.",
-    "success"
-  );
-}
-
-
-/* ---------- ADMIN DEMO NOTICE ---------- */
-
-function showAdminNotice() {
-
-  openModal(
-    "ADMIN SYSTEM NOTICE",
-    `
-      <div class="notice-box">
-
-        <h3>ALINOVA TRADING</h3>
-
-        <p>
-          This admin panel is a browser-based
-          virtual/demo management system.
-        </p>
-
-        <p>
-          User data and demo coin balances are
-          stored locally in this browser.
-        </p>
-
-        <p>
-          For a real multi-user platform,
-          a secure backend/database and
-          server-side authentication are required.
-        </p>
-
-        <strong>
-          No real-money balance or cash
-          withdrawal is handled by this demo.
-        </strong>
-
-      </div>
-    `
-  );
-}
-/* ==========================================
-   ALINOVA TRADING — PART 5/5
-   FINAL EVENTS + PAGE INITIALIZATION
-========================================== */
-
-
-/* ---------- SAFE CLICK HELPER ---------- */
-
-function bindClick(id, handler) {
-
-  const el =
-    document.getElementById(id);
-
-  if (el) {
-    el.addEventListener("click", handler);
-  }
-}
-
-
-/* ---------- AUTH BUTTONS ---------- */
-
-bindClick(
-  "registerBtn",
-  registerUser
+toast(
+"Valid 11-digit Pakistani mobile number enter karein."
 );
 
-bindClick(
-  "loginBtn",
-  loginUser
-);
-
-bindClick(
-  "adminBtn",
-  showAdminLogin
-);
-
-
-/* ---------- ADMIN LOGIN ---------- */
-
-bindClick(
-  "adminLoginBtn",
-  adminLogin
-);
-
-bindClick(
-  "adminBackBtn",
-  backToAuth
-);
-
-
-/* ---------- USER BUTTONS ---------- */
-
-bindClick(
-  "dailyRewardBtn",
-  claimDailyReward
-);
-
-bindClick(
-  "rechargeBtn",
-  submitRecharge
-);
-
-bindClick(
-  "calculateBtn",
-  calculateCoins
-);
-
-bindClick(
-  "referralBtn",
-  shareReferral
-);
-
-bindClick(
-  "spinButton",
-  spinLuckyDraw
-);
-
-bindClick(
-  "logoutBtn",
-  logoutUser
-);
-
-
-/* ---------- ADMIN BUTTONS ---------- */
-
-bindClick(
-  "adminLogoutBtn",
-  adminLogout
-);
-
-bindClick(
-  "adminRefreshBtn",
-  refreshAdmin
-);
-
-bindClick(
-  "adminNoticeBtn",
-  showAdminNotice
-);
-
-
-/* ---------- SEARCH ---------- */
-
-const adminSearch =
-  document.getElementById(
-    "adminUserSearch"
-  );
-
-if (adminSearch) {
-
-  adminSearch.addEventListener(
-    "input",
-    searchAdminUsers
-  );
-
+return;
 }
 
-
-/* ---------- CALCULATOR LIVE UPDATE ---------- */
-
-const calcInput =
-  document.getElementById(
-    "calcCoins"
-  );
-
-if (calcInput) {
-
-  calcInput.addEventListener(
-    "input",
-    calculateCoins
-  );
-
-}
-
-
-/* ---------- MODAL CLOSE ---------- */
-
-const modal =
-  document.getElementById(
-    "mainModal"
-  );
-
-if (modal) {
-
-  modal.addEventListener(
-    "click",
-    function(e) {
-
-      if (e.target === modal) {
-        closeModal();
-      }
-
-    }
-  );
-
-}
-
-
-/* ---------- ENTER KEY LOGIN ---------- */
-
-const loginPhone =
-  document.getElementById(
-    "loginPhone"
-  );
-
-if (loginPhone) {
-
-  loginPhone.addEventListener(
-    "keydown",
-    function(e) {
-
-      if (e.key === "Enter") {
-        loginUser();
-      }
-
-    }
-  );
-
-}
-
-
-const regPhone =
-  document.getElementById(
-    "regPhone"
-  );
-
-if (regPhone) {
-
-  regPhone.addEventListener(
-    "keydown",
-    function(e) {
-
-      if (e.key === "Enter") {
-        registerUser();
-      }
-
-    }
-  );
-
-}
-
-
-const adminPassword =
-  document.getElementById(
-    "adminPassword"
-  );
-
-if (adminPassword) {
-
-  adminPassword.addEventListener(
-    "keydown",
-    function(e) {
-
-      if (e.key === "Enter") {
-        adminLogin();
-      }
-
-    }
-  );
-
-}
-
-
-/* ---------- MOBILE NUMBER FORMAT ---------- */
-
-function formatPakistaniNumber(input) {
-
-  if (!input) return;
-
-  input.addEventListener(
-    "input",
-    function() {
-
-      this.value =
-        this.value
-          .replace(/\D/g, "")
-          .slice(0, 11);
-
-    }
-  );
-
-}
-
-
-formatPakistaniNumber(
-  document.getElementById("loginPhone")
+const user =
+users().find(
+u => u.phone === phone
 );
 
-formatPakistaniNumber(
-  document.getElementById("regPhone")
+if(!user) {
+
+toast(
+"Account nahi mila. Pehle Register karein."
 );
 
-
-/* ---------- RECHARGE INPUT ---------- */
-
-const rechargeCoins =
-  document.getElementById(
-    "rechargeCoins"
-  );
-
-if (rechargeCoins) {
-
-  rechargeCoins.addEventListener(
-    "input",
-    function() {
-
-      let value =
-        Number(this.value || 0);
-
-      if (value < 0) {
-        this.value = 0;
-      }
-
-      const preview =
-        document.getElementById(
-          "rechargePreview"
-        );
-
-      if (preview) {
-
-        preview.textContent =
-          "Estimated demo value: Rs. " +
-          (
-            value * RATE
-          ).toLocaleString("en-PK", {
-            maximumFractionDigits: 2
-          });
-
-      }
-
-    }
-  );
-
+return;
 }
 
+if(user.active === false) {
 
-/* ---------- AUTH PAGE ACCESS HELP ---------- */
+toast(
+"Ye account disabled hai."
+);
 
-const accessHelp =
-  document.getElementById(
-    "accessHelpBtn"
-  );
-
-if (accessHelp) {
-
-  accessHelp.addEventListener(
-    "click",
-    requestAccessHelp
-  );
-
+return;
 }
 
-
-/* ---------- ADMIN PANEL NAVIGATION ---------- */
-
-function showAdminSection(section) {
-
-  const sections = [
-    "adminRequestsSection",
-    "adminUsersSection",
-    "adminAccessSection"
-  ];
-
-  sections.forEach(id => {
-
-    const el =
-      document.getElementById(id);
-
-    if (el) {
-      el.style.display = "none";
-    }
-
-  });
-
-
-  const selected =
-    document.getElementById(
-      section
-    );
-
-  if (selected) {
-    selected.style.display = "block";
-  }
-
-}
-
-
-/* ---------- USER SECTION NAVIGATION ---------- */
-
-function scrollToSection(id) {
-
-  const target =
-    document.getElementById(id);
-
-  if (!target) return;
-
-  target.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
-
-}
-
-
-/* ---------- COPY MOBILE ---------- */
-
-function copyUserPhone() {
-
-  const user =
-    currentUser();
-
-  if (!user) return;
-
-
-  if (
-    navigator.clipboard &&
-    navigator.clipboard.writeText
-  ) {
-
-    navigator.clipboard.writeText(
-      user.phone
-    );
-
-    toast(
-      "Mobile number copied.",
-      "success"
-    );
-
-  }
-
-}
-
-
-/* ---------- RESET DEMO DATA ---------- */
-
-function resetDemoData() {
-
-  if (
-    localStorage.getItem(
-      ADMIN_SESSION
-    ) !== "true"
-  ) {
-
-    toast(
-      "Admin login required.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  const confirmation =
-    prompt(
-      "Type RESET to clear all ALINOVA demo data:"
-    );
-
-
-  if (confirmation !== "RESET") {
-
-    toast(
-      "Reset cancelled.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  localStorage.removeItem(USERS);
-  localStorage.removeItem(RECHARGE);
-  localStorage.removeItem(ACCESS);
-  localStorage.removeItem(SESSION);
-
-
-  toast(
-    "All demo data has been reset.",
-    "success"
-  );
-
-
-  setTimeout(() => {
-
-    renderAdminPanel();
-
-  }, 500);
-
-}
-
-
-/* ---------- INITIAL PAGE STATE ---------- */
-
-function initializeApp() {
-
-  const userSession =
-    localStorage.getItem(
-      SESSION
-    );
-
-  const adminSession =
-    localStorage.getItem(
-      ADMIN_SESSION
-    );
-
-
-  /* Admin session has priority */
-
-  if (adminSession === "true") {
-
-    if (
-      typeof openAdminPanel ===
-      "function"
-    ) {
-
-      openAdminPanel();
-
-    }
-
-    return;
-  }
-
-
-  /* Existing user session */
-
-  if (userSession) {
-
-    const user =
-      currentUser();
-
-    if (
-      user &&
-      user.active !== false
-    ) {
-
-      openWebsite();
-
-      return;
-
-    }
-
-    localStorage.removeItem(
-      SESSION
-    );
-
-  }
-
-
-  /* Default login screen */
-
-  hideAllPages();
-
-  const auth =
-    document.getElementById(
-      "authPage"
-    );
-
-  if (auth) {
-    auth.style.display = "flex";
-  }
-
-}
-
-
-/* ---------- DEFAULT CALCULATOR ---------- */
-
-calculateCoins();
-
-
-/* ---------- START APPLICATION ---------- */
-
-if (
-  document.readyState ===
-  "loading"
-) {
-
-  document.addEventListener(
-    "DOMContentLoaded",
-    initializeApp
-  );
-
-} else {
-
-  initializeApp();
+localStorage.setItem(
+SESSION_KEY,
+phone
+);
+
+localStorage.removeItem(
+ADMIN_KEY
+);
+
+openUser();
 
 }
 
 
 /* ==========================================
-   FINAL SCRIPT CLOSE
+   REGISTER
 ========================================== */
 
-</script>
+function registerUser() {
 
-</body>
-</html>
-      
+const phone =
+document.getElementById(
+"regPhone"
+).value.trim();
+
+if(!/^03\d{9}$/.test(phone)) {
+
+toast(
+"Valid 11-digit Pakistani mobile number enter karein."
+);
+
+return;
+}
+
+let list = users();
+
+if(list.some(
+u => u.phone === phone
+)) {
+
+toast(
+"Number already registered hai. Login karein."
+);
+
+return;
+}
+
+const user = {
+
+phone:phone,
+
+balance:500,
+
+active:true,
+
+registeredAt:timeNow(),
+
+lastReward:0,
+
+referralPoints:0,
+
+activity:[
+
+{
+text:"Account created — +500 virtual ALI Coins",
+time:timeNow()
+}
+
+]
+
+};
+
+list.push(user);
+
+save(
+USERS_KEY,
+list
+);
+
+localStorage.setItem(
+SESSION_KEY,
+phone
+);
+
+openUser();
+
+toast(
+"Registration successful — 500 virtual coins added."
+);
+
+}
+
+
+/* ==========================================
+   USER DASHBOARD
+========================================== */
+
+function openUser() {
+
+const user =
+currentUser();
+
+if(!user) {
+
+showLogin();
+return;
+}
+
+if(user.active === false) {
+
+localStorage.removeItem(
+SESSION_KEY
+);
+
+showLogin();
+
+toast(
+"Account disabled."
+);
+
+return;
+}
+
+hidePages();
+
+document.getElementById(
+"userApp"
+).style.display = "block";
+
+renderUser();
+
+}
+
+
+function renderUser() {
+
+const user =
+currentUser();
+
+if(!user) return;
+
+document.getElementById(
+"userPhone"
+).textContent =
+user.phone;
+
+docum
