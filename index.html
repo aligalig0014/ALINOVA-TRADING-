@@ -1611,5 +1611,735 @@ footer{
 
       </div>
 
+<!-- =====================================================
+     USER COIN REQUEST + CALCULATOR
+===================================================== -->
+
+<div class="section">
+
+  <div class="panel-grid">
+
+    <!-- RECHARGE REQUEST -->
+
+    <div class="panel">
+
+      <h3>
+        Virtual Coin Request
+      </h3>
+
+      <p>
+        Request virtual ALI Coins for your demo account.
+        Requests are reviewed manually by the administrator.
+        Coins are not added automatically.
+      </p>
+
+
+      <div class="form-group">
+
+        <label>
+          VIRTUAL COINS
+        </label>
+
+        <input
+          id="rechargeCoins"
+          class="input"
+          type="number"
+          min="1"
+          placeholder="Example: 5000"
+          oninput="calculate()"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          RECEIPT / REFERENCE
+        </label>
+
+        <input
+          id="rechargeRef"
+          class="input"
+          type="text"
+          placeholder="Optional reference number"
+        >
+
+      </div>
+
+
+      <div class="note">
+
+        Estimated demo value:
+        <b id="calcValue">
+          Rs. 0
+        </b>
+
+      </div>
+
+
+      <button
+        class="btn btn-primary full"
+        style="margin-top:16px"
+        onclick="recharge()"
+      >
+        REQUEST VIA WHATSAPP
+      </button>
+
+
+      <div class="note">
+
+        WhatsApp requests are sent as
+        <b>PENDING ADMIN VERIFICATION</b>.
+        This demo does not automatically verify payments.
+
+      </div>
+
     </div>
+
+
+    <!-- CALCULATOR -->
+
+    <div class="panel">
+
+      <h3>
+        Coin Calculator
+      </h3>
+
+      <p>
+        Demo reference rate:
+        <b>5,000 virtual coins = Rs. 6,500</b>
+        estimated demo value.
+      </p>
+
+
+      <div class="form-group">
+
+        <label>
+          VIRTUAL COINS
+        </label>
+
+        <input
+          id="calcCoins"
+          class="input"
+          type="number"
+          min="0"
+          placeholder="5000"
+          oninput="calculate()"
+        >
+
+      </div>
+
+
+      <div
+        class="balance-card"
+        style="margin-top:15px;padding:20px"
+      >
+
+        <div class="balance-label">
+          ESTIMATED DEMO VALUE
+        </div>
+
+        <div
+          class="balance"
+          style="font-size:32px"
+        >
+          Rs.
+          <span id="calcBig">
+            0
+          </span>
+        </div>
+
+      </div>
+
+
+      <div class="note">
+
+        Formula:
+        <b>Virtual Coins × 1.30</b>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     LUCKY DRAW
+===================================================== -->
+
+<div class="section">
+
+  <div class="section-title">
+
+    <h3>
+      ALINOVA Demo Lucky Draw
+    </h3>
+
+    <span>
+      Promotional demo feature
+    </span>
+
+  </div>
+
+
+  <div class="draw-wrap">
+
+    <div class="draw-layout">
+
+
+      <!-- WHEEL -->
+
+      <div class="wheel-box">
+
+        <div class="pointer"></div>
+
+        <div
+          id="wheel"
+          class="wheel"
+        ></div>
+
+        <div class="wheel-center">
+          ALINOVA
+        </div>
+
+      </div>
+
+
+      <!-- DRAW INFO -->
+
+      <div>
+
+        <div class="badge">
+          ♛ DEMO DRAW
+        </div>
+
+
+        <h2
+          style="
+            margin-top:15px;
+            font-size:32px;
+          "
+        >
+          Spin the Virtual Wheel
+        </h2>
+
+
+        <p
+          style="
+            margin-top:10px;
+            color:var(--muted);
+            line-height:1.7;
+            font-size:13px;
+          "
+        >
+          Try the ALINOVA promotional demo draw
+          and receive a virtual demo-points result.
+        </p>
+
+
+        <button
+          id="spinBtn"
+          class="btn btn-primary full"
+          style="margin-top:18px"
+          onclick="spinDraw()"
+        >
+          🎡 SPIN DEMO DRAW
+        </button>
+
+
+        <div class="winner">
+
+          <div>
+
+            <small>
+              DEMO RESULT
+            </small>
+
+            <b id="winnerText">
+              Ready to Spin
+            </b>
+
+          </div>
+
+        </div>
+
+
+        <div class="prizes">
+
+          <div class="prize">
+
+            <b>
+              15,000
+            </b>
+
+            <span>
+              Demo Points
+            </span>
+
+          </div>
+
+
+          <div class="prize">
+
+            <b>
+              8,000
+            </b>
+
+            <span>
+              Demo Points
+            </span>
+
+          </div>
+
+
+          <div class="prize">
+
+            <b>
+              4,000
+            </b>
+
+            <span>
+              Demo Points
+            </span>
+
+          </div>
+
+
+          <div class="prize">
+
+            <b>
+              2,000
+            </b>
+
+            <span>
+              Demo Points
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="warning">
+
+          ⚠️
+          <b>DEMO / PROMOTIONAL DISPLAY</b>
+          — NOT A CASH PRIZE SYSTEM.
+          Demo results have no cash value.
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     REFERRAL
+===================================================== -->
+
+<div class="section">
+
+  <div class="panel">
+
+    <h3>
+      Invite & Referral
+    </h3>
+
+    <p>
+      Share your ALINOVA demo invitation with friends.
+      Referral rewards shown on this website are
+      virtual/demo points only.
+    </p>
+
+
+    <div class="row">
+
+      <input
+        id="referralText"
+        class="input"
+        readonly
+        value="Join ALINOVA TRADING — Virtual Demo Platform"
+      >
+
+      <button
+        class="btn btn-primary"
+        onclick="shareReferral()"
+      >
+        SHARE
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     RECENT ACTIVITY
+===================================================== -->
+
+<div class="section">
+
+  <div class="section-title">
+
+    <h3>
+      Recent Activity
+    </h3>
+
+    <span>
+      Account history
+    </span>
+
+  </div>
+
+
+  <div
+    id="activityList"
+    class="activity"
+  >
+
+    <div class="activity-item">
+
+      <div>
+        <b>
+          Account Ready
+        </b>
+
+        <br>
+
+        <small>
+          Your demo activity will appear here.
+        </small>
+      </div>
+
+      <span class="positive">
+        •
+      </span>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+</main>
+
+
+<footer>
+
+  ALINOVA TRADING
+  • Virtual Demo Platform
+  • No cash value
+
+</footer>
+
+</section>
+
+
+<!-- =====================================================
+     ADMIN LOGIN PAGE
+===================================================== -->
+
+<section
+  id="adminLoginPage"
+  class="auth-wrap hidden"
+>
+
+  <div
+    class="auth-card"
+    style="width:min(450px,100%)"
+  >
+
+    <div class="admin-badge">
+      ADMIN ACCESS
+    </div>
+
+
+    <h2 style="margin-top:12px">
+      Admin Control Panel
+    </h2>
+
+
+    <div class="sub">
+      Authorized demo administrator login.
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        ADMIN USERNAME
+      </label>
+
+      <input
+        id="adminUsername"
+        class="input"
+        type="text"
+        placeholder="Enter admin username"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        ADMIN PASSWORD
+      </label>
+
+      <input
+        id="adminPassword"
+        class="input"
+        type="password"
+        placeholder="Enter admin password"
+      >
+
+    </div>
+
+
+    <button
+      class="btn btn-primary full"
+      style="margin-top:18px"
+      onclick="adminLogin()"
+    >
+      OPEN ADMIN PANEL
+    </button>
+
+
+    <button
+      class="btn full"
+      style="margin-top:10px"
+      onclick="backToAuth()"
+    >
+      ← BACK TO USER LOGIN
+    </button>
+
+
+    <div class="note">
+
+      Demo credentials:
+
+      <br>
+
+      Username:
+      <b>Alig0014</b>
+
+      <br>
+
+      Password:
+      <b>alig0014</b>
+
+      <br><br>
+
+      ⚠️ This is a client-side demo.
+      Do not use this authentication for
+      real financial or sensitive systems.
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     ADMIN PANEL
+===================================================== -->
+
+<section
+  id="adminPanel"
+  class="hidden"
+>
+
+  <main class="admin-shell">
+
+
+    <div class="admin-head">
+
+      <div>
+
+        <div class="admin-badge">
+          ALINOVA ADMIN
+        </div>
+
+        <h2 style="margin-top:8px">
+          Control Panel
+        </h2>
+
+        <p
+          style="
+            color:var(--muted);
+            font-size:11px;
+            margin-top:5px;
+          "
+        >
+          Manage demo users, requests and
+          virtual balances.
+        </p>
+
+      </div>
+
+
+      <div class="user-actions">
+
+        <button
+          class="btn"
+          onclick="backToAuth()"
+        >
+          User Login
+        </button>
+
+        <button
+          class="btn btn-danger"
+          onclick="adminLogout()"
+        >
+          Admin Logout
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- ADMIN STATS -->
+
+    <div class="admin-grid">
+
+      <div class="admin-card">
+
+        <small>
+          Total Users
+        </small>
+
+        <b id="adminUsers">
+          0
+        </b>
+
+      </div>
+
+
+      <div class="admin-card">
+
+        <small>
+          Pending Requests
+        </small>
+
+        <b id="adminPending">
+          0
+        </b>
+
+      </div>
+
+
+      <div class="admin-card">
+
+        <small>
+          Approved Requests
+        </small>
+
+        <b id="adminApproved">
+          0
+        </b>
+
+      </div>
+
+
+      <div class="admin-card">
+
+        <small>
+          Rejected Requests
+        </small>
+
+        <b id="adminRejected">
+          0
+        </b>
+
+      </div>
+
+    </div>
+
+
+    <!-- ADMIN CONTENT -->
+
+    <div id="adminContent">
+
+      <!-- Part 4 will populate this area -->
+
+    </div>
+
+
+    <div class="admin-section">
+
+      <div class="note">
+
+        ⚠️
+        <b>ADMIN DEMO NOTICE:</b>
+        User balances and requests are stored
+        locally in this browser using localStorage.
+        For a real multi-user platform, a secure
+        server/database is required.
+
+      </div>
+
+    </div>
+
+  </main>
+
+</section>
+
+
+<!-- =====================================================
+     MODAL
+===================================================== -->
+
+<div
+  id="modal"
+  class="modal"
+>
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <h3 id="modalTitle">
+        Details
+      </h3>
+
+      <button
+        class="close"
+        onclick="closeModal()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div id="modalContent"></div>
+
+  </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div
+  id="toast"
+  class="toast"
+></div>
+
+<script>
+  
       
